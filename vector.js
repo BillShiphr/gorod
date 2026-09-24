@@ -16,9 +16,9 @@
  */
 'use strict';
 
-const DATA_VERSION = 10;
+const DATA_VERSION = 11;
 // новая нарезка — новые кусочки, старые отметки к ним не подходят
-const OPEN_KEY = 'gorod.vector-zones.v5';
+const OPEN_KEY = 'gorod.vector-zones.v6';
 // что открыто для примера при первом запуске: участок целиком, пара кусочков, места
 const DEFAULT_OPEN = { fullCell: 'Октябрьская', partCell: 'Полянка', places: ['Парк Горького', 'Винзавод'] };
 
@@ -511,8 +511,11 @@ function withLabelZooms(f, status, suffix, shape = f) {
  * открытость и так видна по неону и горящим улицам. */
 function updateLabelFilters() {
   const z = App.map.getZoom();
-  App.map.setFilter('open-label', ['<=', ['get', 'pillZ'], z]);
-  App.map.setFilter('open-name', ['all', ['<=', ['get', 'textZ'], z], ['>', ['get', 'pillZ'], z]]);
+  // в режиме «не был» плашки открытых знаковых территорий тоже прячем
+  const hideDone = App.poiFilter === 'todo'
+    ? ['!', ['in', ['get', 'kind'], ['literal', ['park', 'cluster', 'market']]]] : true;
+  App.map.setFilter('open-label', ['all', ['<=', ['get', 'pillZ'], z], hideDone]);
+  App.map.setFilter('open-name', ['all', ['<=', ['get', 'textZ'], z], ['>', ['get', 'pillZ'], z], hideDone]);
 }
 
 const SVG = (d) => `<svg viewBox="0 0 24 24"><path d="${d}"/></svg>`;
@@ -748,6 +751,37 @@ function initMap() {
   document.getElementById('btnTrip').onclick = () => openTrip('weekend');
   document.getElementById('tripClose').onclick = closeTrip;
   for (const b of document.querySelectorAll('#tripTabs button')) b.onclick = () => openTrip(b.dataset.tab);
+  for (const b of document.querySelectorAll('#poiFilter button')) b.onclick = () => applyPoiFilter(b.dataset.f);
+  map.on('load', () => {
+    let saved = 'all';
+    try { saved = localStorage.getItem(FILTER_KEY) || 'all'; } catch (e) { /* по умолчанию все */ }
+    applyPoiFilter(saved);
+  });
+}
+
+/* ============================ фильтр мест ============================ */
+
+const FILTER_KEY = 'gorod.poi-filter';
+
+/* Какие интересные места показывать: все, только где не был (что ещё разведать)
+ * или только где был (что уже собрано). Касается точек мест и знаковых
+ * территорий; открытые кусочки и туман не трогаем. */
+function applyPoiFilter(mode) {
+  const map = App.map;
+  const vis = (id, on) => map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
+  const byVisited = mode === 'todo' ? ['!', ['get', 'visited']] : mode === 'done' ? ['get', 'visited'] : null;
+  vis('poi-dot', mode !== 'done');
+  vis('poi-dot-visited', mode !== 'todo');
+  vis('poi-glow', mode !== 'todo');
+  map.setFilter('poi-halo', byVisited);
+  map.setFilter('poi-label', byVisited);
+  // знаковые территории, где не был: пунктир и подпись — прячем в режиме «был»
+  vis('place-line', mode !== 'done');
+  vis('place-label', mode !== 'done');
+  App.poiFilter = mode;
+  updateLabelFilters(); // плашки открытых знаковых территорий — прячем в режиме «не был»
+  for (const b of document.querySelectorAll('#poiFilter button')) b.classList.toggle('on', b.dataset.f === mode);
+  try { localStorage.setItem(FILTER_KEY, mode); } catch (e) { /* не страшно */ }
 }
 
 /* ============================ где я ============================ */

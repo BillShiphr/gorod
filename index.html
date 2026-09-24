@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<link rel="stylesheet" href="vector.css?v=7">
+<link rel="stylesheet" href="vector.css?v=8">
 </head>
 <body>
 <div id="map"></div>
@@ -31,6 +31,14 @@
     </div>
   </div>
 </header>
+
+<!-- какие интересные места показывать на карте -->
+<div class="poi-filter glass" id="poiFilter">
+  <span>Места</span>
+  <button data-f="all" class="on">все</button>
+  <button data-f="todo">не был</button>
+  <button data-f="done">был</button>
+</div>
 
 <div class="controls">
   <button class="glass round" id="btnLocate" title="Где я">
@@ -85,6 +93,6 @@
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
-<script src="vector.js?v=34"></script>
+<script src="vector.js?v=35"></script>
 </body>
 </html>
