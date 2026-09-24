@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<link rel="stylesheet" href="vector.css?v=10">
+<link rel="stylesheet" href="vector.css?v=11">
 </head>
 <body>
 <div id="map"></div>
@@ -93,8 +93,15 @@
 
 <div class="toast" id="toast" hidden></div>
 
+<!-- фото места на весь экран -->
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox-close" id="lightboxClose" title="Закрыть">×</button>
+  <img id="lightboxImg" alt="">
+  <p id="lightboxCap"></p>
+</div>
+
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
-<script src="vector.js?v=38"></script>
+<script src="vector.js?v=40"></script>
 </body>
 </html>

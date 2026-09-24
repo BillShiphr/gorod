@@ -16,9 +16,9 @@
  */
 'use strict';
 
-const DATA_VERSION = 12;
+const DATA_VERSION = 13;
 // новая нарезка — новые кусочки, старые отметки к ним не подходят
-const OPEN_KEY = 'gorod.vector-zones.v6';
+const OPEN_KEY = 'gorod.vector-zones.v7';
 // что открыто для примера при первом запуске: участок целиком, пара кусочков, места
 const DEFAULT_OPEN = { fullCell: 'Октябрьская', partCell: 'Полянка', places: ['Парк Горького', 'Винзавод'] };
 
@@ -627,18 +627,23 @@ function showCard(f, back) {
     ico.className = 'card-ico photo';
     ico.innerHTML = '';
     ico.style.backgroundImage = `url("${ph.img}")`;
+    ico.dataset.src = ph.src || 'Википедия';
+    ico.onclick = () => openPhoto(ph, p.name);  // нажатие — фото на весь экран
   } else {
     ico.className = 'card-ico' + (open ? '' : ' locked');
     ico.style.backgroundImage = '';
     ico.innerHTML = open ? (ICONS[icoKind] || ICONS.park) : ICONS.lock;
+    ico.onclick = null;
   }
   const desc = document.getElementById('cardDesc');
-  desc.hidden = !(isPlace && ph && ph.text);
+  desc.hidden = !(isPlace && ph && (ph.text || ph.url));
   if (!desc.hidden) {
-    desc.textContent = `${ph.text} `;
+    desc.textContent = ph.text ? `${ph.text} ` : '';
     const a = document.createElement('a');
     a.href = ph.url; a.target = '_blank'; a.rel = 'noopener';
-    a.textContent = 'Подробнее в Википедии';
+    // куда ведёт ссылка: статья Википедии, запись Викиданных или сам снимок на Commons
+    a.textContent = ph.src === 'Wikimedia Commons' ? 'Фото целиком'
+      : ph.src === 'Викиданные' ? 'Подробнее' : 'Подробнее в Википедии';
     desc.append(a);
   }
   const b = document.getElementById('cardBadge');
@@ -733,6 +738,33 @@ function flyToPoi(p) {
   map.getSource('selected').setData(fc([...sel, f.geometry.type === 'Point' ? f : turf.pointOnFeature(f)]));
 }
 
+/* Фото места на весь экран. Берём версию пошире (1280 точек) через Special:FilePath —
+ * он сам отдаёт исходник, если тот меньше, в отличие от готовых миниатюр. */
+function bigPhotoUrl(img) {
+  if (img.includes('Special:FilePath/')) return img.replace(/\?width=\d+/, '?width=1280');
+  // миниатюра …/480px-Имя.jpg; хвост с метками (?utm_source=…) отрезаем,
+  // иначе он попадёт в имя файла и вместо 1280 точек придёт исходник на несколько мегабайт
+  const m = img.split('?')[0].match(/\/\d+px-([^/]+)$/);
+  return m ? `https://commons.wikimedia.org/wiki/Special:FilePath/${m[1]}?width=1280` : img;
+}
+
+function openPhoto(ph, name) {
+  const box = document.getElementById('lightbox');
+  const img = document.getElementById('lightboxImg');
+  img.src = ph.img;                 // сразу показываем то, что уже загружено…
+  const big = new Image();          // …и подменяем на крупное, когда догрузится
+  big.onload = () => { if (!box.hidden) img.src = big.src; };
+  big.src = bigPhotoUrl(ph.img);
+  img.alt = name;
+  document.getElementById('lightboxCap').textContent = `${name} · Фото: ${ph.src || 'Википедия'}`;
+  box.hidden = false;
+}
+
+function closePhoto() {
+  document.getElementById('lightbox').hidden = true;
+  document.getElementById('lightboxImg').src = '';
+}
+
 const hideCard = () => {
   App.current = null;
   App.back = null;
@@ -805,6 +837,9 @@ function initMap() {
   document.getElementById('btnZoomIn').onclick = () => map.zoomIn();
   document.getElementById('btnZoomOut').onclick = () => map.zoomOut();
   document.getElementById('cardClose').onclick = hideCard;
+  // фото на весь экран закрывается нажатием на него, крестиком или Esc
+  document.getElementById('lightbox').onclick = closePhoto;
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePhoto(); });
   document.getElementById('btnLocate').onclick = locate;
   document.getElementById('btnHere').onclick = markHere;
   document.getElementById('btnTrip').onclick = () => openTrip('weekend');

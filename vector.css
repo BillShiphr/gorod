@@ -58,7 +58,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card-ico.locked{background:radial-gradient(circle at 30% 30%,#2a3342,#121821 70%)}
 /* фото места из Википедии вместо значка */
 .card-ico.photo{background-size:cover;background-position:center;position:relative}
-.card-ico.photo::after{content:"Фото: Википедия";position:absolute;left:0;right:0;bottom:0;font-size:8px;
+.card-ico.photo::after{content:"Фото: " attr(data-src);position:absolute;left:0;right:0;bottom:0;font-size:8px;
   color:rgba(255,255,255,.8);background:rgba(0,0,0,.45);text-align:center;padding:1px 0;border-radius:0 0 14px 14px}
 .card-desc{margin:-4px 0 10px!important;font-size:13px!important;color:#c7cfda!important;line-height:1.35}
 .card-desc a{color:var(--neon);text-decoration:none;font-weight:700;white-space:nowrap}
@@ -142,6 +142,16 @@ button{font:inherit;color:inherit;cursor:pointer}
   max-width:calc(100% - 32px);background:rgba(9,20,24,.95);border:1px solid rgba(63,240,220,.55);
   color:var(--text);padding:10px 16px;border-radius:14px;font-size:14px;z-index:10;text-align:center}
 .toast[hidden]{display:none}
+
+/* ---------- фото на весь экран ---------- */
+.card-ico.photo{cursor:zoom-in}
+.lightbox{position:fixed;inset:0;z-index:20;background:rgba(5,8,12,.94);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:calc(56px + env(safe-area-inset-top)) 12px calc(24px + env(safe-area-inset-bottom))}
+.lightbox[hidden]{display:none}
+.lightbox img{max-width:100%;max-height:calc(100% - 48px);object-fit:contain;border-radius:10px;cursor:zoom-out}
+.lightbox p{margin:12px 0 0;color:#c7cfda;font-size:13px;text-align:center}
+.lightbox-close{position:absolute;right:14px;top:calc(12px + env(safe-area-inset-top));width:40px;height:40px;
+  border-radius:50%;border:1px solid var(--line);background:var(--glass);color:var(--text);font-size:24px;line-height:1}
 
 .maplibregl-ctrl-attrib{background:rgba(10,15,23,.7)!important;color:var(--muted)}
 .maplibregl-ctrl-attrib a{color:#9aa4b6!important}
