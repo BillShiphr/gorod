@@ -186,11 +186,12 @@ function makeIcons() {
       g.fillRect(9 - 3.6 - 1, 7.5, 2, 2); g.fillRect(9 + 3.6 - 1, 7.5, 2, 2);
       g.beginPath(); g.roundRect(3.5, 8.5, 11, 8, 2); g.fill();
     }),
-    metro: icon(18, (g) => {
-      g.fillStyle = '#10161f'; g.strokeStyle = '#aab3c2'; g.lineWidth = 1.3;
-      g.beginPath(); g.arc(9, 9, 7.6, 0, Math.PI * 2); g.fill(); g.stroke();
-      g.fillStyle = '#eef3f8'; g.font = 'bold 10px sans-serif';
-      g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('М', 9, 9.6);
+    // метро — красный круг с белой «М», как на указателях; белый ободок отделяет от тёмной карты
+    metro: icon(20, (g) => {
+      g.fillStyle = '#e4262b'; g.strokeStyle = '#ffffff'; g.lineWidth = 1.6;
+      g.beginPath(); g.arc(10, 10, 8.4, 0, Math.PI * 2); g.fill(); g.stroke();
+      g.fillStyle = '#ffffff'; g.font = 'bold 11px sans-serif';
+      g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('М', 10, 10.8);
     }),
     lamp: icon(14, (g) => {
       const grad = g.createRadialGradient(7, 7, 0, 7, 7, 7);
@@ -344,10 +345,12 @@ function buildStyle() {
         paint: { 'text-color': '#5fc3d0', 'text-halo-color': C.halo, 'text-halo-width': 1.2 } },
       { id: 'metro', type: 'symbol', source: 'omt', 'source-layer': 'poi', minzoom: 12.5,
         filter: ['==', ['get', 'subclass'], 'subway'],
-        layout: { 'icon-image': 'metro', 'icon-size': 0.9,
-          'text-field': ['step', ['zoom'], '', 14, NAME], 'text-font': FONT.reg, 'text-size': 10,
-          'text-anchor': 'top', 'text-offset': [0, 0.9], 'text-optional': true },
-        paint: { 'text-color': '#b9c2d0', 'text-halo-color': C.halo, 'text-halo-width': 1.2 } },
+        layout: { 'icon-image': 'metro', 'icon-size': ['interpolate', ['linear'], ['zoom'], 12.5, 0.85, 16, 1.1],
+          'text-field': ['step', ['zoom'], '', 13.3, NAME], 'text-font': FONT.bold,
+          'text-size': ['interpolate', ['linear'], ['zoom'], 13.3, 11, 16, 13.5],
+          'text-anchor': 'top', 'text-offset': [0, 0.9], 'text-optional': true,
+          'symbol-sort-key': -1 },
+        paint: { 'text-color': '#ffffff', 'text-halo-color': C.halo, 'text-halo-width': 2, 'text-halo-blur': 0.4 } },
       { id: 'place-label-city', type: 'symbol', source: 'omt', 'source-layer': 'place', maxzoom: 11,
         filter: ['in', ['get', 'class'], ['literal', ['city', 'town']]],
         layout: { 'text-field': NAME, 'text-font': FONT.bold,
