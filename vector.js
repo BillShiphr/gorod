@@ -82,7 +82,6 @@ async function loadData() {
   try { saved = JSON.parse(localStorage.getItem(OPEN_KEY)); } catch (e) { /* нет — берём пример */ }
   if (Array.isArray(saved)) {
     App.open = new Set(saved.filter((id) => App.byId[id]));
-    migrateAutoOpened();
   } else {
     const cellBy = (s) => App.cells.find((c) => c.properties.stations.includes(s));
     const full = cellBy(DEFAULT_OPEN.fullCell), part = cellBy(DEFAULT_OPEN.partCell);
@@ -95,34 +94,16 @@ async function loadData() {
   }
 }
 
-/* Раньше отметка места записывала и сам кусочек как отмеченный, поэтому он
- * не гас после снятия отметки. Один раз убираем такие записи: кусочек с
- * отмеченными местами теперь и так открыт, а без них пусть гаснет. */
-function migrateAutoOpened() {
-  const FLAG = `${OPEN_KEY}.derived-zones`;
-  try { if (localStorage.getItem(FLAG)) return; } catch (e) { return; }
-  for (const z of App.zones) {
-    const id = z.properties.id;
-    if (App.open.has(id) && App.poisOfZone[id].some((p) => App.open.has(p.id))) App.open.delete(id);
-  }
-  try { localStorage.setItem(FLAG, '1'); } catch (e) { /* не страшно */ }
-}
-
 function saveOpen() {
   try { localStorage.setItem(OPEN_KEY, JSON.stringify([...App.open])); } catch (e) { /* не страшно */ }
 }
 
-/* Что открыто. В App.open лежат только отметки: отмеченные места и кусочки,
- * отмеченные самим кнопкой «Я здесь был». Кусочек открыт, пока отмечен сам
- * или в нём есть хоть одно отмеченное место-точка: сняли последнюю — погас.
- * Знаковые территории (Флакон, парки, рынки) кусочек не открывают: у них свой
- * контур, и при отметке загораются только они сами. */
+/* Что открыто. В App.open лежат отметки, и у них разный смысл:
+ * - кусочек отмечен кнопкой «Я здесь был» — ты там гулял, он светится целиком;
+ * - галочка у места (театр, музей, Флакон) — ты был в самом месте, но район
+ *   этим не исследован: загорается только место, кусочек остаётся тёмным. */
 const marked = (id) => App.open.has(id);
-function isOpen(f) {
-  const id = f.properties.id;
-  if (f.properties.kind !== 'zone') return marked(id);
-  return marked(id) || (App.poisOfZone[id] || []).some((p) => !p.landmark && marked(p.id));
-}
+const isOpen = (f) => marked(f.properties.id);
 const openFeatures = () => [...App.zones, ...App.places].filter(isOpen);
 const fc = (features) => ({ type: 'FeatureCollection', features });
 
@@ -130,13 +111,10 @@ function togglePoi(p) {
   if (marked(p.id)) App.open.delete(p.id); else App.open.add(p.id);
 }
 
-/* Открыть или закрыть кусочек целиком. Закрыть — значит снять и отметку
- * самого кусочка, и отметки всех его мест, иначе он так и остался бы открытым. */
+/* Отметить или снять «Я здесь был» у кусочка. Отметки мест внутри не трогаем:
+ * это отдельная история — был ли ты в самом месте. */
 function setZoneOpen(zone, open) {
-  const id = zone.properties.id;
-  if (open) { App.open.add(id); return; }
-  App.open.delete(id);
-  for (const p of App.poisOfZone[id] || []) App.open.delete(p.id);
+  if (open) App.open.add(zone.properties.id); else App.open.delete(zone.properties.id);
 }
 
 /* сколько кусочков участка открыто: [открыто, всего] */
@@ -371,16 +349,30 @@ function buildStyle() {
         paint: { 'text-color': '#c9d1dc', 'text-halo-color': C.halo, 'text-halo-width': 1.6 } },
       // интересные места: сиреневая точка в светлом ободке с тёмной «подложкой» вокруг —
       // по форме и цвету не спутать с фонарём; бирюзовая — уже был
+      // где был — бирюзовое свечение вокруг точки, видно и издалека, и в тёмном кусочке
+      { id: 'poi-glow', type: 'circle', source: 'poiPoints', minzoom: 11.5, filter: ['get', 'visited'],
+        paint: { 'circle-color': C.neon, 'circle-opacity': 0.35, 'circle-blur': 0.8,
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 11.5, 9, 16, 22] } },
       { id: 'poi-halo', type: 'circle', source: 'poiPoints', minzoom: 12.5,
         paint: { 'circle-color': C.bg, 'circle-opacity': 0.75,
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 12.5, 6, 16, 11] } },
-      { id: 'poi-dot', type: 'circle', source: 'poiPoints', minzoom: 12.5,
-        paint: { 'circle-color': ['case', ['get', 'visited'], C.neon, C.poi],
+      // не был — сиреневая точка с приближения 12.5
+      { id: 'poi-dot', type: 'circle', source: 'poiPoints', minzoom: 12.5, filter: ['!', ['get', 'visited']],
+        paint: { 'circle-color': C.poi,
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 12.5, 3, 16, 6],
           'circle-stroke-color': C.poiRing, 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 12.5, 1, 16, 2] } },
-      { id: 'poi-label', type: 'symbol', source: 'poiPoints', minzoom: 14.5,
-        layout: { 'text-field': ['get', 'name'], 'text-font': FONT.bold, 'text-size': 11,
-          'text-anchor': 'left', 'text-offset': [1, 0], 'text-max-width': 10, 'text-optional': true },
+      // был — бирюзовая, крупнее, с белым ободком и видна уже с 11.5
+      { id: 'poi-dot-visited', type: 'circle', source: 'poiPoints', minzoom: 11.5, filter: ['get', 'visited'],
+        paint: { 'circle-color': C.neon,
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 11.5, 4, 16, 9],
+          'circle-stroke-color': '#ffffff', 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11.5, 1, 16, 2.5] } },
+      { id: 'poi-label', type: 'symbol', source: 'poiPoints', minzoom: 13,
+        // где был — подпись с галочкой уже с 13; остальные — только с 14.5
+        layout: { 'text-field': ['step', ['zoom'],
+          ['case', ['get', 'visited'], ['concat', '✓ ', ['get', 'name']], ''],
+          14.5, ['case', ['get', 'visited'], ['concat', '✓ ', ['get', 'name']], ['get', 'name']]],
+          'text-font': FONT.bold, 'text-size': 11,
+          'text-anchor': 'left', 'text-offset': [1.1, 0], 'text-max-width': 10, 'text-optional': true },
         paint: { 'text-color': ['case', ['get', 'visited'], C.neon, C.poiText],
           'text-halo-color': C.halo, 'text-halo-width': 2.2, 'text-halo-blur': 0.5 } },
       // закрытые участки: замок и название
@@ -719,7 +711,7 @@ function initMap() {
   });
 
   // порядок важен: сначала подписи, потом знаковые места, потом кусочки
-  const CLICK_LAYERS = ['open-label', 'open-name', 'place-label', 'poi-dot', 'poi-label', 'cell-label', 'place-hit', 'zone-hit'];
+  const CLICK_LAYERS = ['open-label', 'open-name', 'place-label', 'poi-dot', 'poi-dot-visited', 'poi-label', 'cell-label', 'place-hit', 'zone-hit'];
   map.on('click', (e) => {
     const hits = map.queryRenderedFeatures(e.point, { layers: CLICK_LAYERS });
     hits.sort((a, b) => CLICK_LAYERS.indexOf(a.layer.id) - CLICK_LAYERS.indexOf(b.layer.id));
