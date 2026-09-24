@@ -16,9 +16,9 @@
  */
 'use strict';
 
-const DATA_VERSION = 9;
+const DATA_VERSION = 10;
 // новая нарезка — новые кусочки, старые отметки к ним не подходят
-const OPEN_KEY = 'gorod.vector-zones.v4';
+const OPEN_KEY = 'gorod.vector-zones.v5';
 // что открыто для примера при первом запуске: участок целиком, пара кусочков, места
 const DEFAULT_OPEN = { fullCell: 'Октябрьская', partCell: 'Полянка', places: ['Парк Горького', 'Винзавод'] };
 
