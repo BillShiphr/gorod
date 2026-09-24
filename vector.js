@@ -188,13 +188,14 @@ function makeIcons() {
     }),
     // метро — просто красная «М», без круга; тонкая тёмная обводка по контуру буквы,
     // чтобы не терялась на горящих улицах
+    // своя геометричная «М» в духе метро (не копия логотипа): широкие ножки,
+    // глубокая «галочка» посередине, расширение книзу
     metro: icon(20, (g) => {
-      g.font = '900 17px Manrope, Arial, sans-serif';
-      g.textAlign = 'center'; g.textBaseline = 'middle';
-      g.lineJoin = 'round'; g.lineWidth = 3; g.strokeStyle = 'rgba(10,15,23,.85)';
-      g.strokeText('М', 10, 11);
+      const m = new Path2D('M1.5 17.5 L5.6 3 L10 11.2 L14.4 3 L18.5 17.5 L15 17.5 L13.1 9.6 L10 15.2 L6.9 9.6 L5 17.5 Z');
+      g.lineJoin = 'round'; g.lineWidth = 2.6; g.strokeStyle = 'rgba(10,15,23,.85)';
+      g.stroke(m);
       g.fillStyle = '#ef2b2d';
-      g.fillText('М', 10, 11);
+      g.fill(m);
     }),
     lamp: icon(14, (g) => {
       const grad = g.createRadialGradient(7, 7, 0, 7, 7, 7);
