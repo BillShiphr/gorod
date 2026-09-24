@@ -48,6 +48,8 @@ async function loadData() {
   const [cells, zones, places, pois, admin] = await Promise.all([
     get('data/cells.json'), get('data/zones.json'), get('data/landmarks.json'), get('data/pois.json'),
     get('data/admin.json')]);
+  // фото и описания из Википедии — не обязательны: нет файла — карта работает без них
+  App.photos = await get('data/photos.json').catch(() => ({}));
   App.admin = admin.features;
   App.cells = cells.features;
   App.zones = zones.features;
@@ -238,6 +240,7 @@ function buildStyle() {
       admin: { type: 'geojson', data: fc(App.admin) },
       adminLabels: { type: 'geojson', data: fc(App.admin.map((f) => turf.point([f.properties.lng, f.properties.lat], f.properties))) },
       selected: { type: 'geojson', data: empty },
+      hover: { type: 'geojson', data: empty },
       places: { type: 'geojson', data: fc(App.places) },
       poiPoints: { type: 'geojson', data: empty },
       cellLabels: { type: 'geojson', data: empty },
@@ -324,6 +327,10 @@ function buildStyle() {
         paint: { 'line-color': C.neon, 'line-opacity': 0.5, 'line-width': 12, 'line-blur': 9 } },
       { id: 'open-line', type: 'line', source: 'fog',
         paint: { 'line-color': C.neon, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1.2, 16, 2.4] } },
+      // под мышкой (на компьютере): легче, чем выделение по нажатию
+      { id: 'hover-fill', type: 'fill', source: 'hover', paint: { 'fill-color': '#dff6ff', 'fill-opacity': 0.06 } },
+      { id: 'hover-line', type: 'line', source: 'hover',
+        paint: { 'line-color': '#ffffff', 'line-opacity': 0.45, 'line-width': 1.4 } },
       // то, на что нажали: светлая заливка и контур, открытым от этого не становится
       { id: 'sel-fill', type: 'fill', source: 'selected', paint: { 'fill-color': '#dff6ff', 'fill-opacity': 0.1 } },
       { id: 'sel-glow', type: 'line', source: 'selected',
@@ -605,8 +612,27 @@ function showCard(f) {
   document.getElementById('cardTitle').textContent = title;
   document.getElementById('cardSub').textContent = sub;
   const ico = document.getElementById('cardIco');
-  ico.className = 'card-ico' + (open ? '' : ' locked');
-  ico.innerHTML = open ? (ICONS[icoKind] || ICONS.park) : ICONS.lock;
+  // у места — фото и пара предложений из Википедии, если нашлись
+  const ph = App.photos[p.id];
+  const isPlace = kind !== 'zone' && kind !== 'metro' && kind !== 'area';
+  if (isPlace && ph && ph.img) {
+    ico.className = 'card-ico photo';
+    ico.innerHTML = '';
+    ico.style.backgroundImage = `url("${ph.img}")`;
+  } else {
+    ico.className = 'card-ico' + (open ? '' : ' locked');
+    ico.style.backgroundImage = '';
+    ico.innerHTML = open ? (ICONS[icoKind] || ICONS.park) : ICONS.lock;
+  }
+  const desc = document.getElementById('cardDesc');
+  desc.hidden = !(isPlace && ph && ph.text);
+  if (!desc.hidden) {
+    desc.textContent = `${ph.text} `;
+    const a = document.createElement('a');
+    a.href = ph.url; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = 'Подробнее в Википедии';
+    desc.append(a);
+  }
   const b = document.getElementById('cardBadge');
   b.className = 'badge' + (open ? '' : ' locked');
   b.textContent = badge;
@@ -648,9 +674,17 @@ function drawList(cell, zoneId) {
     const row = document.createElement('div');
     row.className = 'poi' + (App.open.has(p.id) ? ' done' : '') + (p.landmark ? ' gold' : '');
     row.innerHTML = '<button class="mark" title="Отметить, что был здесь">✓</button>'
-      + '<button class="poi-go" title="Показать на карте"><b></b><small></small></button>';
+      + '<button class="poi-go" title="Показать на карте"><span class="txt"><b></b><small></small></span></button>';
     row.querySelector('b').textContent = p.name;
     row.querySelector('small').textContent = p.kind_label;
+    const ph = App.photos[p.id];
+    if (ph && ph.img) {  // маленькое фото места рядом с названием
+      const t = document.createElement('span');
+      t.className = 'thumb';
+      t.style.backgroundImage = `url("${ph.img}")`;
+      row.querySelector('.poi-go').prepend(t);
+      row.querySelector('.poi-go').classList.add('with-thumb');
+    }
     row.querySelector('.mark').onclick = () => { togglePoi(p); refresh(); showCard(App.current); };
     row.querySelector('.poi-go').onclick = () => flyToPoi(p);
     box.append(row);
@@ -742,6 +776,21 @@ function initMap() {
     map.on('mousemove', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
   }
+  // подсветка под мышкой: знаковое место важнее кусочка под ним;
+  // перерисовываем, только когда мышка перешла на другой объект
+  let hovered = null;
+  map.on('mousemove', (e) => {
+    const hits = map.queryRenderedFeatures(e.point, { layers: ['place-hit', 'zone-hit'] });
+    const h = hits.find((x) => x.layer.id === 'place-hit') || hits[0];
+    const id = h ? h.properties.id : null;
+    if (id === hovered) return;
+    hovered = id;
+    map.getSource('hover').setData(fc(id && App.byId[id] ? [App.byId[id]] : []));
+  });
+  map.getCanvas().addEventListener('mouseleave', () => {
+    hovered = null;
+    map.getSource('hover').setData(fc([]));
+  });
 
   document.getElementById('btnZoomIn').onclick = () => map.zoomIn();
   document.getElementById('btnZoomOut').onclick = () => map.zoomOut();
