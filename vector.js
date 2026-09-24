@@ -186,12 +186,15 @@ function makeIcons() {
       g.fillRect(9 - 3.6 - 1, 7.5, 2, 2); g.fillRect(9 + 3.6 - 1, 7.5, 2, 2);
       g.beginPath(); g.roundRect(3.5, 8.5, 11, 8, 2); g.fill();
     }),
-    // метро — красный круг с белой «М», как на указателях; белый ободок отделяет от тёмной карты
+    // метро — просто красная «М», без круга; тонкая тёмная обводка по контуру буквы,
+    // чтобы не терялась на горящих улицах
     metro: icon(20, (g) => {
-      g.fillStyle = '#e4262b'; g.strokeStyle = '#ffffff'; g.lineWidth = 1.6;
-      g.beginPath(); g.arc(10, 10, 8.4, 0, Math.PI * 2); g.fill(); g.stroke();
-      g.fillStyle = '#ffffff'; g.font = 'bold 11px sans-serif';
-      g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('М', 10, 10.8);
+      g.font = '900 17px Manrope, Arial, sans-serif';
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.lineJoin = 'round'; g.lineWidth = 3; g.strokeStyle = 'rgba(10,15,23,.85)';
+      g.strokeText('М', 10, 11);
+      g.fillStyle = '#ef2b2d';
+      g.fillText('М', 10, 11);
     }),
     lamp: icon(14, (g) => {
       const grad = g.createRadialGradient(7, 7, 0, 7, 7, 7);
@@ -345,7 +348,7 @@ function buildStyle() {
         paint: { 'text-color': '#5fc3d0', 'text-halo-color': C.halo, 'text-halo-width': 1.2 } },
       { id: 'metro', type: 'symbol', source: 'omt', 'source-layer': 'poi', minzoom: 12.5,
         filter: ['==', ['get', 'subclass'], 'subway'],
-        layout: { 'icon-image': 'metro', 'icon-size': ['interpolate', ['linear'], ['zoom'], 12.5, 0.85, 16, 1.1],
+        layout: { 'icon-image': 'metro', 'icon-size': ['interpolate', ['linear'], ['zoom'], 12.5, 1.05, 16, 1.35],
           'text-field': ['step', ['zoom'], '', 13.3, NAME], 'text-font': FONT.bold,
           'text-size': ['interpolate', ['linear'], ['zoom'], 13.3, 11, 16, 13.5],
           'text-anchor': 'top', 'text-offset': [0, 0.9], 'text-optional': true,
