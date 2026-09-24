@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f17">
+<title>Город — векторная карта</title>
+<link rel="icon" href="icon.svg">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="vector.css?v=6">
+</head>
+<body>
+<div id="map"></div>
+
+<header class="top">
+  <div class="title">
+    <h1>Москва</h1>
+    <p>исследуй · посещай · открывай</p>
+  </div>
+  <div class="counter glass">
+    <svg viewBox="0 0 36 36" class="ring" aria-hidden="true">
+      <circle cx="18" cy="18" r="15" class="ring-bg"/>
+      <circle cx="18" cy="18" r="15" class="ring-fg" id="ringFg"/>
+    </svg>
+    <div>
+      <b id="countText">0 / 0</b>
+      <small id="countSub">участков открыто</small>
+    </div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="glass round" id="btnLocate" title="Где я">
+    <svg viewBox="0 0 24 24"><path d="M21 3 3 10.5l7.5 3L13.5 21z"/></svg>
+  </button>
+  <div class="glass zoom">
+    <button id="btnZoomIn" title="Приблизить">+</button>
+    <button id="btnZoomOut" title="Отдалить">−</button>
+  </div>
+</div>
+
+<section class="card glass" id="card" hidden>
+  <div class="card-ico" id="cardIco"></div>
+  <div class="card-body">
+    <h2 id="cardTitle"></h2>
+    <p id="cardSub"></p>
+    <div class="card-row">
+      <span class="badge" id="cardBadge"></span>
+      <button class="card-btn" id="cardBtn" hidden></button>
+      <button class="card-btn ghost" id="cardBtn2" hidden></button>
+    </div>
+  </div>
+  <div class="card-list" id="cardList" hidden></div>
+  <button class="card-close" id="cardClose" title="Закрыть">×</button>
+</section>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
+<script src="vector.js?v=19"></script>
+</body>
+</html>

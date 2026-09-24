@@ -1,0 +1,92 @@
+:root{
+  --bg:#0a0f17;
+  --glass:rgba(13,19,29,.84);
+  --line:rgba(110,230,225,.22);
+  --neon:#3ff0dc;
+  --text:#eef3f8;
+  --muted:#8792a4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+  font-family:Manrope,system-ui,sans-serif;overflow:hidden}
+#map{position:fixed;inset:0}
+button{font:inherit;color:inherit;cursor:pointer}
+
+.glass{background:var(--glass);border:1px solid var(--line);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+
+/* ---------- шапка ---------- */
+.top{position:fixed;left:0;right:0;top:0;padding:calc(14px + env(safe-area-inset-top)) 16px 28px;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none;
+  background:linear-gradient(var(--bg) 20%,rgba(10,15,23,0))}
+.top>*{pointer-events:auto}
+.title h1{margin:0;font-size:30px;font-weight:700;letter-spacing:.01em}
+.title p{margin:4px 0 0;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.counter{display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:16px}
+.counter b{display:block;font-size:17px}
+.counter small{display:block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.ring{width:38px;height:38px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:4}
+.ring-bg{stroke:#263140}
+.ring-fg{stroke:var(--neon);stroke-linecap:round;transition:stroke-dasharray .4s}
+
+/* ---------- кнопки справа ---------- */
+.controls{position:fixed;right:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px}
+.round{width:46px;height:46px;border-radius:50%;display:grid;place-items:center}
+.round svg{width:20px;height:20px;fill:var(--text)}
+.zoom{display:flex;flex-direction:column;border-radius:16px;overflow:hidden}
+.zoom button{width:46px;height:46px;background:none;border:0;font-size:24px;line-height:1}
+.zoom button+button{border-top:1px solid var(--line)}
+
+.me{width:16px;height:16px;border-radius:50%;background:#4aa8ff;border:3px solid #fff;
+  box-shadow:0 0 0 6px rgba(74,168,255,.25)}
+
+/* ---------- карточка снизу ---------- */
+.card{position:fixed;left:14px;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));
+  max-width:520px;margin:0 auto;border-radius:20px;padding:14px;display:flex;gap:14px;align-items:center}
+.card[hidden]{display:none}
+.card-ico{width:84px;height:84px;border-radius:14px;flex:none;display:grid;place-items:center;
+  background:radial-gradient(circle at 30% 30%,#2d7a4f,#0f2a1f 70%)}
+.card-ico svg{width:38px;height:38px;fill:#bff8ee}
+.card-ico.locked{background:radial-gradient(circle at 30% 30%,#2a3342,#121821 70%)}
+.card-ico.locked svg{fill:#7d8798}
+.card-body{flex:1;min-width:0}
+.card h2{margin:0;font-size:20px;font-weight:700}
+.card p{margin:3px 0 10px;color:var(--muted);font-size:13px}
+.card-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.badge{font-size:11px;font-weight:800;letter-spacing:.14em;padding:5px 12px;border-radius:999px;
+  border:1px solid rgba(63,240,220,.6);color:var(--neon);background:rgba(63,240,220,.08)}
+.badge.locked{border-color:#3a4556;color:var(--muted);background:none}
+.card-btn{background:var(--neon);color:#062a26;border:0;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:800}
+.card-btn.ghost{background:none;color:var(--muted);border:1px solid #3a4556}
+.card-close{position:absolute;right:8px;top:6px;background:none;border:0;color:var(--muted);font-size:22px}
+.card{flex-wrap:wrap}
+
+/* список интересных мест в карточке участка */
+.card-list{flex-basis:100%;max-height:34vh;overflow-y:auto;border-top:1px solid var(--line);padding-top:8px;margin-top:2px}
+.card-list[hidden]{display:none}
+.card-list h3{margin:2px 0 6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.poi{display:flex;align-items:center;gap:6px;width:100%;border-radius:10px}
+.poi:hover{background:rgba(255,255,255,.04)}
+/* кружок — отдельная кнопка «был здесь»; поле для пальца больше самого кружка */
+.poi .mark{width:40px;height:40px;flex:none;display:grid;place-items:center;background:none;border:0;
+  color:transparent;font-size:13px;font-weight:800;position:relative}
+.poi .mark::before{content:"";position:absolute;inset:9px;border-radius:50%;border:1.5px solid #4a5568}
+/* название — «показать на карте», стрелка справа подсказывает, что это переход */
+.poi-go{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+  background:none;border:0;padding:7px 28px 7px 0;position:relative}
+.poi-go::after{content:"›";position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:20px}
+.poi.done .mark{color:var(--neon)}
+.poi.done .mark::before{border-color:var(--neon);background:rgba(63,240,220,.15)}
+.poi b{display:block;font-size:14px;font-weight:600}
+.poi small{display:block;font-size:11px;color:var(--muted)}
+.card-list .more{margin:6px 0 4px}
+.poi.gold b{color:#ddd0ff}
+
+.back{position:fixed;left:14px;bottom:calc(10px + env(safe-area-inset-bottom));font-size:12px;color:var(--muted);text-decoration:none}
+.card:not([hidden])~.back{display:none}
+
+.maplibregl-ctrl-attrib{background:rgba(10,15,23,.7)!important;color:var(--muted)}
+.maplibregl-ctrl-attrib a{color:#9aa4b6!important}
+.maplibregl-ctrl-attrib-button{filter:invert(1)}
