@@ -565,8 +565,16 @@ function setButton(id, text, primary, onclick) {
   btn.onclick = () => { onclick(); refresh(); showCard(App.current); };
 }
 
-function showCard(f) {
+/* back — карточка, из которой пришли (кусочек или участок, где был список мест):
+ * в карточке места появляется «← назад». Кнопки внутри карточки перерисовывают
+ * её через showCard(App.current) — «назад» при этом сохраняется. */
+function showCard(f, back) {
+  if (back !== undefined) App.back = back;
+  else if (f !== App.current) App.back = null;
   App.current = f;
+  const backBtn = document.getElementById('cardBack');
+  backBtn.hidden = !App.back;
+  backBtn.onclick = () => { const b = App.back; App.back = null; showCard(b); };
   const p = f.properties;
   const kind = p.kind;
   let title, sub, icoKind, open, badge;
@@ -686,7 +694,8 @@ function drawList(cell, zoneId) {
       row.querySelector('.poi-go').classList.add('with-thumb');
     }
     row.querySelector('.mark').onclick = () => { togglePoi(p); refresh(); showCard(App.current); };
-    row.querySelector('.poi-go').onclick = () => flyToPoi(p);
+    // название или стрелка — карточка самого места (фото, описание), карта летит к нему
+    row.querySelector('.poi-go').onclick = () => { showCard(App.byId[p.id], App.current); flyToPoi(p); };
     box.append(row);
   }
   // из кусочка — переход ко всему участку, если там есть что-то ещё
@@ -726,6 +735,7 @@ function flyToPoi(p) {
 
 const hideCard = () => {
   App.current = null;
+  App.back = null;
   document.getElementById('card').hidden = true;
   App.map.getSource('selected').setData(fc([]));
 };

@@ -67,6 +67,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .poi-go .txt{display:block;min-width:0}
 .card-ico.locked svg{fill:#7d8798}
 .card-body{flex:1;min-width:0}
+.card-back{background:none;border:0;padding:0 0 4px;color:var(--neon);font-size:12px;font-weight:700}
+.card-back[hidden]{display:none}
 .card h2{margin:0;font-size:20px;font-weight:700}
 .card p{margin:3px 0 10px;color:var(--muted);font-size:13px}
 .card-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
