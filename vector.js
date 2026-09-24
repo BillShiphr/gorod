@@ -16,9 +16,9 @@
  */
 'use strict';
 
-const DATA_VERSION = 8;
+const DATA_VERSION = 9;
 // новая нарезка — новые кусочки, старые отметки к ним не подходят
-const OPEN_KEY = 'gorod.vector-zones.v3';
+const OPEN_KEY = 'gorod.vector-zones.v4';
 // что открыто для примера при первом запуске: участок целиком, пара кусочков, места
 const DEFAULT_OPEN = { fullCell: 'Октябрьская', partCell: 'Полянка', places: ['Парк Горького', 'Винзавод'] };
 
@@ -527,11 +527,11 @@ const ICONS = {
 
 function drawCounter() {
   const n = App.cells.filter((c) => progress(c)[0] > 0).length, total = App.cells.length;
-  const z = App.zones.filter(isOpen).length;
   const k = App.pois.filter((p) => App.open.has(p.id)).length;
   document.getElementById('countText').textContent = `${n} / ${total}`;
-  document.getElementById('countSub').textContent =
-    `участков · кусочков ${z}/${App.zones.length} · мест ${k}/${App.pois.length}`;
+  // в шапке — участки у метро; кусочки считаются внутри участка (на плашках «4/9»),
+  // общее число кусочков в тысячах ничего бы не говорило
+  document.getElementById('countSub').textContent = `участков открыто · мест ${k}`;
   const len = 2 * Math.PI * 15;
   document.getElementById('ringFg').style.strokeDasharray = `${Math.max(len * n / total, 0.01)} ${len}`;
 }
