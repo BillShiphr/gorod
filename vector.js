@@ -350,10 +350,10 @@ function buildStyle() {
         paint: { 'text-color': '#5fc3d0', 'text-halo-color': C.halo, 'text-halo-width': 1.2 } },
       // станции — из своей выгрузки (data/metro.json): подложка отдаёт метро только
       // с масштаба ~12.5, а нам нужно раньше
-      { id: 'metro', type: 'symbol', source: 'metro', minzoom: 10.8,
-        layout: { 'icon-image': 'metro', 'icon-size': ['interpolate', ['linear'], ['zoom'], 10.8, 0.75, 13, 1.05, 16, 1.35],
-          'text-field': ['step', ['zoom'], '', 12.4, ['get', 'name']], 'text-font': FONT.bold,
-          'text-size': ['interpolate', ['linear'], ['zoom'], 12.4, 10.5, 16, 13.5],
+      { id: 'metro', type: 'symbol', source: 'metro', minzoom: 11.7,
+        layout: { 'icon-image': 'metro', 'icon-size': ['interpolate', ['linear'], ['zoom'], 11.7, 0.85, 13, 1.05, 16, 1.35],
+          'text-field': ['step', ['zoom'], '', 12.9, ['get', 'name']], 'text-font': FONT.bold,
+          'text-size': ['interpolate', ['linear'], ['zoom'], 12.9, 10.5, 16, 13.5],
           'text-anchor': 'top', 'text-offset': [0, 0.9], 'text-optional': true,
           'symbol-sort-key': -1 },
         paint: { 'text-color': '#ffffff', 'text-halo-color': C.halo, 'text-halo-width': 2, 'text-halo-blur': 0.4 } },
