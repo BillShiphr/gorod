@@ -226,6 +226,7 @@ function buildStyle() {
     sources: {
       omt: { type: 'vector', url: 'https://tiles.openfreemap.org/planet' },
       fog: { type: 'geojson', data: empty },
+      openFill: { type: 'geojson', data: empty },
       cells: { type: 'geojson', data: fc(App.cells) },
       zones: { type: 'geojson', data: fc(App.zones) },
       admin: { type: 'geojson', data: fc(App.admin) },
@@ -306,6 +307,11 @@ function buildStyle() {
       { id: 'place-line', type: 'line', source: 'places',
         paint: { 'line-color': C.poi, 'line-opacity': 0.75, 'line-dasharray': [2, 1.6],
           'line-width': ['interpolate', ['linear'], ['zoom'], 10, 0.8, 15, 1.6] } },
+      // заливка открытого: издалека улицы тонкие и почти не светят — без неё
+      // открытое читалось бы только по контуру. Вблизи прозрачнее: там горят улицы.
+      { id: 'open-fill', type: 'fill', source: 'openFill',
+        paint: { 'fill-color': C.neon,
+          'fill-opacity': ['interpolate', ['linear'], ['zoom'], 9, 0.42, 12, 0.3, 14, 0.12, 16, 0.05] } },
       // неон — по краю тумана, то есть по внешней границе всего открытого,
       // без сетки между соседними открытыми кусочками
       { id: 'open-glow', type: 'line', source: 'fog',
@@ -437,7 +443,9 @@ function buildStyle() {
 
 function refresh() {
   const map = App.map;
-  map.getSource('fog').setData(fogGeometry(openFeatures()));
+  const open = openFeatures();
+  map.getSource('fog').setData(fogGeometry(open));
+  map.getSource('openFill').setData(fc(open));
   // участок без единого открытого кусочка — замок; хоть один — плашка с прогрессом
   const touched = App.cells.filter((c) => progress(c)[0] > 0);
   map.getSource('cellLabels').setData(fc(App.cells.filter((c) => progress(c)[0] === 0).map((f) => labelPoint(f))));
