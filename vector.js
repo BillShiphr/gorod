@@ -727,21 +727,185 @@ function initMap() {
   document.getElementById('btnZoomOut').onclick = () => map.zoomOut();
   document.getElementById('cardClose').onclick = hideCard;
   document.getElementById('btnLocate').onclick = locate;
+  document.getElementById('btnHere').onclick = markHere;
+  document.getElementById('btnTrip').onclick = () => openTrip('weekend');
+  document.getElementById('tripClose').onclick = closeTrip;
+  for (const b of document.querySelectorAll('#tripTabs button')) b.onclick = () => openTrip(b.dataset.tab);
 }
 
+/* ============================ где я ============================ */
+
+/* Узнать, где человек. Последнее место запоминаем: «Рядом» и «На выходные»
+ * считают расстояния от него. */
+function getPosition() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) { reject(new Error('нет геолокации')); return; }
+    navigator.geolocation.getCurrentPosition((pos) => {
+      App.here = { ll: [pos.coords.longitude, pos.coords.latitude], acc: pos.coords.accuracy };
+      if (!App.me) {
+        const el = document.createElement('div');
+        el.className = 'me';
+        App.me = new maplibregl.Marker({ element: el });
+      }
+      App.me.setLngLat(App.here.ll).addTo(App.map);
+      resolve(App.here);
+    }, reject, { enableHighAccuracy: true, timeout: 12000, maximumAge: 30000 });
+  });
+}
+
+const GEO_FAIL = 'Не получилось узнать, где вы. Разрешите сайту доступ к геолокации в настройках браузера.';
+
 function locate() {
-  if (!navigator.geolocation) return;
-  navigator.geolocation.getCurrentPosition((pos) => {
-    const ll = [pos.coords.longitude, pos.coords.latitude];
-    if (!App.me) {
-      const el = document.createElement('div');
-      el.className = 'me';
-      App.me = new maplibregl.Marker({ element: el });
-    }
-    App.me.setLngLat(ll).addTo(App.map);
-    App.map.flyTo({ center: ll, zoom: 15 });
-  }, () => alert('Не получилось узнать, где вы. Проверьте доступ к геолокации.'),
-  { enableHighAccuracy: true, timeout: 10000 });
+  getPosition().then(({ ll }) => App.map.flyTo({ center: ll, zoom: Math.max(App.map.getZoom(), 15) }))
+    .catch(() => toast(GEO_FAIL));
+}
+
+/* «Я здесь»: открыть кусочек, в котором человек сейчас стоит. */
+async function markHere() {
+  const btn = document.getElementById('btnHere');
+  const label = btn.lastChild;
+  btn.disabled = true;
+  label.textContent = ' Ищу вас…';
+  try {
+    const { ll, acc } = await getPosition();
+    const pt = turf.point(ll);
+    const zone = App.zones.find((z) => turf.booleanPointInPolygon(pt, z));
+    App.map.flyTo({ center: ll, zoom: Math.max(App.map.getZoom(), 15) });
+    if (!zone) { toast('Вы за пределами карты — здесь пока нечего открывать'); return; }
+    const was = isOpen(zone);
+    setZoneOpen(zone, true);
+    refresh();
+    showCard(zone);
+    const name = zone.properties.name || `у метро «${App.byId[zone.properties.cell].properties.short}»`;
+    const rough = acc > 150 ? ` (точность ~${Math.round(acc / 10) * 10} м)` : '';
+    toast(was ? `Этот кусочек уже открыт${rough}` : `Открыто: ${name}${rough}`);
+  } catch (e) {
+    toast(GEO_FAIL);
+  } finally {
+    btn.disabled = false;
+    label.textContent = ' Я здесь';
+  }
+}
+
+function toast(text) {
+  const el = document.getElementById('toast');
+  el.textContent = text;
+  el.hidden = false;
+  clearTimeout(App.toastTimer);
+  App.toastTimer = setTimeout(() => { el.hidden = true; }, 3500);
+}
+
+/* ============================ куда поехать ============================ */
+
+const km = (a, b) => turf.distance(turf.point(a), turf.point(b));
+const fmtKm = (d) => (d < 1 ? `${Math.max(50, Math.round(d * 20) * 50)} м` : `${d < 10 ? d.toFixed(1).replace('.', ',') : Math.round(d)} км`);
+// от чего считать расстояние: от человека, если знаем, где он, иначе от центра карты
+const origin = () => (App.here ? App.here.ll : App.map.getCenter().toArray());
+const originText = () => (App.here ? 'от вас' : 'от центра карты');
+// у знакового места координаты — в его контуре, у обычного — в самой записи
+const poiLL = (p) => (p.landmark ? [App.byId[p.id].properties.lng, App.byId[p.id].properties.lat] : [p.lng, p.lat]);
+
+/* Идеи на выходные: участки, где ещё не были ни в одном кусочке, в которых
+ * много неотмеченных мест (знаковые считаем за три), не слишком близко —
+ * это поездка, а не прогулка у дома — и не слишком далеко. */
+function weekendIdeas() {
+  const o = origin();
+  return App.cells.map((c) => {
+    const [k] = progress(c);
+    const pois = App.poisOf[c.properties.id].filter((p) => !marked(p.id));
+    const score = pois.length + 2 * pois.filter((p) => p.landmark).length;
+    const d = km(o, [c.properties.lng, c.properties.lat]);
+    return { c, k, pois, d, rank: score / (1 + d / 8) };
+  }).filter((x) => x.k === 0 && x.pois.length >= 2 && x.d >= 3 && x.d <= 25)
+    .sort((a, b) => b.rank - a.rank)
+    .slice(0, 15);
+}
+
+function openTrip(tab) {
+  App.tripTab = tab;
+  hideCard();
+  document.getElementById('trip').hidden = false;
+  document.getElementById('bottombar').classList.add('away');
+  for (const b of document.querySelectorAll('#tripTabs button')) b.classList.toggle('on', b.dataset.tab === tab);
+  drawTrip();
+  // тихо уточняем, где человек: расстояния станут честнее
+  if (!App.here) getPosition().then(() => { if (!document.getElementById('trip').hidden) drawTrip(); }).catch(() => {});
+}
+
+function closeTrip() {
+  document.getElementById('trip').hidden = true;
+  document.getElementById('bottombar').classList.remove('away');
+}
+
+function drawTrip() {
+  const body = document.getElementById('tripBody');
+  body.replaceChildren();
+  if (App.tripTab === 'weekend') drawWeekend(body); else drawNear(body);
+}
+
+function drawWeekend(body) {
+  const ideas = weekendIdeas();
+  if (!ideas.length) {
+    body.insertAdjacentHTML('beforeend', '<p class="hint">Похоже, вокруг всё открыто. Отодвиньте карту в другую часть города и откройте снова.</p>');
+    return;
+  }
+  App.ideaIdx = (App.ideaIdx || 0) % ideas.length;
+  const { c, pois, d } = ideas[App.ideaIdx];
+  const p = c.properties;
+  const top = [...pois].sort((a, b) => b.landmark - a.landmark).slice(0, 5);
+  const box = document.createElement('div');
+  box.className = 'idea';
+  box.innerHTML = '<p class="hint"></p><h2></h2><p class="meta"></p><p class="why"></p><ul></ul>'
+    + '<div class="card-row"><button class="card-btn" data-a="show">Показать на карте</button>'
+    + '<button class="card-btn ghost" data-a="next">Другое предложение</button></div>';
+  box.querySelector('.hint').textContent = `Предложение ${App.ideaIdx + 1} из ${ideas.length}`;
+  box.querySelector('h2').textContent = p.kind === 'metro' ? `У метро «${p.short}»` : p.short;
+  box.querySelector('.meta').textContent = `${p.district ? `${p.district} · ` : ''}${fmtKm(d)} ${originText()}`;
+  box.querySelector('.why').textContent = `Вы здесь ещё не были. Интересных мест: ${pois.length}. Например:`;
+  const ul = box.querySelector('ul');
+  for (const x of top) {
+    const li = document.createElement('li');
+    li.innerHTML = '<span></span> <small></small>';
+    li.firstChild.textContent = x.name;
+    li.lastChild.textContent = `· ${x.kind_label}`;
+    ul.append(li);
+  }
+  box.querySelector('[data-a="show"]').onclick = () => {
+    closeTrip();
+    App.map.fitBounds(turf.bbox(c), { padding: { top: 110, bottom: 260, left: 30, right: 30 }, duration: 900 });
+    showCard(c);
+  };
+  box.querySelector('[data-a="next"]').onclick = () => { App.ideaIdx += 1; drawTrip(); };
+  body.append(box);
+}
+
+function drawNear(body) {
+  const o = origin();
+  const list = App.pois.filter((p) => !marked(p.id))
+    .map((p) => ({ p, d: km(o, poiLL(p)) }))
+    .sort((a, b) => a.d - b.d)
+    .slice(0, 25);
+  const hint = document.createElement('p');
+  hint.className = 'hint';
+  hint.textContent = `Где вы ещё не были — ближайшие ${originText()}.`;
+  if (!App.here) {
+    const b = document.createElement('button');
+    b.className = 'linkbtn';
+    b.textContent = ' Считать от меня';
+    b.onclick = () => getPosition().then(drawTrip).catch(() => toast(GEO_FAIL));
+    hint.append(b);
+  }
+  body.append(hint);
+  for (const { p, d } of list) {
+    const row = document.createElement('button');
+    row.className = 'near-row';
+    row.innerHTML = '<span><b></b><small></small></span><span class="dist"></span>';
+    row.querySelector('b').textContent = p.name;
+    row.querySelector('small').textContent = p.kind_label;
+    row.querySelector('.dist').textContent = fmtKm(d);
+    row.onclick = () => { closeTrip(); showCard(App.byId[p.id]); flyToPoi(p); };
+    body.append(row);
+  }
 }
 
 loadData().then(initMap).catch((e) => {

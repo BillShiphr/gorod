@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<link rel="stylesheet" href="vector.css?v=6">
+<link rel="stylesheet" href="vector.css?v=7">
 </head>
 <body>
 <div id="map"></div>
@@ -57,8 +57,34 @@
   <button class="card-close" id="cardClose" title="Закрыть">×</button>
 </section>
 
+<!-- нижние кнопки; прячутся, пока открыта карточка или «Куда поехать» -->
+<div class="bottombar" id="bottombar">
+  <button class="pillbtn glass" id="btnTrip">
+    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm3.5 6.5-2 5-5 2 2-5z"/></svg>
+    Куда поехать
+  </button>
+  <button class="pillbtn primary" id="btnHere">
+    <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>
+    Я здесь
+  </button>
+</div>
+
+<!-- «Куда поехать»: предложение на выходные и ближайшие места -->
+<section class="sheet glass" id="trip" hidden>
+  <div class="sheet-head">
+    <div class="tabs" id="tripTabs">
+      <button data-tab="weekend" class="on">На выходные</button>
+      <button data-tab="near">Рядом</button>
+    </div>
+    <button class="card-close" id="tripClose" title="Закрыть">×</button>
+  </div>
+  <div class="sheet-body" id="tripBody"></div>
+</section>
+
+<div class="toast" id="toast" hidden></div>
+
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
-<script src="vector.js?v=21"></script>
+<script src="vector.js?v=23"></script>
 </body>
 </html>
