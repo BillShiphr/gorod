@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<link rel="stylesheet" href="vector.css?v=11">
+<link rel="stylesheet" href="vector.css?v=12">
 </head>
 <body>
 <div id="map"></div>
@@ -41,6 +41,9 @@
 </div>
 
 <div class="controls">
+  <button class="glass round" id="btnPhotos" title="Открыть карту по своим фото">
+    <svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+  </button>
   <button class="glass round" id="btnLocate" title="Где я">
     <svg viewBox="0 0 24 24"><path d="M21 3 3 10.5l7.5 3L13.5 21z"/></svg>
   </button>
@@ -93,6 +96,26 @@
 
 <div class="toast" id="toast" hidden></div>
 
+<!-- открыть карту по своим фото: читаем только место и дату съёмки -->
+<section class="sheet glass" id="photoImport" hidden>
+  <div class="sheet-head">
+    <b class="sheet-title">Открыть карту по фото</b>
+    <button class="card-close" id="importClose" title="Закрыть">×</button>
+  </div>
+  <div class="sheet-body" id="importBody">
+    <p class="hint">Выберите фото из галереи — хоть все сразу. Из каждого файла прочитаем только место
+      и дату съёмки и откроем кусочки, где вы фотографировали. Сами фото никуда не отправляются
+      и не сохраняются — всё происходит прямо в телефоне.</p>
+    <div class="tabs" id="importPeriod">
+      <button data-p="365" class="on">за год</button>
+      <button data-p="0">за всё время</button>
+    </div>
+    <input type="file" id="importFiles" accept="image/*,.heic,.heif" multiple hidden>
+    <button class="card-btn big" id="importPick">Выбрать фото</button>
+    <div id="importResult"></div>
+  </div>
+</section>
+
 <!-- фото места на весь экран -->
 <div class="lightbox" id="lightbox" hidden>
   <button class="lightbox-close" id="lightboxClose" title="Закрыть">×</button>
@@ -102,6 +125,8 @@
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
-<script src="vector.js?v=40"></script>
+<!-- чтение места и даты съёмки из фото (JPEG, HEIC) — только в браузере -->
+<script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
+<script src="vector.js?v=42"></script>
 </body>
 </html>

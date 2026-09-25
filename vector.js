@@ -846,6 +846,21 @@ function initMap() {
   document.getElementById('tripClose').onclick = closeTrip;
   for (const b of document.querySelectorAll('#tripTabs button')) b.onclick = () => openTrip(b.dataset.tab);
   for (const b of document.querySelectorAll('#poiFilter button')) b.onclick = () => applyPoiFilter(b.dataset.f);
+  // открыть карту по своим фото
+  document.getElementById('btnPhotos').onclick = openImport;
+  document.getElementById('importClose').onclick = closeImport;
+  document.getElementById('importPick').onclick = () => document.getElementById('importFiles').click();
+  document.getElementById('importFiles').onchange = (e) => {
+    const files = [...e.target.files];
+    e.target.value = '';  // чтобы можно было выбрать те же фото ещё раз
+    if (files.length) importPhotos(files);
+  };
+  for (const b of document.querySelectorAll('#importPeriod button')) {
+    b.onclick = () => {
+      App.importDays = Number(b.dataset.p);
+      for (const x of document.querySelectorAll('#importPeriod button')) x.classList.toggle('on', x === b);
+    };
+  }
   map.on('load', () => {
     let saved = 'all';
     try { saved = localStorage.getItem(FILTER_KEY) || 'all'; } catch (e) { /* по умолчанию все */ }
@@ -876,6 +891,114 @@ function applyPoiFilter(mode) {
   updateLabelFilters(); // плашки открытых знаковых территорий — прячем в режиме «не был»
   for (const b of document.querySelectorAll('#poiFilter button')) b.classList.toggle('on', b.dataset.f === mode);
   try { localStorage.setItem(FILTER_KEY, mode); } catch (e) { /* не страшно */ }
+}
+
+/* ============================ открыть по фото ============================ */
+
+/* Быстрый поиск кусочка по точке: кусочки разложены по клеткам 0,01° —
+ * для тысяч фото перебирать все 3,6 тыс. кусочков было бы долго. */
+function zoneAt(lng, lat) {
+  if (!App.zoneGrid) {
+    const grid = new Map();
+    App.zones.forEach((z, i) => {
+      const [w, s, e, n] = turf.bbox(z);
+      for (let x = Math.floor(w * 100); x <= Math.floor(e * 100); x++) {
+        for (let y = Math.floor(s * 100); y <= Math.floor(n * 100); y++) {
+          const k = `${x}:${y}`;
+          if (!grid.has(k)) grid.set(k, []);
+          grid.get(k).push(i);
+        }
+      }
+    });
+    App.zoneGrid = grid;
+  }
+  const pt = turf.point([lng, lat]);
+  for (const i of App.zoneGrid.get(`${Math.floor(lng * 100)}:${Math.floor(lat * 100)}`) || []) {
+    if (turf.booleanPointInPolygon(pt, App.zones[i])) return App.zones[i];
+  }
+  return null;
+}
+
+function plural(n, one, few, many) {
+  const a = n % 10, b = n % 100;
+  if (a === 1 && b !== 11) return one;
+  if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return few;
+  return many;
+}
+
+function openImport() {
+  hideCard();
+  closeTrip();
+  document.getElementById('photoImport').hidden = false;
+  document.getElementById('bottombar').classList.add('away');
+  document.getElementById('importResult').replaceChildren();
+}
+
+function closeImport() {
+  document.getElementById('photoImport').hidden = true;
+  document.getElementById('bottombar').classList.remove('away');
+}
+
+/* Читаем из фото только место и дату съёмки (exifr, прямо в браузере),
+ * находим кусочки и спрашиваем, открыть ли. Сами фото никуда не уходят. */
+async function importPhotos(files) {
+  const res = document.getElementById('importResult');
+  const days = App.importDays ?? 365;
+  const since = days ? Date.now() - days * 864e5 : 0;
+  res.innerHTML = '<p>Читаю фото… <span id="impCount">0</span> из ' + files.length + '</p><div class="progress"><i id="impBar"></i></div>';
+  const zones = new Map();
+  let withGps = 0, noGps = 0, old = 0, outside = 0;
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    const gps = await exifr.gps(f).catch(() => null);
+    if (!gps || !Number.isFinite(gps.latitude) || !Number.isFinite(gps.longitude)) {
+      noGps += 1;
+    } else {
+      const meta = await exifr.parse(f, ['DateTimeOriginal', 'CreateDate']).catch(() => null);
+      const shot = meta && (meta.DateTimeOriginal || meta.CreateDate);
+      const t = shot instanceof Date ? shot.getTime() : f.lastModified;
+      if (since && t < since) {
+        old += 1;
+      } else {
+        withGps += 1;
+        const z = zoneAt(gps.longitude, gps.latitude);
+        if (z) zones.set(z.properties.id, z); else outside += 1;
+      }
+    }
+    if (i % 10 === 9 || i === files.length - 1) {
+      document.getElementById('impCount').textContent = i + 1;
+      document.getElementById('impBar').style.width = `${Math.round(100 * (i + 1) / files.length)}%`;
+      await new Promise((r) => setTimeout(r));  // даём экрану обновиться
+    }
+  }
+  const fresh = [...zones.values()].filter((z) => !isOpen(z));
+  res.replaceChildren();
+  const say = (text) => { const p = document.createElement('p'); p.textContent = text; res.append(p); };
+  if (!withGps && !old) {
+    say(`В выбранных фото (${files.length}) нет места съёмки. Скорее всего, телефон убрал его при выборе из галереи — так делают iPhone в Safari и новые Android ради приватности.`);
+    say('Попробуйте выбрать фото через «Файлы» (кнопка «Обзор»), а не через галерею. Не выйдет — скажите, есть другой способ: загрузить историю перемещений из Google Карт.');
+    return;
+  }
+  say(`Фото с местом съёмки: ${withGps}${days ? ' за последний год' : ''}.`
+    + (old ? ` Ещё ${old} — старше года, их пропустили.` : '')
+    + (noGps ? ` Без места: ${noGps}.` : '')
+    + (outside ? ` Вне Москвы: ${outside}.` : ''));
+  say(fresh.length
+    ? `Это ${zones.size} ${plural(zones.size, 'кусочек', 'кусочка', 'кусочков')} на карте, из них новых — ${fresh.length}. Открыть их?`
+    : `Это ${zones.size} ${plural(zones.size, 'кусочек', 'кусочка', 'кусочков')}, и все они у вас уже открыты.`);
+  if (!fresh.length) return;
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = '<button class="card-btn">Открыть</button><button class="card-btn ghost">Не надо</button>';
+  row.firstChild.onclick = () => {
+    for (const z of fresh) setZoneOpen(z, true);
+    refresh();
+    closeImport();
+    App.map.fitBounds(turf.bbox(fc(fresh)), { padding: { top: 120, bottom: 120, left: 40, right: 40 }, maxZoom: 14, duration: 900 });
+    toast(`Открыто кусочков: ${fresh.length}`);
+  };
+  row.lastChild.onclick = closeImport;
+  res.append(row);
 }
 
 /* ============================ где я ============================ */

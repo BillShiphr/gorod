@@ -143,6 +143,16 @@ button{font:inherit;color:inherit;cursor:pointer}
   color:var(--text);padding:10px 16px;border-radius:14px;font-size:14px;z-index:10;text-align:center}
 .toast[hidden]{display:none}
 
+/* ---------- открыть карту по фото ---------- */
+.sheet-title{font-size:16px}
+#photoImport .tabs{display:inline-flex;margin:4px 0 12px}
+.card-btn.big{display:block;width:100%;padding:12px;font-size:15px;margin-bottom:10px}
+#importResult p{margin:8px 0;font-size:14px;line-height:1.4}
+#importResult .row{display:flex;gap:8px;margin-top:10px}
+#importResult .row .card-btn{flex:1;padding:10px}
+.progress{height:6px;border-radius:3px;background:#1d2633;overflow:hidden;margin:8px 0}
+.progress i{display:block;height:100%;background:var(--neon);width:0}
+
 /* ---------- фото на весь экран ---------- */
 .card-ico.photo{cursor:zoom-in}
 .lightbox{position:fixed;inset:0;z-index:20;background:rgba(5,8,12,.94);display:flex;flex-direction:column;
