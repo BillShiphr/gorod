@@ -155,6 +155,16 @@ button{font:inherit;color:inherit;cursor:pointer}
 /* «бегущая» полоска, пока телефон готовит фото и сколько ждать — неизвестно */
 .progress.wait i{width:35%;animation:run 1.2s ease-in-out infinite}
 @keyframes run{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+.imp-pill{position:fixed;left:50%;transform:translateX(-50%);top:calc(146px + env(safe-area-inset-top));z-index:9;
+  width:min(320px,calc(100% - 32px));border-radius:14px;padding:9px 14px 6px;font-size:13px;font-weight:700}
+.imp-pill[hidden]{display:none}
+.imp-pill-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.imp-pill-head button{background:none;border:0;color:var(--muted);font-size:20px;line-height:1;padding:0 2px}
+.imp-pill .progress{margin:6px 0 2px;height:5px}
+.imp-pill .progress[hidden]{display:none}
+#impPillResult p{margin:6px 0;font-size:13px;font-weight:500;line-height:1.4}
+#impPillResult .row{display:flex;gap:8px;margin:8px 0 4px}
+#impPillResult .row .card-btn{flex:1;padding:9px}
 .imp-big{font-size:28px;font-weight:800;margin:6px 0 0!important}
 .imp-note{color:var(--muted);font-size:12px!important}
 

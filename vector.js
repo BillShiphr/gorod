@@ -854,26 +854,32 @@ function initMap() {
     document.getElementById('importFiles').click();
   };
   // Окно выбора закрылось, а файлов ещё нет — значит, телефон готовит фото
-  // (скачивает из iCloud, переделывает формат). Показываем, что работа идёт.
+  // (скачивает из iCloud, переделывает формат). Окно импорта сразу убираем,
+  // карта свободна, а сверху висит плашка с бегущей полоской.
   const showPreparing = () => {
     setTimeout(() => {
-      if (!App.importWaiting || document.getElementById('photoImport').hidden) return;
-      document.getElementById('importResult').innerHTML =
-        '<p class="imp-big">Телефон готовит фото…</p><div class="progress wait"><i></i></div>'
-        + '<p class="imp-note">Если фото хранятся в iCloud, телефон сначала их скачивает — '
-        + 'на сотнях снимков это может занять минуту-две. Потом начнётся чтение мест.</p>';
+      if (!App.importWaiting) return;
+      closeImport();
+      showImportPill('Телефон готовит фото…', null);
     }, 400);
   };
   window.addEventListener('focus', showPreparing);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) showPreparing(); });
   document.getElementById('importFiles').addEventListener('cancel', () => {  // закрыли, ничего не выбрав
     App.importWaiting = false;
-    document.getElementById('importResult').replaceChildren();
+    if (!App.importRun) hideImportPill();  // прошлое чтение ещё идёт — его плашку не трогаем
   });
   document.getElementById('importFiles').onchange = (e) => {
     const files = [...e.target.files];
     e.target.value = '';  // чтобы можно было выбрать те же фото ещё раз
-    if (files.length) importPhotos(files);
+    App.importWaiting = false;
+    if (files.length) importPhotos(files); else hideImportPill();
+  };
+  // × на плашке: остановить чтение (или перестать ждать телефон) и убрать плашку
+  document.getElementById('impPillClose').onclick = () => {
+    App.importWaiting = false;
+    if (App.importRun) App.importRun.stop = true;
+    hideImportPill();
   };
   for (const b of document.querySelectorAll('#importPeriod button')) {
     b.onclick = () => {
@@ -959,18 +965,33 @@ function closeImport() {
   document.getElementById('bottombar').classList.remove('away');
 }
 
+/* Плашка импорта сверху карты. pct = null — «бегущая» полоска (ждём телефон),
+ * число — обычный прогресс, false — без полоски (показываем итог). */
+function showImportPill(text, pct) {
+  document.getElementById('impPill').hidden = false;
+  document.getElementById('impPillText').textContent = text;
+  const prog = document.getElementById('impPillProg');
+  prog.hidden = pct === false;
+  prog.classList.toggle('wait', pct === null);
+  document.getElementById('impPillBar').style.width = typeof pct === 'number' ? `${pct}%` : '';
+  document.getElementById('impPillResult').replaceChildren();
+}
+
+function hideImportPill() {
+  document.getElementById('impPill').hidden = true;
+  document.getElementById('impPillResult').replaceChildren();
+}
+
 /* Читаем из фото только место и дату съёмки (exifr, прямо в браузере),
- * находим кусочки и спрашиваем, открыть ли. Сами фото никуда не уходят. */
+ * находим кусочки и спрашиваем, открыть ли. Сами фото никуда не уходят.
+ * Всё идёт фоном: окно импорта закрыто, прогресс — в плашке сверху. */
 async function importPhotos(files) {
-  App.importWaiting = false;
-  const res = document.getElementById('importResult');
+  if (App.importRun) App.importRun.stop = true;  // новый выбор отменяет прошлое чтение
+  const run = App.importRun = { stop: false };
+  closeImport();
   const days = App.importDays ?? 365;
   const since = days ? Date.now() - days * 864e5 : 0;
-  res.innerHTML = '<p class="imp-big" id="impPct">0%</p>'
-    + '<p>Читаю место и дату съёмки: <span id="impCount">0</span> из ' + files.length
-    + ' фото · нашлось кусочков: <span id="impZones">0</span></p>'
-    + '<div class="progress"><i id="impBar"></i></div>'
-    + '<p class="imp-note">Из каждого фото читаем только служебные данные в начале файла — сами снимки не загружаются.</p>';
+  showImportPill(`Читаю фото: 0 из ${files.length}`, 0);
   const zones = new Map();
   let withGps = 0, noGps = 0, old = 0, outside = 0, done = 0;
 
@@ -989,23 +1010,27 @@ async function importPhotos(files) {
   // по 6 фото одновременно: чтение с диска параллелится, так заметно быстрее
   let next = 0, lastPaint = 0;
   const worker = async () => {
-    while (next < files.length) {
+    while (next < files.length && !run.stop) {
       await one(files[next++]);
       done += 1;
       if (performance.now() - lastPaint > 120 || done === files.length) {
         lastPaint = performance.now();
         const pct = Math.round(100 * done / files.length);
-        document.getElementById('impPct').textContent = `${pct}%`;
-        document.getElementById('impCount').textContent = done;
-        document.getElementById('impZones').textContent = zones.size;
-        document.getElementById('impBar').style.width = `${pct}%`;
-        await new Promise((r) => setTimeout(r));  // даём экрану обновиться
+        if (!run.stop) {
+          document.getElementById('impPillText').textContent =
+            `Читаю фото: ${pct}% · ${done} из ${files.length} · кусочков: ${zones.size}`;
+          document.getElementById('impPillBar').style.width = `${pct}%`;
+        }
+        await new Promise((r) => setTimeout(r));  // даём экрану и карте обновиться
       }
     }
   };
   await Promise.all(Array.from({ length: 6 }, worker));
+  if (run.stop) return;  // остановили крестиком или выбрали фото заново
+  App.importRun = null;
   const fresh = [...zones.values()].filter((z) => !isOpen(z));
-  res.replaceChildren();
+  showImportPill('Фото прочитаны', false);
+  const res = document.getElementById('impPillResult');
   const say = (text) => { const p = document.createElement('p'); p.textContent = text; res.append(p); };
   if (!withGps && !old) {
     say(`В выбранных фото (${files.length}) нет места съёмки. Скорее всего, телефон убрал его при выборе из галереи — так делают iPhone в Safari и новые Android ради приватности.`);
@@ -1026,11 +1051,11 @@ async function importPhotos(files) {
   row.firstChild.onclick = () => {
     for (const z of fresh) setZoneOpen(z, true);
     refresh();
-    closeImport();
+    hideImportPill();
     App.map.fitBounds(turf.bbox(fc(fresh)), { padding: { top: 120, bottom: 120, left: 40, right: 40 }, maxZoom: 14, duration: 900 });
     toast(`Открыто кусочков: ${fresh.length}`);
   };
-  row.lastChild.onclick = closeImport;
+  row.lastChild.onclick = hideImportPill;
   res.append(row);
 }
 
