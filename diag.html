@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверка связи</title>
+<style>
+  :root{--bg:#0a0f17;--text:#eef3f8;--muted:#8792a4;--ok:#3ff0dc;--bad:#ff5d73;--slow:#ffc561}
+  body{margin:0;padding:20px 16px;background:var(--bg);color:var(--text);font:15px/1.4 system-ui,sans-serif}
+  h1{font-size:22px;margin:0 0 6px}
+  p{color:var(--muted);margin:0 0 16px}
+  .row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #1d2633}
+  .row small{display:block;color:var(--muted);font-size:12px}
+  .st{flex:none;font-weight:700}
+  .ok{color:var(--ok)} .bad{color:var(--bad)} .slow{color:var(--slow)}
+  #sum{margin-top:18px;font-weight:700}
+</style>
+</head>
+<body>
+<h1>Проверка связи</h1>
+<p>Откройте эту страницу без VPN. Она по очереди запрашивает серверы, с которых карта берёт свои части,
+  и показывает, что открылось. Пришлите скриншот результата.</p>
+<div id="list"></div>
+<div id="sum"></div>
+<script>
+// что проверяем: название, зачем карте, адрес (no-cors — нам важно лишь, дошёл ли ответ)
+const CHECKS = [
+  ['GitHub Pages (сам сайт)', 'данные участков и кусочков', 'data/metro.json'],
+  ['OpenFreeMap: описание карты', 'подложка — без неё карта пустая', 'https://tiles.openfreemap.org/planet'],
+  ['OpenFreeMap: кусок карты', 'дома, улицы, вода', 'https://tiles.openfreemap.org/planet/20260913_164504_pt/14/9904/5205.pbf'],
+  ['OpenFreeMap: шрифт подписей', 'названия улиц и станций', 'https://tiles.openfreemap.org/fonts/Noto%20Sans%20Regular/1024-1279.pbf'],
+  ['unpkg', 'библиотека карты (MapLibre)', 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js'],
+  ['jsdelivr', 'расчёты (turf) и чтение фото (exifr)', 'https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js'],
+  ['Google Fonts', 'шрифт интерфейса', 'https://fonts.googleapis.com/css2?family=Manrope:wght@400&display=swap'],
+  ['Википедия: фото', 'фото мест', 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/The_main_entrance_of_Krasnaya_Presnya_Park.JPG/200px-The_main_entrance_of_Krasnaya_Presnya_Park.JPG'],
+  ['Wikimedia Commons', 'фото мест (часть)', 'https://commons.wikimedia.org/wiki/Special:FilePath/The_main_entrance_of_Krasnaya_Presnya_Park.JPG?width=200'],
+];
+
+async function check([name, why, url]) {
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = '<span><b></b><small></small></span><span class="st">…</span>';
+  row.querySelector('b').textContent = name;
+  row.querySelector('small').textContent = why;
+  document.getElementById('list').append(row);
+  const st = row.querySelector('.st');
+  const t0 = performance.now();
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 12000);
+  try {
+    await fetch(url + (url.includes('?') ? '&' : '?') + 'nocache=' + Date.now(), { mode: 'no-cors', cache: 'no-store', signal: ctrl.signal });
+    const ms = Math.round(performance.now() - t0);
+    st.textContent = ms > 4000 ? `медленно, ${(ms / 1000).toFixed(1)} с` : `да, ${ms} мс`;
+    st.className = 'st ' + (ms > 4000 ? 'slow' : 'ok');
+    return ms > 4000 ? 'slow' : 'ok';
+  } catch (e) {
+    st.textContent = ctrl.signal.aborted ? 'нет (не дождались)' : 'нет';
+    st.className = 'st bad';
+    return 'bad';
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+(async () => {
+  const res = [];
+  for (const c of CHECKS) res.push(await check(c));
+  const bad = res.filter((r) => r === 'bad').length, slow = res.filter((r) => r === 'slow').length;
+  document.getElementById('sum').textContent = bad || slow
+    ? `Не открылось: ${bad}, медленно: ${slow}. Пришлите скриншот — по нему видно, что перенести на свой сервер.`
+    : 'Всё открывается. Если карта всё равно пустая — пришлите скриншот карты.';
+})();
+</script>
+</body>
+</html>
