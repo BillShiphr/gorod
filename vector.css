@@ -150,8 +150,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 #importResult p{margin:8px 0;font-size:14px;line-height:1.4}
 #importResult .row{display:flex;gap:8px;margin-top:10px}
 #importResult .row .card-btn{flex:1;padding:10px}
-.progress{height:6px;border-radius:3px;background:#1d2633;overflow:hidden;margin:8px 0}
-.progress i{display:block;height:100%;background:var(--neon);width:0}
+.progress{height:8px;border-radius:4px;background:#1d2633;overflow:hidden;margin:8px 0}
+.progress i{display:block;height:100%;background:var(--neon);width:0;transition:width .2s}
+/* «бегущая» полоска, пока телефон готовит фото и сколько ждать — неизвестно */
+.progress.wait i{width:35%;animation:run 1.2s ease-in-out infinite}
+@keyframes run{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+.imp-big{font-size:28px;font-weight:800;margin:6px 0 0!important}
+.imp-note{color:var(--muted);font-size:12px!important}
 
 /* ---------- фото на весь экран ---------- */
 .card-ico.photo{cursor:zoom-in}

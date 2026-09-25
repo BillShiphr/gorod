@@ -849,7 +849,27 @@ function initMap() {
   // открыть карту по своим фото
   document.getElementById('btnPhotos').onclick = openImport;
   document.getElementById('importClose').onclick = closeImport;
-  document.getElementById('importPick').onclick = () => document.getElementById('importFiles').click();
+  document.getElementById('importPick').onclick = () => {
+    App.importWaiting = true;
+    document.getElementById('importFiles').click();
+  };
+  // Окно выбора закрылось, а файлов ещё нет — значит, телефон готовит фото
+  // (скачивает из iCloud, переделывает формат). Показываем, что работа идёт.
+  const showPreparing = () => {
+    setTimeout(() => {
+      if (!App.importWaiting || document.getElementById('photoImport').hidden) return;
+      document.getElementById('importResult').innerHTML =
+        '<p class="imp-big">Телефон готовит фото…</p><div class="progress wait"><i></i></div>'
+        + '<p class="imp-note">Если фото хранятся в iCloud, телефон сначала их скачивает — '
+        + 'на сотнях снимков это может занять минуту-две. Потом начнётся чтение мест.</p>';
+    }, 400);
+  };
+  window.addEventListener('focus', showPreparing);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) showPreparing(); });
+  document.getElementById('importFiles').addEventListener('cancel', () => {  // закрыли, ничего не выбрав
+    App.importWaiting = false;
+    document.getElementById('importResult').replaceChildren();
+  });
   document.getElementById('importFiles').onchange = (e) => {
     const files = [...e.target.files];
     e.target.value = '';  // чтобы можно было выбрать те же фото ещё раз
@@ -942,35 +962,48 @@ function closeImport() {
 /* Читаем из фото только место и дату съёмки (exifr, прямо в браузере),
  * находим кусочки и спрашиваем, открыть ли. Сами фото никуда не уходят. */
 async function importPhotos(files) {
+  App.importWaiting = false;
   const res = document.getElementById('importResult');
   const days = App.importDays ?? 365;
   const since = days ? Date.now() - days * 864e5 : 0;
-  res.innerHTML = '<p>Читаю фото… <span id="impCount">0</span> из ' + files.length + '</p><div class="progress"><i id="impBar"></i></div>';
+  res.innerHTML = '<p class="imp-big" id="impPct">0%</p>'
+    + '<p>Читаю место и дату съёмки: <span id="impCount">0</span> из ' + files.length
+    + ' фото · нашлось кусочков: <span id="impZones">0</span></p>'
+    + '<div class="progress"><i id="impBar"></i></div>'
+    + '<p class="imp-note">Из каждого фото читаем только служебные данные в начале файла — сами снимки не загружаются.</p>';
   const zones = new Map();
-  let withGps = 0, noGps = 0, old = 0, outside = 0;
-  for (let i = 0; i < files.length; i++) {
-    const f = files[i];
+  let withGps = 0, noGps = 0, old = 0, outside = 0, done = 0;
+
+  // одно фото: место съёмки (exifr читает только начало файла) и дата
+  const one = async (f) => {
     const gps = await exifr.gps(f).catch(() => null);
-    if (!gps || !Number.isFinite(gps.latitude) || !Number.isFinite(gps.longitude)) {
-      noGps += 1;
-    } else {
-      const meta = await exifr.parse(f, ['DateTimeOriginal', 'CreateDate']).catch(() => null);
-      const shot = meta && (meta.DateTimeOriginal || meta.CreateDate);
-      const t = shot instanceof Date ? shot.getTime() : f.lastModified;
-      if (since && t < since) {
-        old += 1;
-      } else {
-        withGps += 1;
-        const z = zoneAt(gps.longitude, gps.latitude);
-        if (z) zones.set(z.properties.id, z); else outside += 1;
+    if (!gps || !Number.isFinite(gps.latitude) || !Number.isFinite(gps.longitude)) { noGps += 1; return; }
+    const meta = await exifr.parse(f, ['DateTimeOriginal', 'CreateDate']).catch(() => null);
+    const shot = meta && (meta.DateTimeOriginal || meta.CreateDate);
+    const t = shot instanceof Date ? shot.getTime() : f.lastModified;
+    if (since && t < since) { old += 1; return; }
+    withGps += 1;
+    const z = zoneAt(gps.longitude, gps.latitude);
+    if (z) zones.set(z.properties.id, z); else outside += 1;
+  };
+  // по 6 фото одновременно: чтение с диска параллелится, так заметно быстрее
+  let next = 0, lastPaint = 0;
+  const worker = async () => {
+    while (next < files.length) {
+      await one(files[next++]);
+      done += 1;
+      if (performance.now() - lastPaint > 120 || done === files.length) {
+        lastPaint = performance.now();
+        const pct = Math.round(100 * done / files.length);
+        document.getElementById('impPct').textContent = `${pct}%`;
+        document.getElementById('impCount').textContent = done;
+        document.getElementById('impZones').textContent = zones.size;
+        document.getElementById('impBar').style.width = `${pct}%`;
+        await new Promise((r) => setTimeout(r));  // даём экрану обновиться
       }
     }
-    if (i % 10 === 9 || i === files.length - 1) {
-      document.getElementById('impCount').textContent = i + 1;
-      document.getElementById('impBar').style.width = `${Math.round(100 * (i + 1) / files.length)}%`;
-      await new Promise((r) => setTimeout(r));  // даём экрану обновиться
-    }
-  }
+  };
+  await Promise.all(Array.from({ length: 6 }, worker));
   const fresh = [...zones.values()].filter((z) => !isOpen(z));
   res.replaceChildren();
   const say = (text) => { const p = document.createElement('p'); p.textContent = text; res.append(p); };
