@@ -20,8 +20,6 @@ const DATA_VERSION = 14;
 // новая нарезка — новые кусочки, старые отметки к ним не подходят
 const OPEN_KEY = 'gorod.vector-zones.v8';
 // что открыто для примера при первом запуске: участок целиком, пара кусочков, места
-const DEFAULT_OPEN = { fullCell: 'Октябрьская', partCell: 'Полянка', places: ['Парк Горького', 'Винзавод'] };
-
 const C = {
   bg: '#0a0f17', land: '#0d131c', building: '#141b27',
   water: '#0b2536', waterEdge: '#35d6e6',
@@ -80,20 +78,10 @@ async function loadData() {
     App.poisOfZone[p.zone]?.push(p);
   }
 
+  // своя карта у каждого: отметки живут только в этом браузере, новый человек начинает с нуля
   let saved = null;
-  try { saved = JSON.parse(localStorage.getItem(OPEN_KEY)); } catch (e) { /* нет — берём пример */ }
-  if (Array.isArray(saved)) {
-    App.open = new Set(saved.filter((id) => App.byId[id]));
-  } else {
-    const cellBy = (s) => App.cells.find((c) => c.properties.stations.includes(s));
-    const full = cellBy(DEFAULT_OPEN.fullCell), part = cellBy(DEFAULT_OPEN.partCell);
-    const ids = [
-      ...(full ? App.zonesOf[full.properties.id] : []),
-      ...(part ? App.zonesOf[part.properties.id].slice(0, 2) : []),
-      ...App.places.filter((p) => DEFAULT_OPEN.places.includes(p.properties.name)),
-    ].map((f) => f.properties.id);
-    App.open = new Set(ids);
-  }
+  try { saved = JSON.parse(localStorage.getItem(OPEN_KEY)); } catch (e) { /* нет — пустая карта */ }
+  App.open = new Set(Array.isArray(saved) ? saved.filter((id) => App.byId[id]) : []);
 }
 
 function saveOpen() {
