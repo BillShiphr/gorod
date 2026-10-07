@@ -19,17 +19,99 @@
 const DATA_VERSION = 14;
 // новая нарезка — новые кусочки, старые отметки к ним не подходят
 const OPEN_KEY = 'gorod.vector-zones.v8';
-// что открыто для примера при первом запуске: участок целиком, пара кусочков, места
-const C = {
+/* Темы оформления. На сайте две: «ночь» (dusk — ночь посветлее) и «день»
+ * (paper — бумажная карта со штриховкой); остальные — для макетов (?theme=day). */
+const NIGHT = {
   bg: '#0a0f17', land: '#0d131c', building: '#141b27',
-  water: '#0b2536', waterEdge: '#35d6e6',
+  water: '#0b2536', waterEdge: '#35d6e6', waterEdgeGlow: 0.22, waterEdgeLine: 0.45,
   park: '#17502d', wood: '#134526', grass: '#164a2a',
-  road: '#ffe6ad', roadGlow: '#ffab3d', path: '#f3cf86', rail: '#4d5666',
-  neon: '#3ff0dc', label: '#8792a4', halo: '#0a0f17',
+  road: '#ffe6ad', path: '#f3cf86', rail: '#4d5666',
+  // «обводка» улиц: ночью — размытое тёплое свечение, днём — чёткий серый край
+  roadCase: '#ffab3d', roadCaseOpacity: 0.5, roadCaseWidth: 4, roadCaseBlur: 3, lamps: true,
+  fog: '#0a0f17', fogOpacity: 0.84, hatch: null,
+  neon: '#3ff0dc', glow: 0.5, openFill: [0.42, 0.3, 0.12, 0.05],
+  okrugLine: '#6d809e', districtLine: '#3f4e66', zoneLine: '#222c3b', cellLine: '#34435a',
+  sel: '#ffffff', selFill: '#dff6ff',
+  label: '#8792a4', halo: '#0a0f17', roadLabel: '#8b95a6', waterLabel: '#5fc3d0',
+  metroText: '#ffffff', cityLabel: '#c9d1dc', okrugLabel: '#c9d2de', districtLabel: '#9aa6b8',
   // интересные места — свой сиреневый цвет: тёплые фонари и бирюзовое «открыто» его не глушат
-  poi: '#c3a2ff', poiText: '#ddd0ff', poiRing: '#f4efff',
+  poi: '#c3a2ff', poiText: '#ddd0ff', poiRing: '#f4efff', visitedRing: '#ffffff', poiHalo: '#0a0f17',
+  pillBg: 'rgba(9,20,24,.92)', pillGlow: 'rgba(63,240,220,.55)', pillText: '#eef3f8', icoOpen: '#9ff6ea',
+  lock: '#6b7689', metroFill: '#c9d0da', metroStroke: 'rgba(10,15,23,.85)',
 };
-const FOG_OPACITY = 0.84;
+const THEMES = {
+  night: NIGHT,
+  // та же ночь, но закрытое — серое, а не чёрное
+  dusk: Object.assign({}, NIGHT, {
+    fog: '#2b3341', fogOpacity: 0.8, zoneLine: '#3a4659', cellLine: '#4c5b72', lock: '#8a95a8', label: '#a3adbd',
+  }),
+  // ночь посветлее + косая штриховка серым
+  duskHatch: Object.assign({}, NIGHT, {
+    fog: '#2b3341', fogOpacity: 0.84, hatch: { line: 'rgba(150,166,190,.22)', cross: false },
+    zoneLine: '#46546a', cellLine: '#5a6a84', lock: '#8a95a8', label: '#a3adbd',
+  }),
+  // ночь посветлее + тонкая сетка
+  duskCross: Object.assign({}, NIGHT, {
+    fog: '#2b3341', fogOpacity: 0.84, hatch: { line: 'rgba(150,166,190,.14)', cross: true },
+    zoneLine: '#46546a', cellLine: '#5a6a84', lock: '#8a95a8', label: '#a3adbd',
+  }),
+  // день: светлая карта, закрытое — под серой дымкой
+  day: {
+    bg: '#e9ecef', land: '#f5f4f0', building: '#e4e0d7',
+    water: '#a9d5ec', waterEdge: '#4ea6d3', waterEdgeGlow: 0, waterEdgeLine: 0.5,
+    park: '#c5e6b1', wood: '#b6dba0', grass: '#cfe9be',
+    road: ['match', ['get', 'class'], ['motorway', 'trunk', 'primary'], '#ffd66e', '#ffffff'],
+    path: '#c4b48a', rail: '#b3b8c1',
+    roadCase: '#d3ccbd', roadCaseOpacity: 1, roadCaseWidth: 1.7, roadCaseBlur: 0, lamps: false,
+    fog: '#b9c0ca', fogOpacity: 0.8, hatch: null,
+    neon: '#0fae9b', glow: 0.22, openFill: [0.22, 0.1, 0.03, 0],
+    okrugLine: '#6f7a8a', districtLine: '#9aa3b0', zoneLine: '#b9bfc8', cellLine: '#9aa3b0',
+    sel: '#1d2834', selFill: '#1d2834',
+    label: '#5b6574', halo: '#ffffff', roadLabel: '#6b7280', waterLabel: '#2a7fae',
+    metroText: '#1d2733', cityLabel: '#28313d', okrugLabel: '#364050', districtLabel: '#5b6574',
+    poi: '#8657f0', poiText: '#5a2fd0', poiRing: '#ffffff', visitedRing: '#ffffff', poiHalo: '#ffffff',
+    pillBg: 'rgba(255,255,255,.96)', pillGlow: 'rgba(15,174,155,.35)', pillText: '#1b2430', icoOpen: '#0e9e8c',
+    lock: '#8a93a1', metroFill: '#4b5563', metroStroke: 'rgba(255,255,255,.95)',
+  },
+  // бумажная карта: неизведанное заштриховано, как «терра инкогнита» на старых картах
+  paper: {
+    bg: '#ece2cc', land: '#f4ecda', building: '#e3d7bd',
+    water: '#9fcbd5', waterEdge: '#4b97aa', waterEdgeGlow: 0, waterEdgeLine: 0.55,
+    park: '#cfe1a7', wood: '#bfd596', grass: '#d7e6b2',
+    road: ['match', ['get', 'class'], ['motorway', 'trunk', 'primary'], '#f4cf83', '#fffaf0'],
+    path: '#b39a69', rail: '#a89c85',
+    roadCase: '#cbb994', roadCaseOpacity: 1, roadCaseWidth: 1.7, roadCaseBlur: 0, lamps: false,
+    fog: '#e6dcc4', fogOpacity: ['interpolate', ['linear'], ['zoom'], 12, 0.9, 15, 0.82],
+    hatch: { line: 'rgba(120,96,60,.32)', cross: false },
+    neon: '#df5f33', glow: 0.2, openFill: [0.16, 0.06, 0.02, 0],
+    okrugLine: '#8a7859', districtLine: '#b3a17f', zoneLine: '#b8a37d', cellLine: '#937c56',
+    sel: '#3b2f20', selFill: '#3b2f20',
+    label: '#76664d', halo: '#f7f0e0', roadLabel: '#7d6e55', waterLabel: '#2f7d91',
+    metroText: '#3a2f22', cityLabel: '#3a2f22', okrugLabel: '#4d3f2c', districtLabel: '#76664d',
+    poi: '#7b4fd8', poiText: '#5c33b8', poiRing: '#fffaf0', visitedRing: '#fffaf0', poiHalo: '#f7f0e0',
+    pillBg: 'rgba(252,247,236,.97)', pillGlow: 'rgba(223,95,51,.35)', pillText: '#2e261b', icoOpen: '#c9542b',
+    lock: '#9b8a6d', metroFill: '#5a4c39', metroStroke: 'rgba(255,250,240,.95)',
+  },
+};
+const PARAMS = new URLSearchParams(location.search);
+const THEME_KEY = 'gorod.theme';
+const MODE_THEME = { night: 'dusk', day: 'paper' };
+/* Тема при запуске: из адреса (макеты) → выбранная кнопкой → как в телефоне (светлый/тёмный). */
+function startTheme() {
+  if (THEMES[PARAMS.get('theme')]) return PARAMS.get('theme');
+  let mode = null;
+  try { mode = localStorage.getItem(THEME_KEY); } catch (e) { /* нет — как в телефоне */ }
+  if (!MODE_THEME[mode]) mode = matchMedia('(prefers-color-scheme: light)').matches ? 'day' : 'night';
+  return MODE_THEME[mode];
+}
+let THEME = startTheme();
+let C = THEMES[THEME];
+const isDay = () => ['day', 'paper'].includes(THEME);
+function applyThemeToPage() {
+  document.documentElement.dataset.theme = THEME;
+  document.querySelector('meta[name=theme-color]')?.setAttribute('content', C.bg);
+}
+applyThemeToPage();
 const FONT = { reg: ['Noto Sans Regular'], bold: ['Noto Sans Bold'], ital: ['Noto Sans Italic'] };
 const NAME = ['coalesce', ['get', 'name:ru'], ['get', 'name']];
 const WORLD = [[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]];
@@ -82,9 +164,28 @@ async function loadData() {
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(OPEN_KEY)); } catch (e) { /* нет — пустая карта */ }
   App.open = new Set(Array.isArray(saved) ? saved.filter((id) => App.byId[id]) : []);
+  if (DEMO) App.open = demoOpen();
+}
+
+/* Для макетов (?demo=1): «как будто был» в нескольких местах центра.
+ * Ничего не сохраняет — настоящие отметки не трогаем. */
+const DEMO = PARAMS.has('demo');
+function demoOpen() {
+  const cellBy = (s) => App.cells.find((c) => c.properties.stations.includes(s));
+  const ids = [];
+  for (const [st, part] of [['Октябрьская', 0], ['Полянка', 3], ['Китай-город', 0], ['Чистые пруды', 4],
+    ['Курская', 3], ['Парк культуры', 0], ['Третьяковская', 0], ['Арбатская', 5], ['Бауманская', 3]]) {
+    const c = cellBy(st);
+    if (!c) continue;
+    const zs = App.zonesOf[c.properties.id];
+    ids.push(...(part ? zs.slice(0, part) : zs).map((z) => z.properties.id));
+  }
+  for (const p of App.places) if (['Парк Горького', 'Винзавод', 'Музеон'].includes(p.properties.name)) ids.push(p.properties.id);
+  return new Set(ids);
 }
 
 function saveOpen() {
+  if (DEMO) return;
   try { localStorage.setItem(OPEN_KEY, JSON.stringify([...App.open])); } catch (e) { /* не страшно */ }
 }
 
@@ -145,8 +246,8 @@ function icon(size, draw, h = size) {
  * тянется только середина, скруглённые углы и свечение остаются как есть. */
 function pillImage() {
   const data = icon(44, (g) => {
-    g.shadowColor = 'rgba(63,240,220,.55)'; g.shadowBlur = 5;
-    g.fillStyle = 'rgba(9,20,24,.92)'; g.strokeStyle = C.neon; g.lineWidth = 1.2;
+    g.shadowColor = C.pillGlow; g.shadowBlur = 5;
+    g.fillStyle = C.pillBg; g.strokeStyle = C.neon; g.lineWidth = 1.2;
     g.beginPath(); g.roundRect(5, 5, 34, 22, 8); g.fill(); g.stroke();
   }, 32);
   const px = (v) => v * 2; // координаты растяжки — в точках самой картинки
@@ -166,12 +267,12 @@ const GLYPHS = {
 function makeIcons() {
   const icons = { pill: pillImage() };
   for (const [kind, draw] of Object.entries(GLYPHS)) {
-    icons[`ico-${kind}`] = icon(14, (g) => { g.fillStyle = '#9ff6ea'; draw(g); });
+    icons[`ico-${kind}`] = icon(14, (g) => { g.fillStyle = C.icoOpen; draw(g); });
     icons[`poi-${kind}`] = icon(14, (g) => { g.fillStyle = C.poi; draw(g); });
   }
   Object.assign(icons, {
     lock: icon(18, (g) => {
-      g.fillStyle = '#6b7689'; g.strokeStyle = '#6b7689'; g.lineWidth = 2;
+      g.fillStyle = C.lock; g.strokeStyle = C.lock; g.lineWidth = 2;
       g.beginPath(); g.arc(9, 7.5, 3.6, Math.PI, 0); g.stroke();
       g.fillRect(9 - 3.6 - 1, 7.5, 2, 2); g.fillRect(9 + 3.6 - 1, 7.5, 2, 2);
       g.beginPath(); g.roundRect(3.5, 8.5, 11, 8, 2); g.fill();
@@ -182,9 +283,9 @@ function makeIcons() {
     // глубокая «галочка» посередине, расширение книзу
     metro: icon(20, (g) => {
       const m = new Path2D('M1.5 17.5 L5.6 3 L10 11.2 L14.4 3 L18.5 17.5 L15 17.5 L13.1 9.6 L10 15.2 L6.9 9.6 L5 17.5 Z');
-      g.lineJoin = 'round'; g.lineWidth = 2.6; g.strokeStyle = 'rgba(10,15,23,.85)';
+      g.lineJoin = 'round'; g.lineWidth = 2.6; g.strokeStyle = C.metroStroke;
       g.stroke(m);
-      g.fillStyle = '#c9d0da';
+      g.fillStyle = C.metroFill;
       g.fill(m);
     }),
     lamp: icon(14, (g) => {
@@ -195,7 +296,27 @@ function makeIcons() {
       g.fillStyle = grad; g.fillRect(0, 0, 14, 14);
     }),
   });
+  if (C.hatch) {
+    icons['hatch-far'] = hatchImage(12, 1);
+    icons['hatch-mid'] = hatchImage(15, 0.7);
+    icons['hatch-near'] = hatchImage(19, 0.5);
+  }
   return icons;
+}
+
+/* Штриховка неизведанного: квадрат цвета тумана с косыми линиями (и встречными, если «сетка»).
+ * Линии продолжены за края, чтобы квадраты стыковались без швов. */
+function hatchImage(n, lw) {
+  return icon(n, (g) => {
+    g.fillStyle = C.fog; g.fillRect(0, 0, n, n);
+    g.strokeStyle = C.hatch.line; g.lineWidth = lw;
+    g.beginPath();
+    for (const k of [-n, 0, n]) {
+      g.moveTo(k - 2, n + 2); g.lineTo(k + n + 2, -2);
+      if (C.hatch.cross) { g.moveTo(k - 2, -2); g.lineTo(k + n + 2, n + 2); }
+    }
+    g.stroke();
+  });
 }
 
 /* ============================ стиль ============================ */
@@ -234,6 +355,8 @@ function buildStyle() {
       cellLabels: { type: 'geojson', data: empty },
       placeLabels: { type: 'geojson', data: empty },
       openLabels: { type: 'geojson', data: empty },
+      preview: { type: 'geojson', data: empty },
+      anchors: { type: 'geojson', data: empty },
     },
     layers: [
       { id: 'bg', type: 'background', paint: { 'background-color': C.bg } },
@@ -263,7 +386,8 @@ function buildStyle() {
           'line-width': ['interpolate', ['linear'], ['zoom'], 13, 0.5, 17, 1.6] } },
       { id: 'road-glow', type: 'line', source: 'omt', 'source-layer': 'transportation', filter: road,
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': C.roadGlow, 'line-opacity': 0.5, 'line-width': roadWidth(4), 'line-blur': roadWidth(3) } },
+        paint: { 'line-color': C.roadCase, 'line-opacity': C.roadCaseOpacity, 'line-width': roadWidth(C.roadCaseWidth),
+          'line-blur': C.roadCaseBlur ? roadWidth(C.roadCaseBlur) : 0 } },
       { id: 'road', type: 'line', source: 'omt', 'source-layer': 'transportation', filter: road,
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: { 'line-color': C.road, 'line-width': roadWidth(1) } },
@@ -271,35 +395,37 @@ function buildStyle() {
       { id: 'lamps', type: 'symbol', source: 'omt', 'source-layer': 'transportation', minzoom: 14,
         filter: ['all', ['in', ['get', 'class'], ['literal', ['minor', 'service', 'path', 'tertiary']]],
           ['!=', ['get', 'subclass'], 'platform'], ['!=', ['get', 'brunnel'], 'tunnel']],
-        layout: { 'symbol-placement': 'line', 'symbol-spacing': 60, 'icon-image': 'lamp',
+        layout: { visibility: C.lamps ? 'visible' : 'none', 'symbol-placement': 'line', 'symbol-spacing': 60, 'icon-image': 'lamp',
           'icon-size': ['interpolate', ['linear'], ['zoom'], 14, 0.6, 15.5, 0.55, 18, 0.45],
           'icon-allow-overlap': true, 'icon-ignore-placement': true },
         paint: { 'icon-opacity': ['interpolate', ['linear'], ['zoom'], 14, 0.9, 15.5, 0.6, 17, 0.35] } },
 
       /* ---- туман: весь мир минус открытое ---- */
-      { id: 'fog', type: 'fill', source: 'fog', paint: { 'fill-color': C.bg, 'fill-opacity': FOG_OPACITY } },
+      { id: 'fog', type: 'fill', source: 'fog', paint: C.hatch
+        ? { 'fill-pattern': ['step', ['zoom'], 'hatch-far', 12.8, 'hatch-mid', 14.5, 'hatch-near'], 'fill-opacity': C.fogOpacity }
+        : { 'fill-color': C.fog, 'fill-opacity': C.fogOpacity } },
 
       /* ---- поверх тумана ---- */
       /* Три ступени деления по мере приближения, со сменой без рывков:
        * издалека — округа (ЦАО, САО…), на среднем масштабе — районы,
        * вблизи — наши участки у метро и кусочки. */
       { id: 'okrug-line', type: 'line', source: 'admin', maxzoom: 11, filter: ['==', ['get', 'level'], 'okrug'],
-        paint: { 'line-color': '#6d809e', 'line-width': 1.8,
+        paint: { 'line-color': C.okrugLine, 'line-width': 1.8,
           'line-opacity': ['interpolate', ['linear'], ['zoom'], 10.3, 0.9, 10.9, 0] } },
       { id: 'district-line', type: 'line', source: 'admin', minzoom: 10, maxzoom: 12.6,
         filter: ['==', ['get', 'level'], 'district'],
-        paint: { 'line-color': '#3f4e66', 'line-width': 1.1,
+        paint: { 'line-color': C.districtLine, 'line-width': 1.1,
           'line-opacity': ['interpolate', ['linear'], ['zoom'], 10.2, 0, 10.7, 0.9, 12, 0.9, 12.5, 0] } },
       { id: 'zone-line', type: 'line', source: 'zones', minzoom: 12.5,
-        paint: { 'line-color': '#222c3b', 'line-width': ['interpolate', ['linear'], ['zoom'], 12.5, 0.4, 16, 1],
+        paint: { 'line-color': C.zoneLine, 'line-width': ['interpolate', ['linear'], ['zoom'], 12.5, 0.4, 16, 1],
           'line-opacity': ['interpolate', ['linear'], ['zoom'], 12.5, 0, 13, 1] } },
       { id: 'cell-line', type: 'line', source: 'cells', minzoom: 11.8,
-        paint: { 'line-color': '#34435a', 'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.8, 15, 1.6],
+        paint: { 'line-color': C.cellLine, 'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.8, 15, 1.6],
           'line-opacity': ['interpolate', ['linear'], ['zoom'], 11.9, 0, 12.4, 1] } },
       { id: 'water-edge-glow', type: 'line', source: 'omt', 'source-layer': 'water',
-        paint: { 'line-color': C.waterEdge, 'line-opacity': 0.22, 'line-width': 5, 'line-blur': 4 } },
+        paint: { 'line-color': C.waterEdge, 'line-opacity': C.waterEdgeGlow, 'line-width': 5, 'line-blur': 4 } },
       { id: 'water-edge', type: 'line', source: 'omt', 'source-layer': 'water',
-        paint: { 'line-color': C.waterEdge, 'line-opacity': 0.45, 'line-width': 0.8 } },
+        paint: { 'line-color': C.waterEdge, 'line-opacity': C.waterEdgeLine, 'line-width': 0.8 } },
       // знаковые места видно и в тумане: сиреневый пунктир — «здесь есть что-то стоящее»
       { id: 'place-line', type: 'line', source: 'places',
         paint: { 'line-color': C.poi, 'line-opacity': 0.75, 'line-dasharray': [2, 1.6],
@@ -308,41 +434,45 @@ function buildStyle() {
       // открытое читалось бы только по контуру. Вблизи прозрачнее: там горят улицы.
       { id: 'open-fill', type: 'fill', source: 'openFill',
         paint: { 'fill-color': C.neon,
-          'fill-opacity': ['interpolate', ['linear'], ['zoom'], 9, 0.42, 12, 0.3, 14, 0.12, 16, 0.05] } },
+          'fill-opacity': ['interpolate', ['linear'], ['zoom'], 9, C.openFill[0], 12, C.openFill[1], 14, C.openFill[2], 16, C.openFill[3]] } },
       // неон — по краю тумана, то есть по внешней границе всего открытого,
       // без сетки между соседними открытыми кусочками
       { id: 'open-glow', type: 'line', source: 'fog',
-        paint: { 'line-color': C.neon, 'line-opacity': 0.5, 'line-width': 12, 'line-blur': 9 } },
+        paint: { 'line-color': C.neon, 'line-opacity': C.glow, 'line-width': 12, 'line-blur': 9 } },
       { id: 'open-line', type: 'line', source: 'fog',
         paint: { 'line-color': C.neon, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1.2, 16, 2.4] } },
       // под мышкой (на компьютере): легче, чем выделение по нажатию
-      { id: 'hover-fill', type: 'fill', source: 'hover', paint: { 'fill-color': '#dff6ff', 'fill-opacity': 0.06 } },
+      { id: 'hover-fill', type: 'fill', source: 'hover', paint: { 'fill-color': C.selFill, 'fill-opacity': 0.06 } },
       { id: 'hover-line', type: 'line', source: 'hover',
-        paint: { 'line-color': '#ffffff', 'line-opacity': 0.45, 'line-width': 1.4 } },
+        paint: { 'line-color': C.sel, 'line-opacity': 0.45, 'line-width': 1.4 } },
       // то, на что нажали: светлая заливка и контур, открытым от этого не становится
-      { id: 'sel-fill', type: 'fill', source: 'selected', paint: { 'fill-color': '#dff6ff', 'fill-opacity': 0.1 } },
+      { id: 'sel-fill', type: 'fill', source: 'selected', paint: { 'fill-color': C.selFill, 'fill-opacity': 0.1 } },
       { id: 'sel-glow', type: 'line', source: 'selected',
-        paint: { 'line-color': '#ffffff', 'line-opacity': 0.35, 'line-width': 8, 'line-blur': 6 } },
+        paint: { 'line-color': C.sel, 'line-opacity': 0.35, 'line-width': 8, 'line-blur': 6 } },
       { id: 'sel-line', type: 'line', source: 'selected',
-        paint: { 'line-color': '#ffffff', 'line-opacity': 0.9, 'line-width': 2 } },
+        paint: { 'line-color': C.sel, 'line-opacity': 0.9, 'line-width': 2 } },
       // место, к которому перелетели из списка, — белое кольцо вокруг точки
       { id: 'sel-point', type: 'circle', source: 'selected', filter: ['==', ['geometry-type'], 'Point'],
         paint: { 'circle-radius': 15, 'circle-color': 'rgba(255,255,255,0.08)',
-          'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2.5 } },
+          'circle-stroke-color': C.sel, 'circle-stroke-width': 2.5 } },
+      // что откроется вокруг выбранной точки (дом, работа…) — пунктир и лёгкая заливка
+      { id: 'preview-fill', type: 'fill', source: 'preview', paint: { 'fill-color': C.neon, 'fill-opacity': 0.22 } },
+      { id: 'preview-line', type: 'line', source: 'preview',
+        paint: { 'line-color': C.neon, 'line-width': 1.4, 'line-dasharray': [2, 1.5] } },
       { id: 'zone-hit', type: 'fill', source: 'zones', paint: { 'fill-color': '#000', 'fill-opacity': 0 } },
       { id: 'place-hit', type: 'fill', source: 'places', paint: { 'fill-color': '#000', 'fill-opacity': 0 } },
 
       { id: 'road-label', type: 'symbol', source: 'omt', 'source-layer': 'transportation_name', minzoom: 15,
         layout: { 'symbol-placement': 'line', 'text-field': NAME, 'text-font': FONT.reg, 'text-size': 11 },
-        paint: { 'text-color': '#8b95a6', 'text-halo-color': C.halo, 'text-halo-width': 1.4 } },
+        paint: { 'text-color': C.roadLabel, 'text-halo-color': C.halo, 'text-halo-width': 1.4 } },
       { id: 'water-label', type: 'symbol', source: 'omt', 'source-layer': 'water_name',
         filter: ['==', ['geometry-type'], 'Point'],
         layout: { 'text-field': NAME, 'text-font': FONT.ital, 'text-size': 12 },
-        paint: { 'text-color': '#5fc3d0', 'text-halo-color': C.halo, 'text-halo-width': 1.2 } },
+        paint: { 'text-color': C.waterLabel, 'text-halo-color': C.halo, 'text-halo-width': 1.2 } },
       { id: 'water-label-line', type: 'symbol', source: 'omt', 'source-layer': 'water_name',
         filter: ['==', ['geometry-type'], 'LineString'],
         layout: { 'text-field': NAME, 'text-font': FONT.ital, 'text-size': 12, 'symbol-placement': 'line' },
-        paint: { 'text-color': '#5fc3d0', 'text-halo-color': C.halo, 'text-halo-width': 1.2 } },
+        paint: { 'text-color': C.waterLabel, 'text-halo-color': C.halo, 'text-halo-width': 1.2 } },
       // станции — из своей выгрузки (data/metro.json): подложка отдаёт метро только
       // с масштаба ~12.5, а нам нужно раньше
       { id: 'metro', type: 'symbol', source: 'metro', minzoom: 11.7,
@@ -351,12 +481,12 @@ function buildStyle() {
           'text-size': ['interpolate', ['linear'], ['zoom'], 12.9, 10.5, 16, 13.5],
           'text-anchor': 'top', 'text-offset': [0, 0.9], 'text-optional': true,
           'symbol-sort-key': -1 },
-        paint: { 'text-color': '#ffffff', 'text-halo-color': C.halo, 'text-halo-width': 2, 'text-halo-blur': 0.4 } },
+        paint: { 'text-color': C.metroText, 'text-halo-color': C.halo, 'text-halo-width': 2, 'text-halo-blur': 0.4 } },
       { id: 'place-label-city', type: 'symbol', source: 'omt', 'source-layer': 'place', maxzoom: 11,
         filter: ['in', ['get', 'class'], ['literal', ['city', 'town']]],
         layout: { 'text-field': NAME, 'text-font': FONT.bold,
           'text-size': ['match', ['get', 'class'], 'city', 18, 12] },
-        paint: { 'text-color': '#c9d1dc', 'text-halo-color': C.halo, 'text-halo-width': 1.6 } },
+        paint: { 'text-color': C.cityLabel, 'text-halo-color': C.halo, 'text-halo-width': 1.6 } },
       // интересные места: сиреневая точка в светлом ободке с тёмной «подложкой» вокруг —
       // по форме и цвету не спутать с фонарём; бирюзовая — уже был
       // где был — бирюзовое свечение вокруг точки, видно и издалека, и в тёмном кусочке
@@ -364,7 +494,7 @@ function buildStyle() {
         paint: { 'circle-color': C.neon, 'circle-opacity': 0.35, 'circle-blur': 0.8,
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 11.5, 9, 16, 22] } },
       { id: 'poi-halo', type: 'circle', source: 'poiPoints', minzoom: 12.5,
-        paint: { 'circle-color': C.bg, 'circle-opacity': 0.75,
+        paint: { 'circle-color': C.poiHalo, 'circle-opacity': 0.75,
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 12.5, 6, 16, 11] } },
       // не был — сиреневая точка с приближения 12.5
       { id: 'poi-dot', type: 'circle', source: 'poiPoints', minzoom: 12.5, filter: ['!', ['get', 'visited']],
@@ -375,7 +505,7 @@ function buildStyle() {
       { id: 'poi-dot-visited', type: 'circle', source: 'poiPoints', minzoom: 11.5, filter: ['get', 'visited'],
         paint: { 'circle-color': C.neon,
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 11.5, 4, 16, 9],
-          'circle-stroke-color': '#ffffff', 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11.5, 1, 16, 2.5] } },
+          'circle-stroke-color': C.visitedRing, 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11.5, 1, 16, 2.5] } },
       { id: 'poi-label', type: 'symbol', source: 'poiPoints', minzoom: 13,
         // где был — подпись с галочкой уже с 13; остальные — только с 14.5
         layout: { 'text-field': ['step', ['zoom'],
@@ -392,14 +522,14 @@ function buildStyle() {
         layout: { 'text-field': ['format', ['get', 'short'], { 'font-scale': 1 },
           ['concat', '\n', ['get', 'name']], { 'font-scale': 0.5 }],
           'text-font': FONT.bold, 'text-size': 20, 'text-letter-spacing': 0.08, 'text-max-width': 12 },
-        paint: { 'text-color': '#c9d2de', 'text-halo-color': C.halo, 'text-halo-width': 2,
+        paint: { 'text-color': C.okrugLabel, 'text-halo-color': C.halo, 'text-halo-width': 2,
           'text-opacity': ['interpolate', ['linear'], ['zoom'], 10.3, 1, 10.9, 0] } },
       // районы на среднем масштабе
       { id: 'district-label', type: 'symbol', source: 'adminLabels', minzoom: 10.2, maxzoom: 12.6,
         filter: ['==', ['get', 'level'], 'district'],
         layout: { 'text-field': ['upcase', ['get', 'name']], 'text-font': FONT.bold, 'text-letter-spacing': 0.12,
           'text-size': ['interpolate', ['linear'], ['zoom'], 10.5, 10, 12, 12], 'text-max-width': 8 },
-        paint: { 'text-color': '#9aa6b8', 'text-halo-color': C.halo, 'text-halo-width': 1.6,
+        paint: { 'text-color': C.districtLabel, 'text-halo-color': C.halo, 'text-halo-width': 1.6,
           'text-opacity': ['interpolate', ['linear'], ['zoom'], 10.3, 0, 10.8, 1, 12, 1, 12.5, 0] } },
       // закрытые участки у метро вблизи: замок и название
       { id: 'cell-label', type: 'symbol', source: 'cellLabels', minzoom: 12.1,
@@ -418,6 +548,13 @@ function buildStyle() {
           'text-font': FONT.bold, 'text-size': 11, 'text-anchor': 'top', 'text-offset': [0, 0.7],
           'text-max-width': 9, 'text-optional': true },
         paint: { 'text-color': C.poiText, 'text-halo-color': C.halo, 'text-halo-width': 2.2, 'text-halo-blur': 0.5 } },
+      // свои точки: дом, работа… — кружок и подпись
+      { id: 'anchor-dot', type: 'circle', source: 'anchors',
+        paint: { 'circle-radius': 7, 'circle-color': C.neon, 'circle-stroke-color': C.halo, 'circle-stroke-width': 2.5 } },
+      { id: 'anchor-label', type: 'symbol', source: 'anchors',
+        layout: { 'text-field': ['get', 'label'], 'text-font': FONT.bold, 'text-size': 12,
+          'text-anchor': 'left', 'text-offset': [0.9, 0], 'text-allow-overlap': true },
+        paint: { 'text-color': C.neon, 'text-halo-color': C.halo, 'text-halo-width': 2 } },
       { id: 'open-label', type: 'symbol', source: 'openLabels',
         layout: {
           // одна строка: значок, название, прогресс; висит над верхним краем места
@@ -432,7 +569,7 @@ function buildStyle() {
           // знаковые места важнее участков: при нехватке места прячется участок
           'symbol-sort-key': ['match', ['get', 'kind'], ['metro', 'area'], 2, 1],
         },
-        paint: { 'text-color': '#eef3f8' } },
+        paint: { 'text-color': C.pillText } },
       // когда плашка крупнее самого места — только светящееся название без рамки
       { id: 'open-name', type: 'symbol', source: 'openLabels',
         layout: { 'text-field': ['get', 'shortText'], 'text-font': FONT.bold, 'text-size': 11,
@@ -468,6 +605,7 @@ function refresh() {
   updateLabelFilters();
   drawCounter();
   saveOpen();
+  if (window.drawAnchors) drawAnchors();
 }
 
 /* С какого приближения место на экране не меньше подписи: подпись висит над
@@ -757,7 +895,8 @@ const hideCard = () => {
   App.current = null;
   App.back = null;
   document.getElementById('card').hidden = true;
-  App.map.getSource('selected').setData(fc([]));
+  // до загрузки карты слоя выделения ещё нет
+  App.map.getSource('selected')?.setData(fc([]));
 };
 
 /* ============================ запуск ============================ */
@@ -766,8 +905,8 @@ function initMap() {
   const map = App.map = new maplibregl.Map({
     container: 'map',
     style: buildStyle(),
-    center: [37.62, 55.745],
-    zoom: 11,
+    center: PARAMS.get('at') ? PARAMS.get('at').split(',').map(Number) : [37.62, 55.745],
+    zoom: Number(PARAMS.get('z')) || 11,
     minZoom: 8,
     maxZoom: 18,
     attributionControl: false,
@@ -778,14 +917,20 @@ function initMap() {
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
 
   // значки рисуем сами на холсте и отдаём карте, когда она их попросит
-  const icons = makeIcons();
+  App.icons = makeIcons();
   map.on('styleimagemissing', (e) => {
-    const im = icons[e.id];
+    const im = App.icons[e.id];
     if (!im || map.hasImage(e.id)) return;
     if (im.opts) map.addImage(e.id, im.data, im.opts);
     else map.addImage(e.id, im, { pixelRatio: 2 });
   });
   map.on('load', refresh);
+  if (PARAMS.get('card')) {
+    map.once('idle', () => {
+      const c = App.cells.find((x) => x.properties.stations.includes(PARAMS.get('card')));
+      if (c) showCard(c);
+    });
+  }
   // пороги подписей зависят от приближения — пересчитываем раз в кадр, не чаще
   let pending = false;
   map.on('zoom', () => {
@@ -822,6 +967,8 @@ function initMap() {
     map.getSource('hover').setData(fc([]));
   });
 
+  document.getElementById('btnTheme').onclick = toggleTheme;
+  drawThemeButton();
   document.getElementById('btnZoomIn').onclick = () => map.zoomIn();
   document.getElementById('btnZoomOut').onclick = () => map.zoomOut();
   document.getElementById('cardClose').onclick = hideCard;
@@ -834,8 +981,7 @@ function initMap() {
   document.getElementById('tripClose').onclick = closeTrip;
   for (const b of document.querySelectorAll('#tripTabs button')) b.onclick = () => openTrip(b.dataset.tab);
   for (const b of document.querySelectorAll('#poiFilter button')) b.onclick = () => applyPoiFilter(b.dataset.f);
-  // открыть карту по своим фото
-  document.getElementById('btnPhotos').onclick = openImport;
+  // открыть карту по своим фото (кнопка — в «Быстро отметить», см. onboard.js)
   document.getElementById('importClose').onclick = closeImport;
   document.getElementById('importPick').onclick = () => {
     App.importWaiting = true;
@@ -879,6 +1025,40 @@ function initMap() {
     let saved = 'all';
     try { saved = localStorage.getItem(FILTER_KEY) || 'all'; } catch (e) { /* по умолчанию все */ }
     applyPoiFilter(saved);
+  });
+  // быстрый старт и меню «Быстро отметить» — в onboard.js
+  if (window.onboardInit) onboardInit();
+}
+
+/* ============================ день / ночь ============================ */
+
+const SUN = 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v3h-2zm0 19h2v3h-2zM1 11h3v2H1zm19 0h3v2h-3zM4.2 5.6l1.4-1.4 2.1 2.1-1.4 1.4zm12.1 12.1 1.4-1.4 2.1 2.1-1.4 1.4zM4.2 18.4l2.1-2.1 1.4 1.4-2.1 2.1zM16.3 6.3l2.1-2.1 1.4 1.4-2.1 2.1z';
+const MOON = 'M20 15.3A8.5 8.5 0 0 1 8.7 4a8.5 8.5 0 1 0 11.3 11.3z';
+
+/* На кнопке — куда переключит: ночью солнце, днём луна. */
+function drawThemeButton() {
+  const btn = document.getElementById('btnTheme');
+  btn.innerHTML = SVG(isDay() ? MOON : SUN);
+  btn.title = isDay() ? 'Ночная карта' : 'Дневная карта';
+}
+
+/* Сменить тему без перезагрузки: пересобираем стиль карты с новыми цветами,
+ * данные и отметки остаются. */
+function toggleTheme() {
+  const mode = isDay() ? 'night' : 'day';
+  try { localStorage.setItem(THEME_KEY, mode); } catch (e) { /* только на этот раз */ }
+  THEME = MODE_THEME[mode];
+  C = THEMES[THEME];
+  applyThemeToPage();
+  drawThemeButton();
+  App.icons = makeIcons();
+  const sel = App.current;
+  hideCard();
+  App.map.setStyle(buildStyle(), { diff: false });
+  App.map.once('style.load', () => {
+    refresh();
+    applyPoiFilter(App.poiFilter || 'all');
+    if (sel) showCard(sel);
   });
 }
 
@@ -1154,7 +1334,9 @@ function closeTrip() {
 function drawTrip() {
   const body = document.getElementById('tripBody');
   body.replaceChildren();
-  if (App.tripTab === 'weekend') drawWeekend(body); else drawNear(body);
+  if (App.tripTab === 'weekend') drawWeekend(body);
+  else if (App.tripTab === 'wish') drawWish(body);
+  else drawNear(body);
 }
 
 function drawWeekend(body) {

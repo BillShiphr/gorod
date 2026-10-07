@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<link rel="stylesheet" href="vector.css?v=14">
+<link rel="stylesheet" href="vector.css?v=16">
 </head>
 <body>
 <div id="map"></div>
@@ -41,8 +41,10 @@
 </div>
 
 <div class="controls">
-  <button class="glass round" id="btnPhotos" title="Открыть карту по своим фото">
-    <svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+  <button class="glass round" id="btnTheme" title="День / ночь"></button>
+  <!-- быстро отметить, где уже был: свои места, станции, знаменитые места, фото -->
+  <button class="glass round accent" id="btnQuick" title="Быстро отметить, где был">
+    <svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
   </button>
   <button class="glass round" id="btnLocate" title="Где я">
     <svg viewBox="0 0 24 24"><path d="M21 3 3 10.5l7.5 3L13.5 21z"/></svg>
@@ -88,6 +90,7 @@
     <div class="tabs" id="tripTabs">
       <button data-tab="weekend" class="on">На выходные</button>
       <button data-tab="near">Рядом</button>
+      <button data-tab="wish">Хочу</button>
     </div>
     <button class="card-close" id="tripClose" title="Закрыть">×</button>
   </div>
@@ -117,6 +120,67 @@
   </div>
 </section>
 
+<!-- быстрый старт: одно окно, в нём по очереди «Твои места», «Станции», итог -->
+<section class="sheet glass" id="ob" hidden>
+  <div class="sheet-head">
+    <div><b class="sheet-title" id="obTitle"></b><small class="ob-step" id="obStep"></small></div>
+    <button class="card-close" id="obClose" title="Закрыть">×</button>
+  </div>
+  <div class="sheet-body" id="obBody"></div>
+  <div class="ob-foot" id="obFoot"></div>
+</section>
+
+<!-- выбор точки на карте: метка в центре, карту двигают под ней -->
+<div class="pick" id="pick" hidden>
+  <div class="pick-top glass">
+    <b id="pickTitle"></b>
+    <p>Подвинь карту, чтобы метка встала на место, или найди станцию.</p>
+    <input id="pickSearch" type="search" placeholder="Станция метро, парк, музей…" autocomplete="off">
+    <div class="pick-found" id="pickFound"></div>
+  </div>
+  <svg class="pick-pin" viewBox="0 0 24 36"><path d="M12 0a12 12 0 0 0-12 12c0 9 12 24 12 24s12-15 12-24A12 12 0 0 0 12 0zm0 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/></svg>
+  <div class="pick-bottom glass">
+    <p id="pickInfo"></p>
+    <div class="row">
+      <button class="card-btn ghost" id="pickCancel">Отмена</button>
+      <button class="card-btn ghost" id="pickHere">Я сейчас тут</button>
+      <button class="card-btn" id="pickOk">Готово</button>
+    </div>
+  </div>
+</div>
+
+<!-- знаменитые места карточками: вправо — был, влево — не был, вверх — хочу -->
+<div class="swipe" id="swipe" hidden>
+  <div class="swipe-head">
+    <button class="linkbtn" id="swipeUndo">↶ Вернуть</button>
+    <span id="swipeCount"></span>
+    <button class="linkbtn" id="swipeDone">Закончить</button>
+  </div>
+  <div class="swipe-deck" id="swipeDeck"></div>
+  <p class="swipe-hint">Вправо — был · влево — не был · вверх — хочу сходить</p>
+  <div class="swipe-btns">
+    <button class="sw-no" id="swNo" title="Не был">✕</button>
+    <button class="sw-want" id="swWant" title="Хочу сходить">★</button>
+    <button class="sw-yes" id="swYes" title="Был">✓</button>
+  </div>
+</div>
+
+<!-- первый запуск -->
+<div class="welcome" id="welcome" hidden>
+  <div class="welcome-card glass">
+    <h2>Москва под туманом</h2>
+    <p>Карта открывается там, где ты уже был. Давай сразу отметим знакомое — пара минут,
+      и вместо пустой карты будет твоя Москва.</p>
+    <ol>
+      <li><b>Твои места</b> — дом, работа, учёба: откроем район вокруг</li>
+      <li><b>Станции метро</b> — где выходил: кусочки у выходов</li>
+      <li><b>Знаменитые места</b> — карточками: был, не был, хочу</li>
+    </ol>
+    <button class="card-btn big" id="welcomeGo">Начать</button>
+    <button class="linkbtn" id="welcomeSkip">Сначала посмотрю карту</button>
+  </div>
+</div>
+
 <!-- импорт фото идёт фоном: маленькая плашка с прогрессом, карта при этом свободна -->
 <div class="imp-pill glass" id="impPill" hidden>
   <div class="imp-pill-head">
@@ -138,6 +202,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
 <!-- чтение места и даты съёмки из фото (JPEG, HEIC) — только в браузере -->
 <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
-<script src="vector.js?v=46"></script>
+<script src="vector.js?v=51"></script>
+<script src="onboard.js?v=3"></script>
 </body>
 </html>
