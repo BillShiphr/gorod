@@ -309,3 +309,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .wish-row{display:flex;align-items:center}
 .wish-row .near-row{flex:1}
 .wish-x{background:none;border:0;color:var(--muted);font-size:20px;padding:0 4px 0 10px}
+
+/* стереть всю карту — нарочно незаметно */
+.ob-reset{display:block;margin:18px auto 2px;background:none;border:0;padding:6px;font-size:12px;color:var(--muted);opacity:.7}
+.card-btn.danger{color:#e5484d;border-color:color-mix(in srgb,#e5484d 50%,transparent)}

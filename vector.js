@@ -86,11 +86,13 @@ const THEMES = {
     neon: '#df5f33', glow: 0.2, openFill: [0.16, 0.06, 0.02, 0],
     okrugLine: '#8a7859', districtLine: '#b3a17f', zoneLine: '#b8a37d', cellLine: '#937c56',
     sel: '#3b2f20', selFill: '#3b2f20',
-    label: '#76664d', halo: '#f7f0e0', roadLabel: '#7d6e55', waterLabel: '#2f7d91',
-    metroText: '#3a2f22', cityLabel: '#3a2f22', okrugLabel: '#4d3f2c', districtLabel: '#76664d',
+    label: '#3d3122', halo: '#f7f0e0', roadLabel: '#7d6e55', waterLabel: '#2f7d91',
+    metroText: '#2e2418', cityLabel: '#3a2f22', okrugLabel: '#3d3122', districtLabel: '#4f4130',
+    // поверх штриховки подписи и замки теряются — делаем их жирнее и со светлой подложкой
+    labelBold: true, labelHalo: 2.6, lockHalo: '#f7f0e0',
     poi: '#7b4fd8', poiText: '#5c33b8', poiRing: '#fffaf0', visitedRing: '#fffaf0', poiHalo: '#f7f0e0',
     pillBg: 'rgba(252,247,236,.97)', pillGlow: 'rgba(223,95,51,.35)', pillText: '#2e261b', icoOpen: '#c9542b',
-    lock: '#9b8a6d', metroFill: '#5a4c39', metroStroke: 'rgba(255,250,240,.95)',
+    lock: '#4f4130', metroFill: '#4a3c2a', metroStroke: 'rgba(255,250,240,.95)',
   },
 };
 const PARAMS = new URLSearchParams(location.search);
@@ -272,10 +274,17 @@ function makeIcons() {
   }
   Object.assign(icons, {
     lock: icon(18, (g) => {
-      g.fillStyle = C.lock; g.strokeStyle = C.lock; g.lineWidth = 2;
-      g.beginPath(); g.arc(9, 7.5, 3.6, Math.PI, 0); g.stroke();
-      g.fillRect(9 - 3.6 - 1, 7.5, 2, 2); g.fillRect(9 + 3.6 - 1, 7.5, 2, 2);
-      g.beginPath(); g.roundRect(3.5, 8.5, 11, 8, 2); g.fill();
+      // замок: дужка и корпус; в теме с подложкой сначала рисуем его же светлым и толще
+      const draw = (color, extra) => {
+        g.fillStyle = color; g.strokeStyle = color; g.lineJoin = 'round';
+        g.lineWidth = 2 + extra;
+        g.beginPath(); g.arc(9, 7.5, 3.6, Math.PI, 0); g.stroke();
+        g.fillRect(9 - 3.6 - 1 - extra / 2, 7.5, 2 + extra, 2); g.fillRect(9 + 3.6 - 1 - extra / 2, 7.5, 2 + extra, 2);
+        g.beginPath(); g.roundRect(3.5, 8.5, 11, 8, 2); g.fill();
+        if (extra) g.stroke();
+      };
+      if (C.lockHalo) draw(C.lockHalo, 2.5);
+      draw(C.lock, 0);
     }),
     // метро — просто красная «М», без круга; тонкая тёмная обводка по контуру буквы,
     // чтобы не терялась на горящих улицах
@@ -481,7 +490,7 @@ function buildStyle() {
           'text-size': ['interpolate', ['linear'], ['zoom'], 12.9, 10.5, 16, 13.5],
           'text-anchor': 'top', 'text-offset': [0, 0.9], 'text-optional': true,
           'symbol-sort-key': -1 },
-        paint: { 'text-color': C.metroText, 'text-halo-color': C.halo, 'text-halo-width': 2, 'text-halo-blur': 0.4 } },
+        paint: { 'text-color': C.metroText, 'text-halo-color': C.halo, 'text-halo-width': C.labelHalo || 2, 'text-halo-blur': 0.4 } },
       { id: 'place-label-city', type: 'symbol', source: 'omt', 'source-layer': 'place', maxzoom: 11,
         filter: ['in', ['get', 'class'], ['literal', ['city', 'town']]],
         layout: { 'text-field': NAME, 'text-font': FONT.bold,
@@ -529,16 +538,16 @@ function buildStyle() {
         filter: ['==', ['get', 'level'], 'district'],
         layout: { 'text-field': ['upcase', ['get', 'name']], 'text-font': FONT.bold, 'text-letter-spacing': 0.12,
           'text-size': ['interpolate', ['linear'], ['zoom'], 10.5, 10, 12, 12], 'text-max-width': 8 },
-        paint: { 'text-color': C.districtLabel, 'text-halo-color': C.halo, 'text-halo-width': 1.6,
+        paint: { 'text-color': C.districtLabel, 'text-halo-color': C.halo, 'text-halo-width': C.labelHalo || 1.6,
           'text-opacity': ['interpolate', ['linear'], ['zoom'], 10.3, 0, 10.8, 1, 12, 1, 12.5, 0] } },
       // закрытые участки у метро вблизи: замок и название
       { id: 'cell-label', type: 'symbol', source: 'cellLabels', minzoom: 12.1,
         layout: { 'icon-image': 'lock', 'icon-anchor': 'bottom', 'icon-size': 0.85,
           'text-field': ['upcase', ['get', 'name']],
-          'text-font': FONT.reg, 'text-letter-spacing': 0.12,
+          'text-font': C.labelBold ? FONT.bold : FONT.reg, 'text-letter-spacing': 0.12,
           'text-size': ['interpolate', ['linear'], ['zoom'], 12, 9, 15, 12],
           'text-anchor': 'top', 'text-offset': [0, 0.3], 'text-max-width': 9, 'text-optional': true },
-        paint: { 'text-color': C.label, 'text-halo-color': C.halo, 'text-halo-width': 1.4,
+        paint: { 'text-color': C.label, 'text-halo-color': C.halo, 'text-halo-width': C.labelHalo || 1.4,
           'text-opacity': ['interpolate', ['linear'], ['zoom'], 12.1, 0, 12.5, 1],
           'icon-opacity': ['interpolate', ['linear'], ['zoom'], 12.1, 0, 12.5, 1] } },
       // закрытые знаковые места: сиреневый значок и название — важнее замков участков

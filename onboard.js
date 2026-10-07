@@ -131,7 +131,7 @@ function openOb(step) {
   body.scrollTop = 0;
   const inWizard = App.wizard !== null && App.wizard !== undefined && step !== 'hub';
   document.getElementById('obStep').textContent = inWizard && step !== 'summary' ? `шаг ${App.wizard + 1} из 3` : '';
-  ({ hub: drawHub, anchors: drawAnchorsStep, stations: drawStationsStep, summary: drawSummary })[step](body, foot, inWizard);
+  ({ hub: drawHub, anchors: drawAnchorsStep, stations: drawStationsStep, summary: drawSummary, reset: drawReset })[step](body, foot, inWizard);
 }
 
 function closeOb() {
@@ -200,7 +200,42 @@ function drawHub(body, foot) {
     b.onclick = fn;
     body.append(b);
   }
+  // стереть всё — мелкой серой ссылкой в самом низу, чтобы не нажать случайно
+  const reset = el('button', 'ob-reset', 'Стереть всю карту…');
+  reset.onclick = () => openOb('reset');
+  body.append(reset);
   footButtons(foot, [['Пройти всё по шагам', false, startWizard]]);
+}
+
+/* ---------- стереть всю карту ---------- */
+
+function drawReset(body, foot) {
+  setTitle('Стереть всю карту?');
+  const zs = App.zones.filter(isOpen).length + App.places.filter(isOpen).length;
+  const places = App.pois.filter((p) => !p.landmark && marked(p.id)).length;
+  body.append(el('p', '', `Пропадут все отметки: открытых кусочков и территорий — ${zs}, мест — ${places}, `
+    + `твои места (дом, работа…) — ${App.anchors.length}, список «Хочу» — ${App.wish.size}.`));
+  body.append(el('p', 'hint', 'Вернуть будет нельзя. Тема и фильтр мест останутся.'));
+  footButtons(foot, [['Стереть', false, resetAll], ['Оставить', true, () => openOb('hub')]])
+    .firstChild.classList.add('danger');
+}
+
+function resetAll() {
+  App.open.clear();
+  App.anchors = [];
+  App.wish.clear();
+  App.swiped.clear();
+  App.stSel = new Set();
+  for (const k of [ANCHOR_KEY, WISH_KEY, SWIPED_KEY, ONBOARD_KEY]) {
+    try { localStorage.removeItem(k); } catch (e) { /* не страшно */ }
+  }
+  refresh();  // сохранит пустой список отметок
+  closeOb();
+  hideCard();
+  App.map.flyTo({ center: [37.62, 55.745], zoom: 11, duration: 800 });
+  toast('Карта очищена — можно начать заново');
+  // как при первом запуске
+  setTimeout(() => { document.getElementById('welcome').hidden = false; }, 900);
 }
 
 /* ---------- 1. твои места ---------- */
