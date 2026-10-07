@@ -623,9 +623,15 @@ function onboardInit() {
     saveJSON(ONBOARD_KEY, true);
   };
 
-  // первый запуск: карта пустая и знакомство ещё не проходили
+  document.getElementById('btnHelp').onclick = () => openStories(false);
+  document.getElementById('welcomeHow').onclick = () => { document.getElementById('welcome').hidden = true; openStories(true); };
+
+  // первый запуск: карта пустая и знакомство ещё не проходили —
+  // сначала короткие истории (если ещё не смотрел), потом приветствие с быстрым стартом
   App.map.once('load', () => {
     drawAnchors();
-    if (!DEMO && !loadJSON(ONBOARD_KEY, false) && App.open.size === 0) document.getElementById('welcome').hidden = false;
+    if (DEMO || loadJSON(ONBOARD_KEY, false) || App.open.size !== 0) return;
+    if (loadJSON(STORIES_KEY, false)) document.getElementById('welcome').hidden = false;
+    else openStories(true);
   });
 }

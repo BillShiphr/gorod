@@ -14,6 +14,8 @@
   --shadow:none;
   --ico:radial-gradient(circle at 30% 30%,#2d7a4f,#0f2a1f 70%); --ico-fill:#bff8ee;
   --ico-locked:radial-gradient(circle at 30% 30%,#2a3342,#121821 70%); --ico-locked-fill:#7d8798;
+  /* картинки в обучающих историях */
+  --st-land:#141b27; --st-street:#ffe6ad; --st-water:#0b2536; --st-fog:#2b3341; --st-hatch:transparent; --st-line:#5a6a84;
 }
 /* дневные темы (макеты): светлые панели с мягкой тенью вместо тёмного стекла */
 :root[data-theme=day]{
@@ -26,6 +28,7 @@
   --ico-locked:radial-gradient(circle at 30% 30%,#eef0f3,#d3d8df 75%); --ico-locked-fill:#8a93a1;
 }
 :root[data-theme=paper]{
+  --st-land:#f4ecda; --st-street:#d9c095; --st-water:#9fcbd5; --st-fog:#e6dcc4; --st-hatch:rgba(120,96,60,.32); --st-line:#937c56;
   --bg:#ece2cc; --glass:rgba(251,246,235,.94); --line:rgba(90,70,40,.14); --line2:#d6c7a8;
   --neon:#df5f33; --on-neon:#ffffff; --text:#2e261b; --text2:#4f4433; --muted:#7d6f5a;
   --soft:rgba(90,70,40,.06); --track:#e4d8bf;
@@ -313,3 +316,33 @@ button{font:inherit;color:inherit;cursor:pointer}
 /* стереть всю карту — нарочно незаметно */
 .ob-reset{display:block;margin:18px auto 2px;background:none;border:0;padding:6px;font-size:12px;color:var(--muted);opacity:.7}
 .card-btn.danger{color:#e5484d;border-color:color-mix(in srgb,#e5484d 50%,transparent)}
+
+/* кнопка «?» рядом с «Москва» — открывает обучающие истории */
+.title h1{display:flex;align-items:center;gap:10px}
+.help{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--muted);background:none;color:var(--muted);
+  font-size:14px;font-weight:800;line-height:1;padding:0;display:grid;place-items:center}
+.welcome-card #welcomeHow{display:block;margin:0 auto}
+
+/* обучающие истории (stories.js) */
+.stories{position:fixed;inset:0;z-index:18;display:flex;flex-direction:column;background:var(--bg);
+  padding:calc(8px + env(safe-area-inset-top)) 0 calc(14px + env(safe-area-inset-bottom));
+  user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.stories[hidden]{display:none}
+.st-bars{display:flex;gap:4px;padding:6px 14px 0}
+.st-bars span{flex:1;height:3px;border-radius:2px;overflow:hidden;background:color-mix(in srgb,var(--text) 22%,transparent)}
+.st-bars i{display:block;height:100%;width:0;background:var(--text)}
+.st-bars i.done{width:100%}
+.st-bars i.run{animation:stfill linear forwards}
+.stories.paused .st-bars i.run{animation-play-state:paused}
+@keyframes stfill{from{width:0}to{width:100%}}
+.st-close{position:absolute;right:10px;top:calc(18px + env(safe-area-inset-top));background:none;border:0;color:var(--text);
+  font-size:30px;line-height:1;padding:4px 8px;z-index:1}
+.st-art{flex:1;min-height:0;display:grid;place-items:center;margin:34px 22px 14px;container-type:size}
+/* картинка квадратная: по меньшей стороне свободного места */
+.st-art svg{width:min(100cqw,100cqh,420px);height:min(100cqw,100cqh,420px);border-radius:26px;box-shadow:var(--shadow);
+  border:1px solid var(--line)}
+.st-text{padding:0 24px;max-width:520px;margin:0 auto;width:100%}
+.st-text h2{margin:0 0 8px;font-size:26px;line-height:1.15}
+.st-text p{margin:0;font-size:16px;line-height:1.45;color:var(--text2)}
+.st-cta{padding:14px 24px 0;max-width:520px;margin:0 auto;width:100%;min-height:62px}
+.st-cta .card-btn{margin:0}
