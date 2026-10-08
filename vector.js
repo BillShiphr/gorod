@@ -88,15 +88,27 @@ const THEMES = {
     neon: '#df5f33', glow: 0.2, openFill: [0.16, 0.06, 0.02, 0],
     okrugLine: '#8a7859', districtLine: '#b3a17f', zoneLine: '#b8a37d', cellLine: '#937c56',
     sel: '#3b2f20', selFill: '#3b2f20',
-    label: '#3d3122', halo: '#f7f0e0', roadLabel: '#7d6e55', waterLabel: '#2f7d91',
+    label: '#3d3122', halo: '#f7f0e0', roadLabel: '#5a4d3a', waterLabel: '#2f7d91',
     metroText: '#2e2418', cityLabel: '#3a2f22', okrugLabel: '#3d3122', districtLabel: '#4f4130',
-    // поверх штриховки подписи и замки теряются — делаем их жирнее и со светлой подложкой
-    labelBold: true, labelHalo: 2.6, lockHalo: '#f7f0e0',
+    // подписи жирные и тёмные, без светлой подложки (noHalo) — так попросил Серёжа
+    labelBold: true, noHalo: true,
     poi: '#7b4fd8', poiText: '#5c33b8', poiRing: '#fffaf0', visitedRing: '#fffaf0', poiHalo: '#f7f0e0',
     pillBg: 'rgba(252,247,236,.97)', pillGlow: 'rgba(223,95,51,.35)', pillText: '#2e261b', icoOpen: '#c9542b',
     lock: '#4f4130', metroFill: '#4a3c2a', metroStroke: 'rgba(255,250,240,.95)',
   },
 };
+// образцы «серой карты»: всё как днём, но закрытое под нейтрально-серым, а не бежевым
+const GRAY_TEXT = { label: '#2b2f35', districtLabel: '#3a3f46', okrugLabel: '#2b2f35', lock: '#3a3f46',
+  metroText: '#1f2328', metroFill: '#3a3f46', cityLabel: '#2b2f35', roadLabel: '#4a4f57' };
+THEMES.paperGray = Object.assign({}, THEMES.paper, GRAY_TEXT, {
+  fog: '#d4d6d9', fogOpacity: ['interpolate', ['linear'], ['zoom'], 12, 0.9, 15, 0.86],
+  zoneLine: '#b3b7bd', cellLine: '#8b9199', districtLine: '#a3a8af', okrugLine: '#7b828c',
+});
+THEMES.paperGrayDark = Object.assign({}, THEMES.paper, GRAY_TEXT, {
+  fog: '#bcc0c6', fogOpacity: ['interpolate', ['linear'], ['zoom'], 12, 0.91, 15, 0.88],
+  zoneLine: '#a2a7ae', cellLine: '#767d87', districtLine: '#8e949c', okrugLine: '#6b727c',
+});
+
 const PARAMS = new URLSearchParams(location.search);
 const THEME_KEY = 'gorod.theme';
 const MODE_THEME = { night: 'dusk', day: 'paper' };
@@ -110,7 +122,7 @@ function startTheme() {
 }
 let THEME = startTheme();
 let C = THEMES[THEME];
-const isDay = () => ['day', 'paper'].includes(THEME);
+const isDay = () => THEME === 'day' || THEME.startsWith('paper');
 function applyThemeToPage() {
   document.documentElement.dataset.theme = THEME;
   document.querySelector('meta[name=theme-color]')?.setAttribute('content', C.bg);
@@ -347,7 +359,7 @@ function roadWidth(k) {
 function buildStyle() {
   const empty = fc([]);
   const road = ['all', ['in', ['get', 'class'], ['literal', ROADS]], ['!=', ['get', 'brunnel'], 'tunnel']];
-  return {
+  const style = {
     version: 8,
     glyphs: 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf',
     sources: {
@@ -589,6 +601,11 @@ function buildStyle() {
         paint: { 'text-color': C.neon, 'text-halo-color': C.halo, 'text-halo-width': 1.6 } },
     ],
   };
+  // подписи без подложки: у всех надписей убираем светлую обводку (плашки открытых мест — не трогаем)
+  if (C.noHalo) {
+    for (const l of style.layers) if (l.type === 'symbol' && l.paint && l.id !== 'open-label') l.paint['text-halo-width'] = 0;
+  }
+  return style;
 }
 
 /* ============================ перерисовка ============================ */

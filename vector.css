@@ -28,7 +28,7 @@
   --ico:radial-gradient(circle at 30% 30%,#c9f1e8,#7fd6c6 75%); --ico-fill:#0b6f63;
   --ico-locked:radial-gradient(circle at 30% 30%,#eef0f3,#d3d8df 75%); --ico-locked-fill:#8a93a1;
 }
-:root[data-theme=paper]{
+:root[data-theme^=paper]{
   --st-land:#f4ecda; --st-street:#dcc79c; --st-street-major:#eebf68; --st-water:#9fcbd5; --st-water-text:#2f7d91;
   --st-park:#cfe1a7; --st-fog:#ddd2b9; --st-hatch:transparent; --st-line:#937c56;
   --bg:#ece2cc; --glass:rgba(251,246,235,.94); --line:rgba(90,70,40,.14); --line2:#d6c7a8;
@@ -227,7 +227,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 .maplibregl-ctrl-attrib{background:color-mix(in srgb,var(--bg) 70%,transparent)!important;color:var(--muted)}
 .maplibregl-ctrl-attrib a{color:var(--muted)!important}
-:root:not([data-theme=day]):not([data-theme=paper]) .maplibregl-ctrl-attrib-button{filter:invert(1)}
+:root:not([data-theme=day]):not([data-theme^=paper]) .maplibregl-ctrl-attrib-button{filter:invert(1)}
 
 /* ---------- быстрый старт (onboard.js) ---------- */
 .round.accent{background:var(--neon);border:0}
