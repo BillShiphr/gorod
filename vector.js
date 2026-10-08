@@ -382,6 +382,7 @@ function buildStyle() {
       preview: { type: 'geojson', data: empty },
       reveal: { type: 'geojson', data: empty },
       revealPts: { type: 'geojson', data: empty },
+      revealWave: { type: 'geojson', data: empty },
       anchors: { type: 'geojson', data: empty },
     },
     layers: [
@@ -467,10 +468,13 @@ function buildStyle() {
         paint: { 'line-color': C.neon, 'line-opacity': C.glow, 'line-width': 12, 'line-blur': 9 } },
       { id: 'open-line', type: 'line', source: 'fog',
         paint: { 'line-color': C.neon, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1.2, 16, 2.4] } },
-      // вспышка при открытии: свет изнутри, расходящийся контур и кольцо из центра (flashReveal)
+      // вспышка при открытии: свет изнутри и волна, бегущая наружу от границы (flashReveal);
+      // кольцо — только у мест-точек, у них нет контура
       { id: 'reveal-fill', type: 'fill', source: 'reveal', paint: { 'fill-color': C.flash || '#ffffff', 'fill-opacity': 0 } },
       { id: 'reveal-line', type: 'line', source: 'reveal',
-        paint: { 'line-color': C.neon, 'line-opacity': 0, 'line-width': 2, 'line-blur': 2 } },
+        paint: { 'line-color': C.neon, 'line-opacity': 0, 'line-width': 3, 'line-blur': 1 } },
+      { id: 'reveal-wave', type: 'line', source: 'revealWave',
+        paint: { 'line-color': C.neon, 'line-opacity': 0, 'line-width': 3, 'line-blur': 2.5 } },
       { id: 'reveal-ring', type: 'circle', source: 'revealPts',
         paint: { 'circle-radius': 0, 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': C.neon,
           'circle-stroke-width': 2.5, 'circle-stroke-opacity': 0 } },
@@ -653,31 +657,48 @@ function refresh() {
   App.prevOpen = nowOpen;
 }
 
-/* Вспышка на только что открытом: кусочек на миг заливается светом, контур
- * расходится светящейся волной и гаснет, из центра бежит кольцо. Около секунды. */
+/* Вспышка на только что открытом: участок на миг заливается светом, граница
+ * вспыхивает, а от неё наружу бежит светящаяся волна той же формы и гаснет.
+ * У места-точки контура нет — от него расходится кольцо. Около секунды. */
 function flashReveal(features) {
   const map = App.map;
   if (!map.getLayer('reveal-fill')) return;
   const shapes = features.filter((f) => f.geometry.type !== 'Point');
-  const pts = features.map((f) => (f.geometry.type === 'Point' ? f : turf.point([f.properties.lng, f.properties.lat])));
+  const pts = features.filter((f) => f.geometry.type === 'Point');
   map.getSource('reveal').setData(fc(shapes));
-  map.getSource('revealPts').setData(fc(pts.slice(0, 60)));  // сотня колец разом — уже каша
+  map.getSource('revealPts').setData(fc(pts.slice(0, 60)));
+  // волна: заранее «раздуваем» общую границу открытого на несколько шагов наружу,
+  // до ~50 точек экрана на текущем приближении; кадры потом только переключают шаги
+  let waves = [];
+  if (shapes.length) {
+    try {
+      let base = shapes.length === 1 ? shapes[0] : turf.union(fc(shapes.slice(0, 80))) || shapes[0];
+      base = turf.simplify(base, { tolerance: 0.00003, highQuality: false });
+      const mpp = (156543.03 * Math.cos((map.getCenter().lat * Math.PI) / 180)) / 2 ** map.getZoom();
+      const maxM = 50 * mpp;
+      waves = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => turf.buffer(base, (maxM * i) / 10, { units: 'meters', steps: 6 }));
+    } catch (e) { waves = []; }
+  }
   cancelAnimationFrame(App.revealRaf);
   const t0 = performance.now(), T = 1100;
+  let wave = -1;
   const set = (layer, prop, v) => map.setPaintProperty(layer, prop, v);
   const step = (t) => {
     const k = Math.min(1, (t - t0) / T);
-    const e = 1 - (1 - k) ** 3;            // быстро в начале, плавно в конце
+    const e = 1 - (1 - k) ** 2.4;          // быстро в начале, плавно в конце
     const fade = k < 0.15 ? k / 0.15 : 1 - (k - 0.15) / 0.85;
-    set('reveal-fill', 'fill-opacity', 0.55 * fade);
-    set('reveal-line', 'line-opacity', 0.9 * (1 - k));
-    set('reveal-line', 'line-width', 2 + 16 * e);
-    set('reveal-line', 'line-blur', 2 + 10 * e);
-    set('reveal-ring', 'circle-radius', 6 + 48 * e);
+    set('reveal-fill', 'fill-opacity', 0.5 * fade);
+    set('reveal-line', 'line-opacity', 0.95 * (1 - k));
+    if (waves.length) {
+      const w = Math.min(waves.length - 1, Math.floor(e * waves.length));
+      if (w !== wave) { wave = w; map.getSource('revealWave').setData(waves[w]); }
+      set('reveal-wave', 'line-opacity', 0.85 * (1 - k));
+      set('reveal-wave', 'line-width', 3 + 3 * e);
+    }
+    set('reveal-ring', 'circle-radius', 6 + 40 * e);
     set('reveal-ring', 'circle-stroke-opacity', 0.9 * (1 - k));
     if (k < 1) { App.revealRaf = requestAnimationFrame(step); return; }
-    map.getSource('reveal').setData(fc([]));
-    map.getSource('revealPts').setData(fc([]));
+    for (const src of ['reveal', 'revealPts', 'revealWave']) map.getSource(src).setData(fc([]));
   };
   App.revealRaf = requestAnimationFrame(step);
   if (navigator.vibrate) navigator.vibrate(25);  // Android; iPhone сайтам вибрацию не даёт
