@@ -16,7 +16,7 @@
  */
 'use strict';
 
-const DATA_VERSION = 14;
+const DATA_VERSION = 15;
 // новая нарезка — новые кусочки, старые отметки к ним не подходят
 const OPEN_KEY = 'gorod.vector-zones.v8';
 /* Темы оформления. На сайте две: «ночь» (dusk — ночь посветлее) и «день»
