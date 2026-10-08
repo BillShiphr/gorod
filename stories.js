@@ -26,24 +26,39 @@ const CITY = `<rect width="300" height="300" fill="var(--st-land)"/>
   <path d="M-10 120 C60 140 120 105 180 130 S260 150 310 125 L310 150 C250 175 200 150 175 158 S80 170 -10 148Z" fill="var(--st-water)"/>`;
 // туман на всё, кроме дырки hole (путь по часовой — дыркой по правилу evenodd)
 const FOG = (hole) => `<path fill-rule="evenodd" fill="url(#stHatch)" opacity=".93" d="M0 0H300V300H0Z ${hole}"/>`;
-const LIT = (hole) => `<path d="${hole}" fill="none" stroke="var(--neon)" stroke-width="9" opacity=".45" filter="url(#stGlow)"/>
-  <path d="${hole}" fill="var(--neon)" fill-opacity=".14" stroke="var(--neon)" stroke-width="2.5" stroke-linejoin="round"/>`;
+const LIT = (hole, tint = 0.14) => `<path d="${hole}" fill="none" stroke="var(--neon)" stroke-width="9" opacity=".45" filter="url(#stGlow)"/>
+  <path d="${hole}" fill="var(--neon)" fill-opacity="${tint}" stroke="var(--neon)" stroke-width="2.5" stroke-linejoin="round"/>`;
 const PILL = (x, y, text, w = text.length * 7.4 + 26) => `<g transform="translate(${x - w / 2} ${y})">
   <rect width="${w}" height="26" rx="9" fill="var(--glass)" stroke="var(--neon)" stroke-width="1.4"/>
   <text x="${w / 2}" y="17.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--text)">${text}</text></g>`;
 
-const HOLE1 = 'M95 95 L150 80 L205 100 L215 160 L180 205 L120 210 L85 165 Z';
 const HOLE5 = 'M30 30 L95 25 L105 85 L40 95 Z';
 
 const STORIES = [
   {
-    title: 'Москва под туманом',
-    text: 'Это твоя личная карта. Всё, где ты ещё не был, спрятано под туманом. Побывал — кусочек открывается и загорается.',
-    art: () => `${ART_DEFS}${CITY}${FOG(HOLE1)}${LIT(HOLE1)}${PILL(150, 48, 'Китай-город ✓')}`,
+    title: 'Открывай город по-новому',
+    text: 'Это твоя личная карта Москвы. Места, где ты ещё не был, пока закрыты. Побывал — локация открывается и загорается. Исследуй город и смотри, как карта оживает.',
+    // настоящий центр: Кремль, изгиб Москвы-реки; открыты кусочки вокруг (story-art.js)
+    art: () => {
+      const a = STORY_CITY;
+      const x = Math.min(Math.max(a.pill[0], 62), 238);
+      return `${ART_DEFS}<rect width="300" height="300" fill="var(--st-land)"/>
+        <path d="${a.parks}" fill="var(--st-park)"/><path d="${a.water}" fill="var(--st-water)"/>
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="${a.minor}" stroke="var(--st-street)" stroke-width="1" opacity=".75"/>
+          <path d="${a.middle}" stroke="var(--st-street)" stroke-width="1.8"/>
+          <path d="${a.major}" stroke="var(--st-street-major)" stroke-width="3.2"/></g>
+        ${FOG(a.open)}${LIT(a.open, 0.03)}
+        <text x="${a.kremlin[0]}" y="${a.kremlin[1]}" text-anchor="middle" font-size="12" font-weight="800" letter-spacing="2"
+          fill="var(--text)" stroke="var(--st-land)" stroke-width="3" paint-order="stroke">КРЕМЛЬ</text>
+        <text x="${a.river[0]}" y="${a.river[1]}" text-anchor="middle" font-size="12" font-style="italic" font-weight="600"
+          fill="var(--st-water-text)" stroke="var(--st-land)" stroke-width="3" paint-order="stroke">Москва-река</text>
+        ${PILL(x, a.pill[1], 'Был здесь ✓')}`;
+    },
   },
   {
-    title: 'Город нарезан на кусочки',
-    text: 'Кусочек — пара кварталов между улицами и реками. Кусочки собраны в участки вокруг станций метро. Нажми на участок — увидишь, сколько в нём открыто.',
+    title: 'Город разделён на секторы',
+    text: 'Сектор — пара кварталов между улицами и реками. Секторы собраны в участки вокруг станций метро. Нажми на участок — увидишь, сколько в нём открыто.',
     art: () => {
       const cells = ['M20 20 L110 15 L120 95 L25 105 Z', 'M110 15 L200 25 L190 100 L120 95 Z', 'M200 25 L285 18 L280 110 L190 100 Z',
         'M25 105 L120 95 L125 190 L30 200 Z', 'M120 95 L190 100 L200 185 L125 190 Z', 'M190 100 L280 110 L285 195 L200 185 Z',
