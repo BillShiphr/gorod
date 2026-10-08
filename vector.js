@@ -1441,7 +1441,13 @@ function drawNear(body) {
   }
 }
 
-loadData().then(initMap).catch((e) => {
+// данные качаем сразу, а карту запускаем, когда загружены и остальные файлы
+// (onboard.js, stories.js): иначе при медленном интернете они не успевали подключиться
+const pageReady = new Promise((resolve) => {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', resolve);
+  else resolve();
+});
+Promise.all([loadData(), pageReady]).then(initMap).catch((e) => {
   console.error(e);
   document.body.insertAdjacentHTML('beforeend', `<p style="position:fixed;top:40%;width:100%;text-align:center">Не загрузилось: ${e.message}</p>`);
 });

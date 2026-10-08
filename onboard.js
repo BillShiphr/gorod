@@ -27,13 +27,15 @@ App.swiped = new Set(loadJSON(SWIPED_KEY, []));   // какие карточки
 App.stations = [];                                // [{ name, pts: [[lng, lat], …] }]
 
 /* Свои места. r — радиус в км, в котором открываем кусочки: у дома человек
- * исходил всё вокруг, у работы и учёбы — меньше. */
+ * исходил всё вокруг, у работы и учёбы — меньше. Километр у дома оказался
+ * слишком щедрым — 500 м, остальное пропорционально. */
 const ANCHOR_TYPES = [
-  { type: 'home', label: 'Дом', hint: 'где живёшь сейчас', r: 1.0, many: false },
-  { type: 'work', label: 'Работа', hint: 'офис, где бываешь по делам', r: 0.6, many: true },
-  { type: 'study', label: 'Учёба', hint: 'школа, институт', r: 0.6, many: true },
-  { type: 'past', label: 'Прошлый дом', hint: 'где жил раньше', r: 0.8, many: true },
-  { type: 'often', label: 'Часто бываю', hint: 'родители, друзья, спорт', r: 0.5, many: true },
+  // ph — подсказка в строке поиска; places — искать ли среди парков и музеев (только «часто бываю»)
+  { type: 'home', label: 'Дом', hint: 'где живёшь сейчас', r: 0.5, many: false, ph: 'Адрес, улица или станция метро' },
+  { type: 'work', label: 'Работа', hint: 'офис, где бываешь по делам', r: 0.35, many: true, ph: 'Адрес, улица или станция метро' },
+  { type: 'study', label: 'Учёба', hint: 'школа, институт', r: 0.35, many: true, ph: 'Учебное заведение, улица или станция метро' },
+  { type: 'past', label: 'Прошлый дом', hint: 'где жил раньше', r: 0.4, many: true, ph: 'Адрес, улица или станция метро' },
+  { type: 'often', label: 'Часто бываю', hint: 'родители, друзья, спорт', r: 0.3, many: true, ph: 'Адрес, парк, место или станция метро', places: true },
 ];
 const anchorType = (t) => ANCHOR_TYPES.find((a) => a.type === t);
 const STATION_R = 0.45;
@@ -276,11 +278,12 @@ function startPick(t) {
   document.getElementById('pick').hidden = false;
   document.getElementById('pickTitle').textContent = `${t.label}: где это?`;
   document.getElementById('pickSearch').value = '';
+  document.getElementById('pickSearch').placeholder = t.ph;
   document.getElementById('pickFound').replaceChildren();
   const old = !t.many && App.anchors.find((a) => a.type === t.type);
   const center = old ? old.ll : App.here ? App.here.ll : null;
-  // радиус целиком на экране: для дома (1 км) — дальше, для остального — ближе
-  const zoom = t.r >= 0.8 ? 13 : 13.6;
+  // радиус целиком на экране: для дома — чуть дальше, для остального — ближе
+  const zoom = t.r >= 0.45 ? 14 : 14.4;
   if (center) App.map.jumpTo({ center, zoom });
   else if (App.map.getZoom() < 12.5) App.map.jumpTo({ zoom: 12.8 });
   App.map.on('move', pickMoved);
@@ -327,29 +330,72 @@ function pickConfirm() {
   openOb('anchors');
 }
 
-/* Поиск по своим данным, без интернета: станции, участки, интересные места. */
-function pickSearch(q) {
+/* Поиск: сразу — по своим данным (станции, интересные места), без интернета;
+ * через полсекунды после ввода — ещё и по адресам (Photon — поиск по картам
+ * OpenStreetMap). Адрес уходит только туда и нигде не сохраняется. */
+let addrTimer = 0, addrCtrl = null;
+
+function foundButton(box, name, sub, ll, zoom) {
+  const b = el('button');
+  b.append(el('b', '', name), el('small', '', sub));
+  b.onclick = () => {
+    clearTimeout(addrTimer);
+    if (addrCtrl) addrCtrl.abort();
+    box.replaceChildren();
+    document.getElementById('pickSearch').blur();
+    App.map.flyTo({ center: ll, zoom, duration: 700 });
+  };
+  box.append(b);
+}
+
+function pickSearch(raw) {
   const box = document.getElementById('pickFound');
   box.replaceChildren();
-  q = q.trim().toLowerCase();
+  clearTimeout(addrTimer);
+  if (addrCtrl) addrCtrl.abort();
+  const q = raw.trim().toLowerCase();
   if (q.length < 2) return;
   const found = [];
   const add = (name, sub, ll) => { if (!found.some((f) => f.name === name && f.sub === sub)) found.push({ name, sub, ll }); };
   const rank = (n) => (n.toLowerCase().startsWith(q) ? 0 : 1);
   for (const s of App.stations) if (s.name.toLowerCase().includes(q)) add(s.name, 'станция метро', s.pts[0]);
-  for (const p of App.pois) if (p.name.toLowerCase().includes(q)) add(p.name, p.kind_label, poiLL(p));
-  found.sort((a, b) => rank(a.name) - rank(b.name) || (a.sub === 'станция метро' ? -1 : 1));
-  for (const f of found.slice(0, 6)) {
-    const b = el('button');
-    b.append(el('b', '', f.name), el('small', '', f.sub));
-    b.onclick = () => {
-      box.replaceChildren();
-      document.getElementById('pickSearch').blur();
-      App.map.flyTo({ center: f.ll, zoom: 14, duration: 700 });
-    };
-    box.append(b);
+  if (App.picking && App.picking.places) {
+    for (const p of App.pois) if (p.name.toLowerCase().includes(q)) add(p.name, p.kind_label, poiLL(p));
   }
-  if (!found.length) box.append(el('p', 'hint', 'Ничего не нашлось — подвинь карту руками'));
+  found.sort((a, b) => rank(a.name) - rank(b.name) || (a.sub === 'станция метро' ? -1 : 1));
+  // с цифрой в запросе это скорее адрес — свои совпадения короче, адреса нужнее
+  for (const f of found.slice(0, /\d/.test(q) ? 2 : 5)) foundButton(box, f.name, f.sub, f.ll, 14);
+  if (q.length >= 4) addrTimer = setTimeout(() => searchAddress(raw.trim(), box), 450);
+  else if (!found.length) box.append(el('p', 'hint', 'Ничего не нашлось — подвинь карту руками'));
+}
+
+async function searchAddress(q, box) {
+  addrCtrl = new AbortController();
+  const status = el('p', 'hint', 'Ищу адрес…');
+  box.append(status);
+  try {
+    const url = 'https://photon.komoot.io/api/?' + new URLSearchParams({ q, limit: 10, bbox: '36.8,55.1,38.0,56.1' });
+    const d = await fetch(url, { signal: addrCtrl.signal }).then((r) => r.json());
+    status.remove();
+    const seen = new Set();
+    let n = 0;
+    for (const f of d.features || []) {
+      const p = f.properties;
+      const name = p.housenumber && p.street ? `${p.street}, ${p.housenumber}` : p.name || p.street;
+      // строения одного дома («23 с2», «23 с3») — одним пунктом: для метки это одно место
+      const key = name && name.replace(/\s*с\d+$/, '');
+      if (!name || seen.has(key) || n >= 5) continue;
+      seen.add(key);
+      n += 1;
+      const sub = [p.housenumber ? '' : (p.osm_value === 'house' ? '' : 'улица, место'), p.district || p.locality, p.city]
+        .filter(Boolean).join(' · ') || 'адрес';
+      foundButton(box, name, sub, f.geometry.coordinates, p.housenumber ? 16 : 14.5);
+    }
+    if (!n && !box.querySelector('button')) box.append(el('p', 'hint', 'Адрес не нашёлся — попробуй написать иначе или подвинь карту руками'));
+  } catch (e) {
+    if (e.name === 'AbortError') return;
+    status.textContent = 'Поиск адресов сейчас не отвечает — найди станцию или подвинь карту руками';
+  }
 }
 
 /* ---------- 2. станции метро ---------- */
