@@ -674,11 +674,31 @@ function drawCounter() {
   const n = App.cells.filter((c) => progress(c)[0] > 0).length, total = App.cells.length;
   const k = App.pois.filter((p) => App.open.has(p.id)).length;
   document.getElementById('countText').textContent = `${n} / ${total}`;
+  // процент участков: до 10% — с десятой, чтобы первые шаги были заметны
+  const pct = (100 * n) / total;
+  document.getElementById('countPct').textContent = `${pct > 0 && pct < 10 ? pct.toFixed(1).replace('.', ',') : Math.round(pct)}%`;
   // в шапке — участки у метро; кусочки считаются внутри участка (на плашках «4/9»),
   // общее число кусочков в тысячах ничего бы не говорило
   document.getElementById('countSub').textContent = `участков открыто · мест ${k}`;
   const len = 2 * Math.PI * 15;
   document.getElementById('ringFg').style.strokeDasharray = `${Math.max(len * n / total, 0.01)} ${len}`;
+}
+
+/* Счётчик в углу: числа или кольцо с процентом. При переключении кольцо
+ * заново заполняется от нуля — как кольцо активности на часах. */
+const COUNTER_KEY = 'gorod.counter';
+function setCounterMode(pct, animate) {
+  const box = document.getElementById('counter');
+  box.classList.toggle('pct', pct);
+  try { localStorage.setItem(COUNTER_KEY, pct ? 'pct' : 'abs'); } catch (e) { /* не страшно */ }
+  if (!animate) return;
+  const fg = document.getElementById('ringFg');
+  const full = fg.style.strokeDasharray;
+  fg.style.transition = 'none';
+  fg.style.strokeDasharray = `0.01 ${2 * Math.PI * 15}`;
+  void fg.getBoundingClientRect();
+  fg.style.transition = '';
+  requestAnimationFrame(() => { fg.style.strokeDasharray = full; });
 }
 
 /* ============================ карточка ============================ */
@@ -977,6 +997,12 @@ function initMap() {
   });
 
   document.getElementById('btnTheme').onclick = toggleTheme;
+  const counter = document.getElementById('counter');
+  let counterMode = null;
+  try { counterMode = localStorage.getItem(COUNTER_KEY); } catch (e) { /* по умолчанию числа */ }
+  setCounterMode(counterMode === 'pct', false);
+  counter.onclick = () => setCounterMode(!counter.classList.contains('pct'), true);
+  counter.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') counter.onclick(); };
   drawThemeButton();
   document.getElementById('btnZoomIn').onclick = () => map.zoomIn();
   document.getElementById('btnZoomOut').onclick = () => map.zoomOut();

@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<link rel="stylesheet" href="vector.css?v=21">
+<link rel="stylesheet" href="vector.css?v=23">
 </head>
 <body>
 <div id="map"></div>
@@ -20,12 +20,16 @@
     <h1>Москва <button class="help" id="btnHelp" title="Как это работает">?</button></h1>
     <p>исследуй · посещай · открывай</p>
   </div>
-  <div class="counter glass">
-    <svg viewBox="0 0 36 36" class="ring" aria-hidden="true">
-      <circle cx="18" cy="18" r="15" class="ring-bg"/>
-      <circle cx="18" cy="18" r="15" class="ring-fg" id="ringFg"/>
-    </svg>
-    <div>
+  <!-- нажатие меняет вид: числа «6 / 329» ↔ крупное кольцо с процентом, как на Apple Watch -->
+  <div class="counter glass" id="counter" role="button" tabindex="0" title="Проценты / числа">
+    <span class="ring-wrap">
+      <svg viewBox="0 0 36 36" class="ring" aria-hidden="true">
+        <circle cx="18" cy="18" r="15" class="ring-bg"/>
+        <circle cx="18" cy="18" r="15" class="ring-fg" id="ringFg"/>
+      </svg>
+      <span class="cnt-pct" id="countPct"></span>
+    </span>
+    <div class="cnt-abs">
       <b id="countText">0 / 0</b>
       <small id="countSub">участков открыто</small>
     </div>
@@ -203,7 +207,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
 <!-- чтение места и даты съёмки из фото (JPEG, HEIC) — только в браузере -->
 <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
-<script src="vector.js?v=52"></script>
+<script src="vector.js?v=53"></script>
 <script src="onboard.js?v=5"></script>
 <script src="story-art.js?v=5"></script>
 <script src="stories.js?v=7"></script>
