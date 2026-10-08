@@ -36,7 +36,7 @@ const NIGHT = {
   metroText: '#ffffff', cityLabel: '#c9d1dc', okrugLabel: '#c9d2de', districtLabel: '#9aa6b8',
   // интересные места — свой сиреневый цвет: тёплые фонари и бирюзовое «открыто» его не глушат
   poi: '#c3a2ff', poiText: '#ddd0ff', poiRing: '#f4efff', visitedRing: '#ffffff', poiHalo: '#0a0f17',
-  pillBg: 'rgba(9,20,24,.92)', pillGlow: 'rgba(63,240,220,.55)', pillText: '#eef3f8', icoOpen: '#9ff6ea',
+  pillBg: 'rgba(9,20,24,.92)', pillGlow: 'rgba(63,240,220,.55)', pillText: '#eef3f8', icoOpen: '#9ff6ea', flash: '#eafffb',
   lock: '#6b7689', metroFill: '#c9d0da', metroStroke: 'rgba(10,15,23,.85)',
 };
 const THEMES = {
@@ -94,7 +94,7 @@ const THEMES = {
     // подписи жирные и тёмные, без светлой подложки (noHalo) — так попросил Серёжа
     labelBold: true, noHalo: true,
     poi: '#7b4fd8', poiText: '#5c33b8', poiRing: '#fffaf0', visitedRing: '#fffaf0', poiHalo: '#f7f0e0',
-    pillBg: 'rgba(252,247,236,.97)', pillGlow: 'rgba(223,95,51,.35)', pillText: '#2e261b', icoOpen: '#c9542b',
+    pillBg: 'rgba(252,247,236,.97)', pillGlow: 'rgba(223,95,51,.35)', pillText: '#2e261b', icoOpen: '#c9542b', flash: '#fff6e0',
     lock: '#4f4130', metroFill: '#4a3c2a', metroStroke: 'rgba(255,250,240,.95)',
   },
 };
@@ -380,6 +380,8 @@ function buildStyle() {
       placeLabels: { type: 'geojson', data: empty },
       openLabels: { type: 'geojson', data: empty },
       preview: { type: 'geojson', data: empty },
+      reveal: { type: 'geojson', data: empty },
+      revealPts: { type: 'geojson', data: empty },
       anchors: { type: 'geojson', data: empty },
     },
     layers: [
@@ -465,6 +467,13 @@ function buildStyle() {
         paint: { 'line-color': C.neon, 'line-opacity': C.glow, 'line-width': 12, 'line-blur': 9 } },
       { id: 'open-line', type: 'line', source: 'fog',
         paint: { 'line-color': C.neon, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1.2, 16, 2.4] } },
+      // вспышка при открытии: свет изнутри, расходящийся контур и кольцо из центра (flashReveal)
+      { id: 'reveal-fill', type: 'fill', source: 'reveal', paint: { 'fill-color': C.flash || '#ffffff', 'fill-opacity': 0 } },
+      { id: 'reveal-line', type: 'line', source: 'reveal',
+        paint: { 'line-color': C.neon, 'line-opacity': 0, 'line-width': 2, 'line-blur': 2 } },
+      { id: 'reveal-ring', type: 'circle', source: 'revealPts',
+        paint: { 'circle-radius': 0, 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': C.neon,
+          'circle-stroke-width': 2.5, 'circle-stroke-opacity': 0 } },
       // под мышкой (на компьютере): легче, чем выделение по нажатию
       { id: 'hover-fill', type: 'fill', source: 'hover', paint: { 'fill-color': C.selFill, 'fill-opacity': 0.06 } },
       { id: 'hover-line', type: 'line', source: 'hover',
@@ -635,6 +644,43 @@ function refresh() {
   drawCounter();
   saveOpen();
   if (window.drawAnchors) drawAnchors();
+  // что открылось с прошлого раза — вспыхивает (при первой отрисовке и смене темы — нет)
+  const nowOpen = new Set([...open, ...App.poiPoints.filter(isOpen)].map((f) => f.properties.id));
+  if (App.prevOpen) {
+    const fresh = [...nowOpen].filter((id) => !App.prevOpen.has(id)).map((id) => App.byId[id]).filter(Boolean);
+    if (fresh.length) flashReveal(fresh);
+  }
+  App.prevOpen = nowOpen;
+}
+
+/* Вспышка на только что открытом: кусочек на миг заливается светом, контур
+ * расходится светящейся волной и гаснет, из центра бежит кольцо. Около секунды. */
+function flashReveal(features) {
+  const map = App.map;
+  if (!map.getLayer('reveal-fill')) return;
+  const shapes = features.filter((f) => f.geometry.type !== 'Point');
+  const pts = features.map((f) => (f.geometry.type === 'Point' ? f : turf.point([f.properties.lng, f.properties.lat])));
+  map.getSource('reveal').setData(fc(shapes));
+  map.getSource('revealPts').setData(fc(pts.slice(0, 60)));  // сотня колец разом — уже каша
+  cancelAnimationFrame(App.revealRaf);
+  const t0 = performance.now(), T = 1100;
+  const set = (layer, prop, v) => map.setPaintProperty(layer, prop, v);
+  const step = (t) => {
+    const k = Math.min(1, (t - t0) / T);
+    const e = 1 - (1 - k) ** 3;            // быстро в начале, плавно в конце
+    const fade = k < 0.15 ? k / 0.15 : 1 - (k - 0.15) / 0.85;
+    set('reveal-fill', 'fill-opacity', 0.55 * fade);
+    set('reveal-line', 'line-opacity', 0.9 * (1 - k));
+    set('reveal-line', 'line-width', 2 + 16 * e);
+    set('reveal-line', 'line-blur', 2 + 10 * e);
+    set('reveal-ring', 'circle-radius', 6 + 48 * e);
+    set('reveal-ring', 'circle-stroke-opacity', 0.9 * (1 - k));
+    if (k < 1) { App.revealRaf = requestAnimationFrame(step); return; }
+    map.getSource('reveal').setData(fc([]));
+    map.getSource('revealPts').setData(fc([]));
+  };
+  App.revealRaf = requestAnimationFrame(step);
+  if (navigator.vibrate) navigator.vibrate(25);  // Android; iPhone сайтам вибрацию не даёт
 }
 
 /* С какого приближения место на экране не меньше подписи: подпись висит над
@@ -1113,7 +1159,7 @@ function toggleTheme() {
   hideCard();
   App.map.setStyle(buildStyle(), { diff: false });
   App.map.once('style.load', () => {
-    refresh();
+    refresh();  // App.prevOpen не меняется — вспышки нет
     applyPoiFilter(App.poiFilter || 'all');
     if (sel) showCard(sel);
   });
