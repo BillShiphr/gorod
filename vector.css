@@ -262,7 +262,19 @@ button{font:inherit;color:inherit;cursor:pointer}
 .ob-sum li{margin:3px 0;font-size:14px}
 
 /* выбор точки на карте */
-.picking .top,.picking .poi-filter,.picking .controls,.picking .bottombar,.picking .card{display:none!important}
+.picking .top,.picking .poi-filter,.picking .controls,.picking .bottombar,.picking .card,
+.selecting .top,.selecting .poi-filter,.selecting .bottombar,.selecting .card,.selecting #btnQuick,.selecting #btnTheme{display:none!important}
+/* режим выбора, как в галерее */
+.sel[hidden]{display:none}
+.sel-top,.sel-bottom{position:fixed;left:12px;right:12px;max-width:520px;margin:0 auto;border-radius:18px;padding:12px 14px;z-index:6}
+.sel-top{top:calc(12px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sel-top b{font-size:17px}
+.sel-top .linkbtn{font-size:15px}
+.sel-bottom{bottom:calc(16px + env(safe-area-inset-bottom))}
+.sel-bottom p{margin:0 0 10px;font-size:12px;color:var(--muted)}
+.sel-bottom .row{display:flex;gap:8px}
+.sel-bottom .card-btn{flex:1;padding:12px 6px;font-size:14px}
+.sel-bottom .card-btn:disabled{opacity:.4}
 .pick[hidden]{display:none}
 .pick-top,.pick-bottom{position:fixed;left:12px;right:12px;max-width:520px;margin:0 auto;border-radius:18px;padding:12px 14px;z-index:6}
 .pick-top{top:calc(12px + env(safe-area-inset-top))}

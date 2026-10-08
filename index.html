@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<link rel="stylesheet" href="vector.css?v=26">
+<link rel="stylesheet" href="vector.css?v=27">
 </head>
 <body>
 <div id="map"></div>
@@ -153,6 +153,21 @@
   </div>
 </div>
 
+<!-- режим выбора кусочков, как в галерее при выборе фото -->
+<div class="sel" id="sel" hidden>
+  <div class="sel-top glass">
+    <b id="selCount">Выбери кусочки</b>
+    <button class="linkbtn" id="selCancel">Отмена</button>
+  </div>
+  <div class="sel-bottom glass">
+    <p>Нажимай на кусочки, как на фото в галерее. Ещё раз — снять выбор.</p>
+    <div class="row">
+      <button class="card-btn ghost" id="selClose" disabled>Закрыть</button>
+      <button class="card-btn" id="selOpen" disabled>Открыть</button>
+    </div>
+  </div>
+</div>
+
 <!-- знаменитые места карточками: вправо — был, влево — не был, вверх — хочу -->
 <div class="swipe" id="swipe" hidden>
   <div class="swipe-head">
@@ -207,8 +222,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
 <!-- чтение места и даты съёмки из фото (JPEG, HEIC) — только в браузере -->
 <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
-<script src="vector.js?v=61"></script>
-<script src="onboard.js?v=9"></script>
+<script src="vector.js?v=62"></script>
+<script src="onboard.js?v=10"></script>
 <script src="story-art.js?v=5"></script>
 <script src="stories.js?v=9"></script>
 </body>

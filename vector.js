@@ -383,6 +383,8 @@ function buildStyle() {
       reveal: { type: 'geojson', data: empty },
       revealPts: { type: 'geojson', data: empty },
       revealWave: { type: 'geojson', data: empty },
+      chosen: { type: 'geojson', data: empty },
+      chosenPts: { type: 'geojson', data: empty },
       anchors: { type: 'geojson', data: empty },
     },
     layers: [
@@ -496,6 +498,14 @@ function buildStyle() {
       { id: 'preview-fill', type: 'fill', source: 'preview', paint: { 'fill-color': C.neon, 'fill-opacity': 0.22 } },
       { id: 'preview-line', type: 'line', source: 'preview',
         paint: { 'line-color': C.neon, 'line-width': 1.4, 'line-dasharray': [2, 1.5] } },
+      // режим выбора, как в галерее: выбранные кусочки — заливка, контур и галочка в кружке
+      { id: 'chosen-fill', type: 'fill', source: 'chosen', paint: { 'fill-color': C.neon, 'fill-opacity': 0.32 } },
+      { id: 'chosen-line', type: 'line', source: 'chosen', paint: { 'line-color': C.neon, 'line-width': 2.5 } },
+      { id: 'chosen-dot', type: 'circle', source: 'chosenPts',
+        paint: { 'circle-radius': 11, 'circle-color': C.neon, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } },
+      { id: 'chosen-check', type: 'symbol', source: 'chosenPts',
+        layout: { 'text-field': '✓', 'text-font': FONT.bold, 'text-size': 14, 'text-allow-overlap': true, 'icon-allow-overlap': true },
+        paint: { 'text-color': '#ffffff' } },
       { id: 'zone-hit', type: 'fill', source: 'zones', paint: { 'fill-color': '#000', 'fill-opacity': 0 } },
       { id: 'place-hit', type: 'fill', source: 'places', paint: { 'fill-color': '#000', 'fill-opacity': 0 } },
 
@@ -652,10 +662,13 @@ function refresh() {
   const nowOpen = new Set([...open, ...App.poiPoints.filter(isOpen)].map((f) => f.properties.id));
   if (App.prevOpen) {
     const fresh = [...nowOpen].filter((id) => !App.prevOpen.has(id)).map((id) => App.byId[id]).filter(Boolean);
-    if (fresh.length) flashReveal(fresh);
+    if (fresh.length && FLASH) flashReveal(fresh);
   }
   App.prevOpen = nowOpen;
 }
+
+// вспышку при открытии пока выключили (попросил Серёжа); вернуть — true
+const FLASH = false;
 
 /* Вспышка на только что открытом: участок на миг заливается светом, граница
  * вспыхивает, а от неё наружу бежит светящаяся волна той же формы и гаснет.
@@ -1060,6 +1073,7 @@ function initMap() {
   map.on('click', (e) => {
     // выбираем точку для «Твоих мест» — нажатие добавляет или убирает кусочек (onboard.js)
     if (App.picking) { pickTap(e); return; }
+    if (App.selecting) { selectTap(e); return; }
     const hits = map.queryRenderedFeatures(e.point, { layers: CLICK_LAYERS });
     hits.sort((a, b) => CLICK_LAYERS.indexOf(a.layer.id) - CLICK_LAYERS.indexOf(b.layer.id));
     const f = hits.length && App.byId[hits[0].properties.id];

@@ -191,6 +191,8 @@ function drawHub(body, foot) {
       'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm4.5 13h-2v-5l-2.5 4-2.5-4v5h-2V8h2l2.5 4.2L14.5 8h2z'],
     ['Знаменитые места', 'карточками: был, не был, хочу сходить', () => openSwipe(),
       'M4 5h12v16H4zm14-2v16h2V3zM6 7v8h8V7z'],
+    ['Отметить на карте', 'нажимай на кусочки, как на фото в галерее; или зажми палец на карте', () => { closeOb(); startSelect(); },
+      'M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm10.6 5.4-3.3-3.3 1.4-1.4 1.9 1.9 4.6-4.6 1.4 1.4z'],
     ['По фото из галереи', 'место съёмки откроет кусочки', () => { closeOb(); openImport(); },
       'M9 3 7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10z'],
   ];
@@ -618,6 +620,91 @@ function drawSummary(body, foot) {
   footButtons(foot, [['Смотреть карту', true, () => { closeOb(); fitOpen(); }]]);
 }
 
+/* ---------- режим выбора, как в галерее ---------- */
+
+/* Нажимаешь на кусочки — они отмечаются галочкой, повторное нажатие снимает;
+ * потом «Открыть» или «Закрыть» разом. Включается из меню «Быстро отметить»
+ * или долгим нажатием на карту (как в галерее долгое нажатие начинает выбор). */
+function startSelect(firstZone) {
+  hideCard();
+  closeTrip();
+  closeOb();
+  App.selecting = new Set();
+  document.body.classList.add('selecting');
+  document.getElementById('sel').hidden = false;
+  if (firstZone) App.selecting.add(firstZone.properties.id);
+  drawSelection();
+}
+
+function endSelect() {
+  App.selecting = null;
+  document.body.classList.remove('selecting');
+  document.getElementById('sel').hidden = true;
+  App.map.getSource('chosen').setData(fc([]));
+  App.map.getSource('chosenPts').setData(fc([]));
+}
+
+function selectTap(e) {
+  // нажатие сразу после долгого нажатия — то же касание, второй раз не переключаем
+  if (App.selSkipClick) { App.selSkipClick = false; return; }
+  const hit = App.map.queryRenderedFeatures(e.point, { layers: ['zone-hit'] })[0];
+  const z = hit && App.byId[hit.properties.id];
+  if (!z) return;
+  const id = z.properties.id;
+  if (App.selecting.has(id)) App.selecting.delete(id); else App.selecting.add(id);
+  drawSelection();
+}
+
+function drawSelection() {
+  const zs = [...App.selecting].map((id) => App.byId[id]).filter(Boolean);
+  App.map.getSource('chosen').setData(fc(zs));
+  App.map.getSource('chosenPts').setData(fc(zs.map((z) => turf.point([z.properties.lng, z.properties.lat]))));
+  const n = zs.length, closed = zs.filter((z) => !isOpen(z)).length, open = n - closed;
+  document.getElementById('selCount').textContent = n ? `Выбрано: ${n}` : 'Выбери кусочки';
+  const bOpen = document.getElementById('selOpen'), bClose = document.getElementById('selClose');
+  bOpen.disabled = !closed;
+  bClose.disabled = !open;
+  bOpen.textContent = closed ? `Открыть ${closed}` : 'Открыть';
+  bClose.textContent = open ? `Закрыть ${open}` : 'Закрыть';
+}
+
+function applySelection(open) {
+  const zs = [...App.selecting].map((id) => App.byId[id]).filter((z) => z && isOpen(z) !== open);
+  for (const z of zs) setZoneOpen(z, open);
+  endSelect();
+  refresh();
+  if (zs.length) toast(`${open ? 'Открыто' : 'Закрыто'} кусочков: ${zs.length}`);
+}
+
+/* Долгое нажатие на карту (палец ~0,5 с без движения) включает выбор с этим кусочком. */
+function watchLongPress() {
+  const canvas = App.map.getCanvasContainer();
+  let timer = 0, x0 = 0, y0 = 0;
+  const cancel = () => clearTimeout(timer);
+  canvas.addEventListener('touchstart', (e) => {
+    cancel();
+    if (e.touches.length !== 1 || App.picking || App.selecting) return;
+    const t = e.touches[0];
+    x0 = t.clientX; y0 = t.clientY;
+    timer = setTimeout(() => {
+      const r = canvas.getBoundingClientRect();
+      const hit = App.map.queryRenderedFeatures([x0 - r.left, y0 - r.top], { layers: ['zone-hit'] })[0];
+      const z = hit && App.byId[hit.properties.id];
+      if (!z) return;
+      App.selSkipClick = true;
+      setTimeout(() => { App.selSkipClick = false; }, 700);
+      if (navigator.vibrate) navigator.vibrate(15);
+      startSelect(z);
+    }, 550);
+  }, { passive: true });
+  canvas.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    if (Math.hypot(t.clientX - x0, t.clientY - y0) > 10) cancel();
+  }, { passive: true });
+  canvas.addEventListener('touchend', cancel);
+  canvas.addEventListener('touchcancel', cancel);
+}
+
 /* ---------- «Хочу» в «Куда поехать» ---------- */
 
 function drawWish(body) {
@@ -666,6 +753,10 @@ function onboardInit() {
   }).catch(() => { /* без станций: шаг «Станции» будет пустой, остальное работает */ });
 
   document.getElementById('btnQuick').onclick = () => openOb('hub');
+  document.getElementById('selCancel').onclick = endSelect;
+  document.getElementById('selOpen').onclick = () => applySelection(true);
+  document.getElementById('selClose').onclick = () => applySelection(false);
+  watchLongPress();
   document.getElementById('obClose').onclick = () => { App.wizard = null; closeOb(); refresh(); };
   document.getElementById('pickOk').onclick = pickConfirm;
   document.getElementById('pickCancel').onclick = () => { endPick(); openOb('anchors'); };
