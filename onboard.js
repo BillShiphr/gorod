@@ -269,9 +269,12 @@ function drawAnchorsStep(body, foot, inWizard) {
 }
 
 /* Выбор точки: метка стоит в центре экрана, карту двигают под ней,
- * пунктиром видно, какие кусочки откроются. */
+ * пунктиром видно, какие кусочки откроются. Нажатием по кусочку его можно
+ * добавить или убрать — эти правки остаются, даже если подвинуть карту. */
 function startPick(t) {
   App.picking = t;
+  App.pickAdd = new Set();
+  App.pickDel = new Set();
   closeOb();
   hideCard();
   document.body.classList.add('picking');
@@ -290,6 +293,22 @@ function startPick(t) {
   pickMoved();
 }
 
+/* Что откроется: кусочки в радиусе от метки, минус убранные руками, плюс добавленные. */
+function pickZones() {
+  const base = zonesNear(App.map.getCenter().toArray(), App.picking.r).filter((z) => !App.pickDel.has(z.properties.id));
+  const extra = [...App.pickAdd].map((id) => App.byId[id]).filter((z) => z && !base.includes(z));
+  return [...base, ...extra];
+}
+
+function pickTap(e) {
+  const hit = App.map.queryRenderedFeatures(e.point, { layers: ['zone-hit'] })[0];
+  const z = hit && App.byId[hit.properties.id];
+  if (!z) return;
+  const id = z.properties.id;
+  if (pickZones().includes(z)) { App.pickAdd.delete(id); App.pickDel.add(id); } else { App.pickDel.delete(id); App.pickAdd.add(id); }
+  pickMoved();
+}
+
 let pickFrame = 0;
 function pickMoved() {
   if (pickFrame) return;
@@ -297,13 +316,15 @@ function pickMoved() {
     pickFrame = 0;
     if (!App.picking) return;
     const ll = App.map.getCenter().toArray();
-    const zs = zonesNear(ll, App.picking.r);
+    const zs = pickZones();
     App.map.getSource('preview').setData(fc(zs));
     const fresh = zs.filter((z) => !isOpen(z)).length;
     const where = whereText(ll);
-    document.getElementById('pickInfo').textContent = zs.length
-      ? `${where ? `${where} · ` : ''}откроется кусочков: ${fresh}${fresh < zs.length ? ` (ещё ${zs.length - fresh} уже открыты)` : ''}`
-      : 'Здесь карта заканчивается — подвинь ближе к Москве';
+    const info = document.getElementById('pickInfo');
+    info.replaceChildren();
+    if (!zs.length && !zonesNear(ll, App.picking.r).length) { info.textContent = 'Здесь карта заканчивается — подвинь ближе к Москве'; return; }
+    info.append(`${where ? `${where} · ` : ''}откроется кусочков: ${fresh}${fresh < zs.length ? ` (ещё ${zs.length - fresh} уже открыты)` : ''}`,
+      el('small', '', 'Нажми на кусочек, чтобы убрать его или добавить'));
   });
 }
 
@@ -318,8 +339,8 @@ function endPick() {
 function pickConfirm() {
   const t = App.picking;
   const ll = App.map.getCenter().toArray();
-  const zs = zonesNear(ll, t.r);
-  if (!zs.length) { toast('Здесь карта заканчивается — подвинь ближе к Москве'); return; }
+  const zs = pickZones();
+  if (!zs.length) { toast('Ничего не выбрано — подвинь метку или нажми на кусочки'); return; }
   if (!t.many) App.anchors = App.anchors.filter((a) => a.type !== t.type);
   App.anchors.push({ type: t.type, ll: ll.map((v) => Math.round(v * 1e5) / 1e5) });
   saveJSON(ANCHOR_KEY, App.anchors);

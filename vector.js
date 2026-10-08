@@ -973,6 +973,8 @@ function initMap() {
   // порядок важен: сначала подписи, потом знаковые места, потом кусочки
   const CLICK_LAYERS = ['open-label', 'open-name', 'place-label', 'poi-dot', 'poi-dot-visited', 'poi-label', 'cell-label', 'place-hit', 'zone-hit'];
   map.on('click', (e) => {
+    // выбираем точку для «Твоих мест» — нажатие добавляет или убирает кусочек (onboard.js)
+    if (App.picking) { pickTap(e); return; }
     const hits = map.queryRenderedFeatures(e.point, { layers: CLICK_LAYERS });
     hits.sort((a, b) => CLICK_LAYERS.indexOf(a.layer.id) - CLICK_LAYERS.indexOf(b.layer.id));
     const f = hits.length && App.byId[hits[0].properties.id];
