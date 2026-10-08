@@ -81,8 +81,10 @@ const THEMES = {
     road: ['match', ['get', 'class'], ['motorway', 'trunk', 'primary'], '#f4cf83', '#fffaf0'],
     path: '#b39a69', rail: '#a89c85',
     roadCase: '#cbb994', roadCaseOpacity: 1, roadCaseWidth: 1.7, roadCaseBlur: 0, lamps: false,
-    fog: '#e6dcc4', fogOpacity: ['interpolate', ['linear'], ['zoom'], 12, 0.9, 15, 0.82],
-    hatch: { line: 'rgba(120,96,60,.32)', cross: false },
+    // штриховку по туману пока убрали (не понравилась) — закрытое просто приглушено;
+    // вернуть: hatch: { line: 'rgba(120,96,60,.32)', cross: false }
+    fog: '#ddd2b9', fogOpacity: ['interpolate', ['linear'], ['zoom'], 12, 0.86, 15, 0.8],
+    hatch: null,
     neon: '#df5f33', glow: 0.2, openFill: [0.16, 0.06, 0.02, 0],
     okrugLine: '#8a7859', districtLine: '#b3a17f', zoneLine: '#b8a37d', cellLine: '#937c56',
     sel: '#3b2f20', selFill: '#3b2f20',

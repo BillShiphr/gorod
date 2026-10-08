@@ -113,10 +113,8 @@ const STORIES = [
     title: 'Всё остаётся у тебя',
     text: 'Отметки хранятся только на этом устройстве и никуда не отправляются — у каждого своя карта. Для удобства карту можно переключать между светлой и тёмной темой — кнопка справа.',
     art: () => `${ART_DEFS}
-      <g><rect width="150" height="300" fill="#f4ecda"/><rect width="150" height="300" fill="url(#stHatchDay)"/>
+      <g><rect width="150" height="300" fill="#f4ecda"/>
         <rect x="150" width="150" height="300" fill="#141b27"/></g>
-      <defs><pattern id="stHatchDay" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
-        <line x1="0" y1="0" x2="0" y2="9" stroke="rgba(120,96,60,.35)" stroke-width="1.2"/></pattern></defs>
       <circle cx="75" cy="70" r="20" fill="#f0b81c"/>
       <path transform="translate(205 50)" d="M40 30A20 20 0 0 1 13 3a20 20 0 1 0 27 27z" fill="#dfe6f0"/>
       <g transform="translate(105 110)"><rect width="90" height="160" rx="16" fill="var(--glass)" stroke="var(--text)" stroke-width="3"/>

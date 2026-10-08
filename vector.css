@@ -30,7 +30,7 @@
 }
 :root[data-theme=paper]{
   --st-land:#f4ecda; --st-street:#dcc79c; --st-street-major:#eebf68; --st-water:#9fcbd5; --st-water-text:#2f7d91;
-  --st-park:#cfe1a7; --st-fog:#e6dcc4; --st-hatch:rgba(120,96,60,.32); --st-line:#937c56;
+  --st-park:#cfe1a7; --st-fog:#ddd2b9; --st-hatch:transparent; --st-line:#937c56;
   --bg:#ece2cc; --glass:rgba(251,246,235,.94); --line:rgba(90,70,40,.14); --line2:#d6c7a8;
   --neon:#df5f33; --on-neon:#ffffff; --text:#2e261b; --text2:#4f4433; --muted:#7d6f5a;
   --soft:rgba(90,70,40,.06); --track:#e4d8bf;
