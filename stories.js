@@ -33,6 +33,15 @@ const PILL = (x, y, text, w = text.length * 7.4 + 26) => `<g transform="translat
   <text x="${w / 2}" y="17.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--text)">${text}</text></g>`;
 
 const HOLE5 = 'M30 30 L95 25 L105 85 L40 95 Z';
+// настоящая подложка из story-art.js: земля, парки, вода, улицы трёх уровней
+const BASE = (a) => `<rect width="300" height="300" fill="var(--st-land)"/>
+  <path d="${a.parks}" fill="var(--st-park)"/><path d="${a.water}" fill="var(--st-water)"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="${a.minor}" stroke="var(--st-street)" stroke-width="1" opacity=".75"/>
+    <path d="${a.middle}" stroke="var(--st-street)" stroke-width="1.8"/>
+    <path d="${a.major}" stroke="var(--st-street-major)" stroke-width="3.2"/></g>`;
+// плашка не вылезает за край картинки
+const pillX = (x) => Math.min(Math.max(x, 70), 230);
 
 const STORIES = [
   {
@@ -40,34 +49,27 @@ const STORIES = [
     text: 'Это твоя личная карта Москвы. Места, где ты ещё не был, пока закрыты. Побывал — локация открывается и загорается. Исследуй город и смотри, как карта оживает.',
     // настоящий центр: Кремль, изгиб Москвы-реки; открыты кусочки вокруг (story-art.js)
     art: () => {
-      const a = STORY_CITY;
-      const x = Math.min(Math.max(a.pill[0], 62), 238);
-      return `${ART_DEFS}<rect width="300" height="300" fill="var(--st-land)"/>
-        <path d="${a.parks}" fill="var(--st-park)"/><path d="${a.water}" fill="var(--st-water)"/>
-        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <path d="${a.minor}" stroke="var(--st-street)" stroke-width="1" opacity=".75"/>
-          <path d="${a.middle}" stroke="var(--st-street)" stroke-width="1.8"/>
-          <path d="${a.major}" stroke="var(--st-street-major)" stroke-width="3.2"/></g>
+      const a = STORY_ART.city;
+      return `${ART_DEFS}${BASE(a)}
         ${FOG(a.open)}${LIT(a.open, 0.03)}
         <text x="${a.kremlin[0]}" y="${a.kremlin[1]}" text-anchor="middle" font-size="12" font-weight="800" letter-spacing="2"
           fill="var(--text)" stroke="var(--st-land)" stroke-width="3" paint-order="stroke">КРЕМЛЬ</text>
         <text x="${a.river[0]}" y="${a.river[1]}" text-anchor="middle" font-size="12" font-style="italic" font-weight="600"
           fill="var(--st-water-text)" stroke="var(--st-land)" stroke-width="3" paint-order="stroke">Москва-река</text>
-        ${PILL(x, a.pill[1], 'Был здесь ✓')}`;
+        ${PILL(pillX(a.pill[0]), a.pill[1], 'Был здесь ✓')}`;
     },
   },
   {
     title: 'Город разделён на секторы',
     text: 'Сектор — пара кварталов между улицами и реками. Секторы собраны в участки вокруг станций метро. Нажми на участок — увидишь, сколько в нём открыто.',
+    // настоящий участок у «Третьяковской»: его секторы, часть открыта, вокруг — соседи
     art: () => {
-      const cells = ['M20 20 L110 15 L120 95 L25 105 Z', 'M110 15 L200 25 L190 100 L120 95 Z', 'M200 25 L285 18 L280 110 L190 100 Z',
-        'M25 105 L120 95 L125 190 L30 200 Z', 'M120 95 L190 100 L200 185 L125 190 Z', 'M190 100 L280 110 L285 195 L200 185 Z',
-        'M30 200 L125 190 L120 285 L20 280 Z', 'M125 190 L200 185 L210 282 L120 285 Z', 'M200 185 L285 195 L282 285 L210 282 Z'];
-      const lit = [1, 4, 5];
-      return `${ART_DEFS}${CITY}<rect width="300" height="300" fill="url(#stHatch)" opacity=".93"/>
-        ${cells.map((d, i) => `<path d="${d}" fill="${lit.includes(i) ? 'var(--neon)' : 'none'}" fill-opacity=".16" stroke="${lit.includes(i) ? 'var(--neon)' : 'var(--st-line)'}" stroke-width="${lit.includes(i) ? 2.5 : 1.5}" stroke-linejoin="round"/>`).join('')}
-        <path d="${cells[4]}" fill="none" stroke="var(--text)" stroke-width="3" stroke-linejoin="round"/>
-        ${PILL(160, 128, 'М Курская · 4/10')}`;
+      const a = STORY_ART.cells;
+      return `${ART_DEFS}${BASE(a)}${FOG(a.open)}${LIT(a.open, 0.03)}
+        <path d="${a.zones}" fill="none" stroke="var(--st-line)" stroke-width="1" opacity=".6"/>
+        <path d="${a.cells}" fill="none" stroke="var(--st-line)" stroke-width="2.2"/>
+        <path d="${a.main}" fill="none" stroke="var(--text)" stroke-width="3" stroke-linejoin="round"/>
+        ${PILL(pillX(a.pill[0]), a.pill[1], a.label)}`;
     },
   },
   {
@@ -109,7 +111,7 @@ const STORIES = [
   },
   {
     title: 'Всё остаётся у тебя',
-    text: 'Отметки хранятся только на этом устройстве и никуда не отправляются — у каждого своя карта. Днём карта бумажная, ночью тёмная: переключатель справа.',
+    text: 'Отметки хранятся только на этом устройстве и никуда не отправляются — у каждого своя карта. Для удобства карту можно переключать между светлой и тёмной темой — кнопка справа.',
     art: () => `${ART_DEFS}
       <g><rect width="150" height="300" fill="#f4ecda"/><rect width="150" height="300" fill="url(#stHatchDay)"/>
         <rect x="150" width="150" height="300" fill="#141b27"/></g>
