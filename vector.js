@@ -83,7 +83,8 @@ const THEMES = {
     roadCase: '#cbb994', roadCaseOpacity: 1, roadCaseWidth: 1.7, roadCaseBlur: 0, lamps: false,
     // штриховку по туману пока убрали (не понравилась) — закрытое просто приглушено;
     // вернуть: hatch: { line: 'rgba(120,96,60,.32)', cross: false }
-    fog: '#ddd2b9', fogOpacity: ['interpolate', ['linear'], ['zoom'], 12, 0.86, 15, 0.8],
+    // закрытое потемнее — открытое заметнее на его фоне
+    fog: '#cbbd9d', fogOpacity: ['interpolate', ['linear'], ['zoom'], 12, 0.88, 15, 0.83],
     hatch: null,
     neon: '#df5f33', glow: 0.2, openFill: [0.16, 0.06, 0.02, 0],
     okrugLine: '#8a7859', districtLine: '#b3a17f', zoneLine: '#b8a37d', cellLine: '#937c56',
@@ -580,7 +581,8 @@ function buildStyle() {
         paint: { 'text-color': C.neon, 'text-halo-color': C.halo, 'text-halo-width': 2 } },
       { id: 'open-label', type: 'symbol', source: 'openLabels',
         layout: {
-          // одна строка: значок, название, прогресс; висит над верхним краем места
+          // одна строка: значок, название, прогресс; висит над верхним краем места.
+          // Без плашки — обычная надпись: название цветом текста, прогресс цветом обводки
           'text-field': ['format',
             ['image', ['concat', 'ico-', ['get', 'kind']]], {},
             '  ', {},
@@ -588,11 +590,10 @@ function buildStyle() {
             ['concat', '  ', ['get', 'status']], { 'font-scale': 0.85, 'text-color': C.neon }],
           'text-font': FONT.bold, 'text-size': 11.5, 'text-anchor': 'bottom', 'text-offset': [0, -0.5],
           'text-max-width': 40,
-          'icon-image': 'pill', 'icon-text-fit': 'both', 'icon-text-fit-padding': [2, 7, 2, 5],
           // знаковые места важнее участков: при нехватке места прячется участок
           'symbol-sort-key': ['match', ['get', 'kind'], ['metro', 'area'], 2, 1],
         },
-        paint: { 'text-color': C.pillText } },
+        paint: { 'text-color': C.pillText, 'text-halo-color': C.halo, 'text-halo-width': 1.8, 'text-halo-blur': 0.4 } },
       // когда плашка крупнее самого места — только светящееся название без рамки
       { id: 'open-name', type: 'symbol', source: 'openLabels',
         layout: { 'text-field': ['get', 'shortText'], 'text-font': FONT.bold, 'text-size': 11,
@@ -601,9 +602,9 @@ function buildStyle() {
         paint: { 'text-color': C.neon, 'text-halo-color': C.halo, 'text-halo-width': 1.6 } },
     ],
   };
-  // подписи без подложки: у всех надписей убираем светлую обводку (плашки открытых мест — не трогаем)
+  // подписи без подложки: у всех надписей убираем светлую обводку
   if (C.noHalo) {
-    for (const l of style.layers) if (l.type === 'symbol' && l.paint && l.id !== 'open-label') l.paint['text-halo-width'] = 0;
+    for (const l of style.layers) if (l.type === 'symbol' && l.paint) l.paint['text-halo-width'] = 0;
   }
   return style;
 }

@@ -28,9 +28,9 @@ const CITY = `<rect width="300" height="300" fill="var(--st-land)"/>
 const FOG = (hole) => `<path fill-rule="evenodd" fill="url(#stHatch)" opacity=".93" d="M0 0H300V300H0Z ${hole}"/>`;
 const LIT = (hole, tint = 0.14) => `<path d="${hole}" fill="none" stroke="var(--neon)" stroke-width="9" opacity=".45" filter="url(#stGlow)"/>
   <path d="${hole}" fill="var(--neon)" fill-opacity="${tint}" stroke="var(--neon)" stroke-width="2.5" stroke-linejoin="round"/>`;
-const PILL = (x, y, text, w = text.length * 7.4 + 26) => `<g transform="translate(${x - w / 2} ${y})">
-  <rect width="${w}" height="26" rx="9" fill="var(--glass)" stroke="var(--neon)" stroke-width="1.4"/>
-  <text x="${w / 2}" y="17.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--text)">${text}</text></g>`;
+// подпись открытого места — как на карте: обычный текст без плашки
+const PILL = (x, y, text) => `<text x="${x}" y="${y + 18}" text-anchor="middle" font-size="13" font-weight="800"
+  fill="var(--text)" stroke="var(--st-land)" stroke-width="3" stroke-opacity=".6" paint-order="stroke">${text}</text>`;
 
 const HOLE5 = 'M30 30 L95 25 L105 85 L40 95 Z';
 // настоящая подложка из story-art.js: земля, парки, вода, улицы трёх уровней
