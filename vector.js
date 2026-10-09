@@ -37,6 +37,7 @@ const NIGHT = {
   // интересные места — свой сиреневый цвет: тёплые фонари и бирюзовое «открыто» его не глушат
   poi: '#c3a2ff', poiText: '#ddd0ff', poiRing: '#f4efff', visitedRing: '#ffffff', poiHalo: '#0a0f17',
   pillBg: 'rgba(9,20,24,.92)', pillGlow: 'rgba(63,240,220,.55)', pillText: '#eef3f8', icoOpen: '#9ff6ea', flash: '#eafffb',
+  wish: '#ffd24a',  // «хочу сходить» — золотая звезда
   lock: '#6b7689', metroFill: '#c9d0da', metroStroke: 'rgba(10,15,23,.85)',
 };
 const THEMES = {
@@ -70,7 +71,7 @@ const THEMES = {
     label: '#5b6574', halo: '#ffffff', roadLabel: '#6b7280', waterLabel: '#2a7fae',
     metroText: '#1d2733', cityLabel: '#28313d', okrugLabel: '#364050', districtLabel: '#5b6574',
     poi: '#8657f0', poiText: '#5a2fd0', poiRing: '#ffffff', visitedRing: '#ffffff', poiHalo: '#ffffff',
-    pillBg: 'rgba(255,255,255,.96)', pillGlow: 'rgba(15,174,155,.35)', pillText: '#1b2430', icoOpen: '#0e9e8c',
+    pillBg: 'rgba(255,255,255,.96)', pillGlow: 'rgba(15,174,155,.35)', pillText: '#1b2430', icoOpen: '#0e9e8c', wish: '#e0a100',
     lock: '#8a93a1', metroFill: '#4b5563', metroStroke: 'rgba(255,255,255,.95)',
   },
   // бумажная карта: неизведанное заштриховано, как «терра инкогнита» на старых картах
@@ -95,6 +96,7 @@ const THEMES = {
     labelBold: true, noHalo: true,
     poi: '#7b4fd8', poiText: '#5c33b8', poiRing: '#fffaf0', visitedRing: '#fffaf0', poiHalo: '#f7f0e0',
     pillBg: 'rgba(252,247,236,.97)', pillGlow: 'rgba(223,95,51,.35)', pillText: '#2e261b', icoOpen: '#c9542b', flash: '#fff6e0',
+    wish: '#d18f00',
     lock: '#4f4130', metroFill: '#4a3c2a', metroStroke: 'rgba(255,250,240,.95)',
   },
 };
@@ -312,6 +314,17 @@ function makeIcons() {
       g.fillStyle = C.metroFill;
       g.fill(m);
     }),
+    // «хочу сходить»: золотая пятиконечная звезда со светлой каймой
+    star: icon(22, (g) => {
+      g.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const r = i % 2 ? 4.4 : 9.6, a = -Math.PI / 2 + (i * Math.PI) / 5;
+        g[i ? 'lineTo' : 'moveTo'](11 + r * Math.cos(a), 11.6 + r * Math.sin(a));
+      }
+      g.closePath();
+      g.lineJoin = 'round'; g.lineWidth = 2.4; g.strokeStyle = C.halo; g.stroke();
+      g.fillStyle = C.wish; g.fill();
+    }),
     lamp: icon(14, (g) => {
       const grad = g.createRadialGradient(7, 7, 0, 7, 7, 7);
       grad.addColorStop(0, 'rgba(255,248,215,1)');
@@ -457,7 +470,7 @@ function buildStyle() {
         paint: { 'line-color': C.waterEdge, 'line-opacity': C.waterEdgeLine, 'line-width': 0.8 } },
       // знаковые места видно и в тумане: сиреневый пунктир — «здесь есть что-то стоящее»
       { id: 'place-line', type: 'line', source: 'places',
-        paint: { 'line-color': C.poi, 'line-opacity': 0.75, 'line-dasharray': [2, 1.6],
+        paint: { 'line-color': ['case', ['==', ['get', 'wish'], true], C.wish, C.poi], 'line-opacity': 0.75, 'line-dasharray': [2, 1.6],
           'line-width': ['interpolate', ['linear'], ['zoom'], 10, 0.8, 15, 1.6] } },
       // заливка открытого: издалека улицы тонкие и почти не светят — без неё
       // открытое читалось бы только по контуру. Вблизи прозрачнее: там горят улицы.
@@ -544,7 +557,8 @@ function buildStyle() {
         paint: { 'circle-color': C.poiHalo, 'circle-opacity': 0.75,
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 12.5, 6, 16, 11] } },
       // не был — сиреневая точка с приближения 12.5
-      { id: 'poi-dot', type: 'circle', source: 'poiPoints', minzoom: 12.5, filter: ['!', ['get', 'visited']],
+      { id: 'poi-dot', type: 'circle', source: 'poiPoints', minzoom: 12.5,
+        filter: ['all', ['!', ['get', 'visited']], ['!', ['get', 'wish']]],
         paint: { 'circle-color': C.poi,
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 12.5, 3, 16, 6],
           'circle-stroke-color': C.poiRing, 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 12.5, 1, 16, 2] } },
@@ -553,14 +567,19 @@ function buildStyle() {
         paint: { 'circle-color': C.neon,
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 11.5, 4, 16, 9],
           'circle-stroke-color': C.visitedRing, 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11.5, 1, 16, 2.5] } },
+      // хочу сходить — золотая звезда, видна уже с 11
+      { id: 'poi-wish', type: 'symbol', source: 'poiPoints', minzoom: 11,
+        filter: ['all', ['get', 'wish'], ['!', ['get', 'visited']]],
+        layout: { 'icon-image': 'star', 'icon-allow-overlap': true,
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 11, 0.75, 16, 1.15] } },
       { id: 'poi-label', type: 'symbol', source: 'poiPoints', minzoom: 13,
-        // где был — подпись с галочкой уже с 13; остальные — только с 14.5
+        // где был и куда хочешь — подпись уже с 13; остальные — только с 14.5
         layout: { 'text-field': ['step', ['zoom'],
-          ['case', ['get', 'visited'], ['concat', '✓ ', ['get', 'name']], ''],
+          ['case', ['get', 'visited'], ['concat', '✓ ', ['get', 'name']], ['get', 'wish'], ['get', 'name'], ''],
           14.5, ['case', ['get', 'visited'], ['concat', '✓ ', ['get', 'name']], ['get', 'name']]],
           'text-font': FONT.bold, 'text-size': 11,
           'text-anchor': 'left', 'text-offset': [1.1, 0], 'text-max-width': 10, 'text-optional': true },
-        paint: { 'text-color': ['case', ['get', 'visited'], C.neon, C.poiText],
+        paint: { 'text-color': ['case', ['get', 'visited'], C.neon, ['get', 'wish'], C.wish, C.poiText],
           'text-halo-color': C.halo, 'text-halo-width': 2.2, 'text-halo-blur': 0.5 } },
       // закрытые участки: замок и название
       // округа издалека: крупное «ЦАО» и под ним полное название
@@ -591,10 +610,10 @@ function buildStyle() {
       // закрытые знаковые места: сиреневый значок и название — важнее замков участков
       { id: 'place-label', type: 'symbol', source: 'placeLabels', minzoom: 10.5,
         layout: { 'icon-image': ['concat', 'poi-', ['get', 'kind']],
-          'text-field': ['step', ['zoom'], '', 11.5, ['get', 'name']],
+          'text-field': ['step', ['zoom'], '', 11.5, ['case', ['get', 'wish'], ['concat', '★ ', ['get', 'name']], ['get', 'name']]],
           'text-font': FONT.bold, 'text-size': 11, 'text-anchor': 'top', 'text-offset': [0, 0.7],
           'text-max-width': 9, 'text-optional': true },
-        paint: { 'text-color': C.poiText, 'text-halo-color': C.halo, 'text-halo-width': 2.2, 'text-halo-blur': 0.5 } },
+        paint: { 'text-color': ['case', ['get', 'wish'], C.wish, C.poiText], 'text-halo-color': C.halo, 'text-halo-width': 2.2, 'text-halo-blur': 0.5 } },
       // свои точки: дом, работа… — кружок и подпись
       { id: 'anchor-dot', type: 'circle', source: 'anchors',
         paint: { 'circle-radius': 7, 'circle-color': C.neon, 'circle-stroke-color': C.halo, 'circle-stroke-width': 2.5 } },
@@ -642,8 +661,14 @@ function refresh() {
   // участок без единого открытого кусочка — замок; хоть один — плашка с прогрессом
   const touched = App.cells.filter((c) => progress(c)[0] > 0);
   map.getSource('cellLabels').setData(fc(App.cells.filter((c) => progress(c)[0] === 0).map((f) => labelPoint(f))));
-  map.getSource('placeLabels').setData(fc(App.places.filter((f) => !isOpen(f)).map((f) => labelPoint(f))));
-  for (const f of App.poiPoints) f.properties.visited = isOpen(f);
+  const wished = (id) => !!(App.wish && App.wish.has(id));
+  for (const f of App.places) f.properties.wish = wished(f.properties.id);
+  map.getSource('places').setData(fc(App.places));
+  map.getSource('placeLabels').setData(fc(App.places.filter((f) => !isOpen(f)).map((f) => labelPoint(f, { wish: f.properties.wish }))));
+  for (const f of App.poiPoints) {
+    f.properties.visited = isOpen(f);
+    f.properties.wish = wished(f.properties.id);
+  }
   map.getSource('poiPoints').setData(fc(App.poiPoints));
   map.getSource('openLabels').setData(fc([
     ...App.places.filter(isOpen).map((f) => withLabelZooms(f, '✓', '')),
@@ -815,7 +840,7 @@ function setButton(id, text, primary, onclick) {
   const btn = document.getElementById(id);
   btn.hidden = !text;
   if (!text) return;
-  btn.className = 'card-btn' + (primary ? '' : ' ghost');
+  btn.className = 'card-btn' + (primary ? '' : ' ghost');  // сбрасывает и «wish-on»
   btn.textContent = text;
   btn.onclick = () => { onclick(); refresh(); showCard(App.current); };
 }
@@ -868,7 +893,9 @@ function showCard(f, back) {
     badge = open ? 'БЫЛ ЗДЕСЬ' : 'НЕ БЫЛИ';
     setButton('cardBtn', open ? 'Снять отметку' : 'Я здесь был', !open,
       () => (poi ? togglePoi(poi) : open ? App.open.delete(p.id) : App.open.add(p.id)));
-    setButton('cardBtn2', null);
+    const wish = App.wish && App.wish.has(p.id);
+    setButton('cardBtn2', wish ? '★ В «Хочу»' : '☆ Хочу сходить', false, () => toggleWish(p.id));
+    document.getElementById('cardBtn2').classList.toggle('wish-on', wish);
     drawList(null);
   }
 
@@ -941,8 +968,10 @@ function drawList(cell, zoneId) {
   for (const p of list) {
     const row = document.createElement('div');
     row.className = 'poi' + (App.open.has(p.id) ? ' done' : '') + (p.landmark ? ' gold' : '');
+    const wish = App.wish && App.wish.has(p.id);
     row.innerHTML = '<button class="mark" title="Отметить, что был здесь">✓</button>'
-      + '<button class="poi-go" title="Показать на карте"><span class="txt"><b></b><small></small></span></button>';
+      + '<button class="poi-go" title="Показать на карте"><span class="txt"><b></b><small></small></span></button>'
+      + `<button class="star${wish ? ' on' : ''}" title="${wish ? 'Убрать из «Хочу»' : 'Хочу сходить'}">${wish ? '★' : '☆'}</button>`;
     row.querySelector('b').textContent = p.name;
     row.querySelector('small').textContent = p.kind_label;
     const ph = App.photos[p.id];
@@ -954,6 +983,7 @@ function drawList(cell, zoneId) {
       row.querySelector('.poi-go').classList.add('with-thumb');
     }
     row.querySelector('.mark').onclick = () => { togglePoi(p); refresh(); showCard(App.current); };
+    row.querySelector('.star').onclick = () => { toggleWish(p.id); refresh(); showCard(App.current); };
     // название или стрелка — карточка самого места (фото, описание), карта летит к нему
     row.querySelector('.poi-go').onclick = () => { showCard(App.byId[p.id], App.current); flyToPoi(p); };
     box.append(row);
@@ -1213,6 +1243,7 @@ function applyPoiFilter(mode) {
   const byVisited = mode === 'todo' ? ['!', ['get', 'visited']] : mode === 'done' ? ['get', 'visited'] : null;
   vis('poi-dot', mode !== 'done');
   vis('poi-dot-visited', mode !== 'todo');
+  vis('poi-wish', mode !== 'done');
   vis('poi-glow', mode !== 'todo');
   map.setFilter('poi-halo', byVisited);
   map.setFilter('poi-label', byVisited);

@@ -705,7 +705,14 @@ function watchLongPress() {
   canvas.addEventListener('touchcancel', cancel);
 }
 
-/* ---------- «Хочу» в «Куда поехать» ---------- */
+/* ---------- «Хочу» ---------- */
+
+/* Звёздочка у места: добавить в «Хочу» или убрать. Тот же список, что
+ * пополняют карточки знаменитых мест (вверх — хочу). */
+function toggleWish(id) {
+  if (App.wish.has(id)) App.wish.delete(id); else App.wish.add(id);
+  saveJSON(WISH_KEY, [...App.wish]);
+}
 
 function drawWish(body) {
   const list = App.pois.filter((p) => App.wish.has(p.id));
@@ -725,7 +732,7 @@ function drawWish(body) {
     go.onclick = () => { closeTrip(); showCard(App.byId[p.id]); flyToPoi(p); };
     const x = el('button', 'wish-x', '×');
     x.title = 'Убрать из списка';
-    x.onclick = () => { App.wish.delete(p.id); saveJSON(WISH_KEY, [...App.wish]); drawTrip(); };
+    x.onclick = () => { App.wish.delete(p.id); saveJSON(WISH_KEY, [...App.wish]); refresh(); drawTrip(); };
     row.append(go, x);
     body.append(row);
   }
