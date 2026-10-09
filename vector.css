@@ -149,7 +149,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card-list .more{margin:6px 0 4px}
 .poi.gold b{color:var(--poi-text)}
 /* звёздочка «хочу сходить» в списке мест и в карточке места */
-.poi .star{width:38px;height:40px;flex:none;background:none;border:0;font-size:21px;line-height:1;color:var(--muted);padding:0}
+.poi .star{width:38px;height:40px;flex:none;background:none;border:0;font-size:22px;line-height:1;color:var(--muted);padding:0}
 .poi .star.on{color:var(--wish)}
 .poi-go{padding-right:22px!important}
 .card-btn.wish-on{color:var(--wish);border-color:color-mix(in srgb,var(--wish) 60%,transparent)}

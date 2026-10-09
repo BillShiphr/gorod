@@ -37,7 +37,7 @@ const NIGHT = {
   // интересные места — свой сиреневый цвет: тёплые фонари и бирюзовое «открыто» его не глушат
   poi: '#c3a2ff', poiText: '#ddd0ff', poiRing: '#f4efff', visitedRing: '#ffffff', poiHalo: '#0a0f17',
   pillBg: 'rgba(9,20,24,.92)', pillGlow: 'rgba(63,240,220,.55)', pillText: '#eef3f8', icoOpen: '#9ff6ea', flash: '#eafffb',
-  wish: '#ffd24a',  // «хочу сходить» — золотая звезда
+  wish: '#ffd24a', wishText: '#ffd24a',  // «хочу сходить» — золотой блик и подпись
   lock: '#6b7689', metroFill: '#c9d0da', metroStroke: 'rgba(10,15,23,.85)',
 };
 const THEMES = {
@@ -71,7 +71,7 @@ const THEMES = {
     label: '#5b6574', halo: '#ffffff', roadLabel: '#6b7280', waterLabel: '#2a7fae',
     metroText: '#1d2733', cityLabel: '#28313d', okrugLabel: '#364050', districtLabel: '#5b6574',
     poi: '#8657f0', poiText: '#5a2fd0', poiRing: '#ffffff', visitedRing: '#ffffff', poiHalo: '#ffffff',
-    pillBg: 'rgba(255,255,255,.96)', pillGlow: 'rgba(15,174,155,.35)', pillText: '#1b2430', icoOpen: '#0e9e8c', wish: '#e0a100',
+    pillBg: 'rgba(255,255,255,.96)', pillGlow: 'rgba(15,174,155,.35)', pillText: '#1b2430', icoOpen: '#0e9e8c', wish: '#e0a100', wishText: '#9a6a00',
     lock: '#8a93a1', metroFill: '#4b5563', metroStroke: 'rgba(255,255,255,.95)',
   },
   // бумажная карта: неизведанное заштриховано, как «терра инкогнита» на старых картах
@@ -96,7 +96,7 @@ const THEMES = {
     labelBold: true, noHalo: true,
     poi: '#7b4fd8', poiText: '#5c33b8', poiRing: '#fffaf0', visitedRing: '#fffaf0', poiHalo: '#f7f0e0',
     pillBg: 'rgba(252,247,236,.97)', pillGlow: 'rgba(223,95,51,.35)', pillText: '#2e261b', icoOpen: '#c9542b', flash: '#fff6e0',
-    wish: '#d18f00',
+    wish: '#d18f00', wishText: '#8a5a00',  // подпись темнее значка — на бежевом не сливается
     lock: '#4f4130', metroFill: '#4a3c2a', metroStroke: 'rgba(255,250,240,.95)',
   },
 };
@@ -314,12 +314,17 @@ function makeIcons() {
       g.fillStyle = C.metroFill;
       g.fill(m);
     }),
-    // «хочу сходить»: золотая пятиконечная звезда со светлой каймой
-    star: icon(22, (g) => {
+    // «хочу сходить»: золотой четырёхконечный блик (лучи с вогнутыми краями) со светлой каймой
+    star: icon(24, (g) => {
+      // от кончика к кончику — кривая с опорами у оси луча (a) и у центра (b): лучи тонкие, края вогнутые
+      const c = 12, r = 11, a = 0.05, b = 0.36;
+      const tips = [[0, -1], [1, 0], [0, 1], [-1, 0], [0, -1]];
       g.beginPath();
-      for (let i = 0; i < 10; i++) {
-        const r = i % 2 ? 4.4 : 9.6, a = -Math.PI / 2 + (i * Math.PI) / 5;
-        g[i ? 'lineTo' : 'moveTo'](11 + r * Math.cos(a), 11.6 + r * Math.sin(a));
+      g.moveTo(c, c - r);
+      for (let i = 0; i < 4; i++) {
+        const [x0, y0] = tips[i], [x1, y1] = tips[i + 1];
+        g.bezierCurveTo(c + (x0 * b + x1 * a) * r, c + (y0 * b + y1 * a) * r,
+          c + (x0 * a + x1 * b) * r, c + (y0 * a + y1 * b) * r, c + x1 * r, c + y1 * r);
       }
       g.closePath();
       g.lineJoin = 'round'; g.lineWidth = 2.4; g.strokeStyle = C.halo; g.stroke();
@@ -579,7 +584,7 @@ function buildStyle() {
           14.5, ['case', ['get', 'visited'], ['concat', '✓ ', ['get', 'name']], ['get', 'name']]],
           'text-font': FONT.bold, 'text-size': 11,
           'text-anchor': 'left', 'text-offset': [1.1, 0], 'text-max-width': 10, 'text-optional': true },
-        paint: { 'text-color': ['case', ['get', 'visited'], C.neon, ['get', 'wish'], C.wish, C.poiText],
+        paint: { 'text-color': ['case', ['get', 'visited'], C.neon, ['get', 'wish'], C.wishText, C.poiText],
           'text-halo-color': C.halo, 'text-halo-width': 2.2, 'text-halo-blur': 0.5 } },
       // закрытые участки: замок и название
       // округа издалека: крупное «ЦАО» и под ним полное название
@@ -609,11 +614,11 @@ function buildStyle() {
           'icon-opacity': ['interpolate', ['linear'], ['zoom'], 12.1, 0, 12.5, 1] } },
       // закрытые знаковые места: сиреневый значок и название — важнее замков участков
       { id: 'place-label', type: 'symbol', source: 'placeLabels', minzoom: 10.5,
-        layout: { 'icon-image': ['concat', 'poi-', ['get', 'kind']],
-          'text-field': ['step', ['zoom'], '', 11.5, ['case', ['get', 'wish'], ['concat', '★ ', ['get', 'name']], ['get', 'name']]],
+        layout: { 'icon-image': ['case', ['get', 'wish'], 'star', ['concat', 'poi-', ['get', 'kind']]],
+          'text-field': ['step', ['zoom'], '', 11.5, ['get', 'name']],
           'text-font': FONT.bold, 'text-size': 11, 'text-anchor': 'top', 'text-offset': [0, 0.7],
           'text-max-width': 9, 'text-optional': true },
-        paint: { 'text-color': ['case', ['get', 'wish'], C.wish, C.poiText], 'text-halo-color': C.halo, 'text-halo-width': 2.2, 'text-halo-blur': 0.5 } },
+        paint: { 'text-color': ['case', ['get', 'wish'], C.wishText, C.poiText], 'text-halo-color': C.halo, 'text-halo-width': 2.2, 'text-halo-blur': 0.5 } },
       // свои точки: дом, работа… — кружок и подпись
       { id: 'anchor-dot', type: 'circle', source: 'anchors',
         paint: { 'circle-radius': 7, 'circle-color': C.neon, 'circle-stroke-color': C.halo, 'circle-stroke-width': 2.5 } },
@@ -894,7 +899,7 @@ function showCard(f, back) {
     setButton('cardBtn', open ? 'Снять отметку' : 'Я здесь был', !open,
       () => (poi ? togglePoi(poi) : open ? App.open.delete(p.id) : App.open.add(p.id)));
     const wish = App.wish && App.wish.has(p.id);
-    setButton('cardBtn2', wish ? '★ В «Хочу»' : '☆ Хочу сходить', false, () => toggleWish(p.id));
+    setButton('cardBtn2', wish ? '✦ В «Хочу»' : '✧ Хочу сходить', false, () => toggleWish(p.id));
     document.getElementById('cardBtn2').classList.toggle('wish-on', wish);
     drawList(null);
   }
@@ -971,7 +976,7 @@ function drawList(cell, zoneId) {
     const wish = App.wish && App.wish.has(p.id);
     row.innerHTML = '<button class="mark" title="Отметить, что был здесь">✓</button>'
       + '<button class="poi-go" title="Показать на карте"><span class="txt"><b></b><small></small></span></button>'
-      + `<button class="star${wish ? ' on' : ''}" title="${wish ? 'Убрать из «Хочу»' : 'Хочу сходить'}">${wish ? '★' : '☆'}</button>`;
+      + `<button class="star${wish ? ' on' : ''}" title="${wish ? 'Убрать из «Хочу»' : 'Хочу сходить'}">${wish ? '✦' : '✧'}</button>`;
     row.querySelector('b').textContent = p.name;
     row.querySelector('small').textContent = p.kind_label;
     const ph = App.photos[p.id];
