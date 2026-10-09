@@ -104,8 +104,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card-ico.locked{background:var(--ico-locked)}
 /* фото места из Википедии вместо значка */
 .card-ico.photo{background-size:cover;background-position:center;position:relative}
-.card-ico.photo::after{content:"Фото: " attr(data-src);position:absolute;left:0;right:0;bottom:0;font-size:8px;
-  color:rgba(255,255,255,.8);background:rgba(0,0,0,.45);text-align:center;padding:1px 0;border-radius:0 0 14px 14px}
+/* откуда фото и чьё — не на превью, а под фото на весь экран (лицензия просит указать автора) */
 .card-desc{margin:-4px 0 10px!important;font-size:13px!important;color:var(--text2)!important;line-height:1.35}
 .card-desc a{color:var(--neon);text-decoration:none;font-weight:700;white-space:nowrap}
 .poi .thumb{width:38px;height:38px;border-radius:8px;flex:none;background-size:cover;background-position:center}

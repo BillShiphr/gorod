@@ -16,7 +16,7 @@
  */
 'use strict';
 
-const DATA_VERSION = 16;
+const DATA_VERSION = 17;
 // новая нарезка — новые кусочки, старые отметки к ним не подходят
 const OPEN_KEY = 'gorod.vector-zones.v8';
 /* Темы оформления. На сайте две: «ночь» (dusk — ночь посветлее) и «день»
@@ -1137,7 +1137,9 @@ function openPhoto(ph, name) {
   big.onload = () => { if (!box.hidden) img.src = big.src; };
   big.src = bigPhotoUrl(ph.img);
   img.alt = name;
-  document.getElementById('lightboxCap').textContent = `${name} · Фото: ${ph.src || 'Википедия'}`;
+  // автор и лицензия снимка — так просят условия Wikimedia Commons
+  const who = [ph.artist, ph.license].filter(Boolean).join(' · ');
+  document.getElementById('lightboxCap').textContent = `${name} · Фото: ${who ? `${who} · ` : ''}Wikimedia Commons`;
   box.hidden = false;
 }
 
