@@ -16,7 +16,7 @@
  */
 'use strict';
 
-const DATA_VERSION = 15;
+const DATA_VERSION = 16;
 // новая нарезка — новые кусочки, старые отметки к ним не подходят
 const OPEN_KEY = 'gorod.vector-zones.v8';
 /* Темы оформления. На сайте две: «ночь» (dusk — ночь посветлее) и «день»
@@ -134,6 +134,23 @@ applyThemeToPage();
 const FONT = { reg: ['Noto Sans Regular'], bold: ['Noto Sans Bold'], ital: ['Noto Sans Italic'] };
 const NAME = ['coalesce', ['get', 'name:ru'], ['get', 'name']];
 const WORLD = [[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]];
+/* Самые известные места — на карте кружком с фото, как в Яндекс Картах: по ним легко
+ * ориентироваться. Порядок — приоритет, когда кружкам тесно (тот же список в
+ * data/add_top_places.py). Второе — короткая подпись под кружком. */
+const TOP_PLACES = [
+  ['Красная площадь'], ['Московский Кремль', 'Кремль'], ['Останкинская телевизионная башня', 'Останкинская башня'],
+  ['ВДНХ'], ['Москва-Сити'], ['Парк Горького'], ['Большой театр'], ['Храм Христа Спасителя', 'Храм Христа'],
+  ['Главное здание МГУ', 'МГУ'], ['Зарядье'], ['Собор Василия Блаженного', 'Храм Василия Блаженного'],
+  ['Третьяковская галерея', 'Третьяковка'], ['Новодевичий монастырь'], ['Музей-заповедник «Коломенское»', 'Коломенское'],
+  ['Дворцово-парковый ансамбль «Царицыно»', 'Царицыно'], ['Лужники'], ['ГЭС-2'],
+  ['Государственный универсальный магазин (ГУМ)', 'ГУМ'],
+  ['Государственный музей изобразительных искусств имени А. С. Пушкина', 'Пушкинский музей'],
+  ['Парк Воробьёвы горы', 'Воробьёвы горы'], ['Музей-заповедник Кусково', 'Кусково'], ['Кремль в Измайлово'],
+  ['парк Сокольники', 'Сокольники'], ['Парк Победы'], ['Жилой дом на Котельнической набережной', 'Высотка на Котельнической'],
+  ['Мемориальный музей космонавтики', 'Музей космонавтики'], ['Шуховская башня'], ['Патриаршие пруды'],
+  ['Флакон'], ['Винзавод'],
+];
+
 const KIND_LABEL = { park: 'парк', cluster: 'культурное пространство', market: 'рынок, еда' };
 
 const App = { map: null, cells: [], zones: [], places: [], pois: [], poiPoints: [], byId: {},
@@ -160,6 +177,16 @@ async function loadData() {
     properties: Object.assign({}, p, { kind: 'poi' }),
   }));
   for (const f of [...App.cells, ...App.zones, ...App.places, ...App.poiPoints]) App.byId[f.properties.id] = f;
+  // самые известные места: точка (у знаковой территории — её центр), короткая подпись, приоритет
+  const poiByName = new Map(pois.map((p) => [p.name, p]));
+  App.top = TOP_PLACES.map(([name, short], rank) => {
+    const p = poiByName.get(name);
+    const ph = p && App.photos[p.id];
+    if (!p || !ph || !ph.icon) return null;
+    const ll = p.landmark ? [App.byId[p.id].properties.lng, App.byId[p.id].properties.lat] : [p.lng, p.lat];
+    return turf.point(ll, { id: p.id, name: short || name, rank });
+  }).filter(Boolean);
+  App.topLoading = new Set();
 
   for (const c of App.cells) {
     const p = c.properties;
@@ -361,6 +388,55 @@ function hatchImage(n, lw) {
   });
 }
 
+/* ============================ кружки с фото ============================ */
+
+const topPhoto = {};  // id места → обещание загруженного снимка (грузим один раз на все темы)
+function loadTopPhoto(pid) {
+  if (!topPhoto[pid]) {
+    topPhoto[pid] = new Promise((resolve, reject) => {
+      const im = new Image();
+      im.crossOrigin = 'anonymous';  // иначе браузер не даст нарисовать снимок на холсте
+      im.onload = () => resolve(im);
+      im.onerror = reject;
+      im.src = App.photos[pid].icon;
+    });
+  }
+  return topPhoto[pid];
+}
+
+/* Значок «ph-<место>-<n|v|w>»: снимок в круге, обводка по состоянию, лёгкая тень.
+ * Рисуем в 2× размере для чёткости. Снимок не загрузился — просто цветной круг. */
+function topIcon(key) {
+  const m = key.match(/^ph-(.+)-([nvw])$/);
+  if (!m || App.topLoading.has(key)) return;
+  App.topLoading.add(key);
+  const [, pid, st] = m;
+  const ring = st === 'v' ? C.neon : st === 'w' ? C.wish : '#ffffff';
+  const S = 104, c = S / 2, R = 44, r = 39;
+  const draw = (im) => {
+    const cv = document.createElement('canvas');
+    cv.width = cv.height = S;
+    const g = cv.getContext('2d');
+    g.save();
+    g.shadowColor = 'rgba(0,0,0,.35)'; g.shadowBlur = 6; g.shadowOffsetY = 2;
+    g.fillStyle = ring;
+    g.beginPath(); g.arc(c, c, R, 0, 2 * Math.PI); g.fill();
+    g.restore();
+    g.save();
+    g.beginPath(); g.arc(c, c, r, 0, 2 * Math.PI); g.clip();
+    if (im) {
+      const side = Math.min(im.naturalWidth, im.naturalHeight);  // квадрат из середины снимка
+      g.drawImage(im, (im.naturalWidth - side) / 2, (im.naturalHeight - side) / 2, side, side, c - r, c - r, 2 * r, 2 * r);
+    } else {
+      g.fillStyle = C.poi; g.fillRect(0, 0, S, S);
+    }
+    g.restore();
+    if (App.map.hasImage(key)) return;
+    App.map.addImage(key, g.getImageData(0, 0, S, S), { pixelRatio: 2 });
+  };
+  loadTopPhoto(pid).then(draw).catch(() => draw(null));
+}
+
 /* ============================ стиль ============================ */
 
 const ROADS = ['motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'minor', 'service'];
@@ -402,6 +478,7 @@ function buildStyle() {
       revealPts: { type: 'geojson', data: empty },
       revealWave: { type: 'geojson', data: empty },
       chosen: { type: 'geojson', data: empty },
+      topPlaces: { type: 'geojson', data: empty },
       chosenPts: { type: 'geojson', data: empty },
       anchors: { type: 'geojson', data: empty },
     },
@@ -626,6 +703,15 @@ function buildStyle() {
         layout: { 'text-field': ['get', 'label'], 'text-font': FONT.bold, 'text-size': 12,
           'text-anchor': 'left', 'text-offset': [0.9, 0], 'text-allow-overlap': true },
         paint: { 'text-color': C.neon, 'text-halo-color': C.halo, 'text-halo-width': 2 } },
+      // самые известные места — кружок с фото; обводка: белая — не был, цвет «открыто» — был, золотая — хочу
+      { id: 'top-photos', type: 'symbol', source: 'topPlaces', minzoom: 9.5,
+        layout: { 'icon-image': ['concat', 'ph-', ['get', 'id'], '-', ['get', 'state']],
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 9.5, 0.55, 12, 0.75, 14, 0.9, 16, 1.05],
+          'symbol-sort-key': ['get', 'rank'],
+          'text-field': ['step', ['zoom'], '', 11.5, ['get', 'name']],
+          'text-font': FONT.bold, 'text-size': 11, 'text-anchor': 'top', 'text-offset': [0, 2.1],
+          'text-max-width': 8, 'text-optional': true },
+        paint: { 'text-color': C.pillText, 'text-halo-color': C.halo, 'text-halo-width': 1.6 } },
       { id: 'open-label', type: 'symbol', source: 'openLabels',
         layout: {
           // одна строка: значок, название, прогресс; висит над верхним краем места.
@@ -667,6 +753,11 @@ function refresh() {
   const touched = App.cells.filter((c) => progress(c)[0] > 0);
   map.getSource('cellLabels').setData(fc(App.cells.filter((c) => progress(c)[0] === 0).map((f) => labelPoint(f))));
   const wished = (id) => !!(App.wish && App.wish.has(id));
+  for (const f of App.top) {
+    const id = f.properties.id;
+    f.properties.state = marked(id) ? 'v' : wished(id) ? 'w' : 'n';
+  }
+  map.getSource('topPlaces').setData(fc(App.top));
   for (const f of App.places) f.properties.wish = wished(f.properties.id);
   map.getSource('places').setData(fc(App.places));
   map.getSource('placeLabels').setData(fc(App.places.filter((f) => !isOpen(f)).map((f) => labelPoint(f, { wish: f.properties.wish }))));
@@ -1083,6 +1174,7 @@ function initMap() {
   // значки рисуем сами на холсте и отдаём карте, когда она их попросит
   App.icons = makeIcons();
   map.on('styleimagemissing', (e) => {
+    if (e.id.startsWith('ph-')) { topIcon(e.id); return; }
     const im = App.icons[e.id];
     if (!im || map.hasImage(e.id)) return;
     if (im.opts) map.addImage(e.id, im.data, im.opts);
@@ -1103,8 +1195,8 @@ function initMap() {
     requestAnimationFrame(() => { pending = false; updateLabelFilters(); });
   });
 
-  // порядок важен: сначала подписи, потом знаковые места, потом кусочки
-  const CLICK_LAYERS = ['open-label', 'open-name', 'place-label', 'poi-dot', 'poi-dot-visited', 'poi-label', 'cell-label', 'place-hit', 'zone-hit'];
+  // порядок важен: сначала кружки с фото и подписи, потом знаковые места, потом кусочки
+  const CLICK_LAYERS = ['top-photos', 'open-label', 'open-name', 'place-label', 'poi-dot', 'poi-dot-visited', 'poi-label', 'cell-label', 'place-hit', 'zone-hit'];
   map.on('click', (e) => {
     // выбираем точку для «Твоих мест» — нажатие добавляет или убирает кусочек (onboard.js)
     if (App.picking) { pickTap(e); return; }
@@ -1114,7 +1206,7 @@ function initMap() {
     const f = hits.length && App.byId[hits[0].properties.id];
     if (f) showCard(f); else hideCard();
   });
-  for (const layer of ['zone-hit', 'place-hit']) {
+  for (const layer of ['zone-hit', 'place-hit', 'top-photos']) {
     map.on('mousemove', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
   }
@@ -1225,6 +1317,7 @@ function toggleTheme() {
   applyThemeToPage();
   drawThemeButton();
   App.icons = makeIcons();
+  App.topLoading = new Set();
   const sel = App.current;
   hideCard();
   App.map.setStyle(buildStyle(), { diff: false });
