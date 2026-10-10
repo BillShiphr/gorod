@@ -245,10 +245,11 @@
  "poi30": {
   "title": "Ильинский сквер",
   "text": "Ильинский сквер (ранее известный как Лубянский сквер) — сквер в центре Москвы, расположен внутри прямоугольника, образованного проезжими частями площади Ильинских Ворот, Старой и Славянской площадей, и Лубянского проезда.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Ilyinskie_worota_s_pamjatnikom_plewny.jpg/500px-Ilyinskie_worota_s_pamjatnikom_plewny.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%B3%D1%80%D0%B5%D0%BD%D0%B0%D0%B4%D0%B5%D1%80%D0%B0%D0%BC%2C_%D0%BF%D0%B0%D0%B2%D1%88%D0%B8%D0%BC_%D0%BF%D0%BE%D0%B4_%D0%9F%D0%BB%D0%B5%D0%B2%D0%BD%D0%BE%D0%B9_%D0%98%D0%BB%D1%8C%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D0%B5_%D0%92%D0%BE%D1%80%D0%BE%D1%82%D0%B0_%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_2026_02.jpg/500px-%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%B3%D1%80%D0%B5%D0%BD%D0%B0%D0%B4%D0%B5%D1%80%D0%B0%D0%BC%2C_%D0%BF%D0%B0%D0%B2%D1%88%D0%B8%D0%BC_%D0%BF%D0%BE%D0%B4_%D0%9F%D0%BB%D0%B5%D0%B2%D0%BD%D0%BE%D0%B9_%D0%98%D0%BB%D1%8C%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D0%B5_%D0%92%D0%BE%D1%80%D0%BE%D1%82%D0%B0_%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_2026_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%98%D0%BB%D1%8C%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D1%81%D0%BA%D0%B2%D0%B5%D1%80",
-  "artist": "Unknown authorUnknown author",
-  "license": "Public domain"
+  "artist": "Никонико962",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%B3%D1%80%D0%B5%D0%BD%D0%B0%D0%B4%D0%B5%D1%80%D0%B0%D0%BC,_%D0%BF%D0%B0%D0%B2%D1%88%D0%B8%D0%BC_%D0%BF%D0%BE%D0%B4_%D0%9F%D0%BB%D0%B5%D0%B2%D0%BD%D0%BE%D0%B9_%D0%98%D0%BB%D1%8C%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D0%B5_%D0%92%D0%BE%D1%80%D0%BE%D1%82%D0%B0_%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_2026_02.jpg"
  },
  "poi31": {
   "title": "Усадьба Трубецких в Хамовниках",
@@ -261,10 +262,11 @@
  "poi33": {
   "title": "Тайницкий сад",
   "text": "Тайни́цкий сад — сад на территории Московского Кремля. Располагается вдоль южной стены крепости, своё название получил в честь Тайницкой башни. Входит в список всемирного культурного наследия ЮНЕСКО.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/OldTaynitskyGarden_Kremlin.jpg/500px-OldTaynitskyGarden_Kremlin.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Moscow._Grand_Kremlin_Palace_from_the_Bolshoy_Kamenny_Bridge.jpg/500px-Moscow._Grand_Kremlin_Palace_from_the_Bolshoy_Kamenny_Bridge.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%A2%D0%B0%D0%B9%D0%BD%D0%B8%D1%86%D0%BA%D0%B8%D0%B9_%D1%81%D0%B0%D0%B4",
-  "artist": "The original uploader was Ovc at Russian Wikipedia.",
-  "license": "Public domain"
+  "artist": "Юрий Д.К.",
+  "license": "CC BY 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow._Grand_Kremlin_Palace_from_the_Bolshoy_Kamenny_Bridge.jpg"
  },
  "poi34": {
   "title": "Александровский сад (Москва)",
@@ -383,10 +385,11 @@
  "poi60": {
   "title": "Пресненский (парк)",
   "text": "«Детский Парк „Пресненский“» (прежние названия — Детский парк Краснопреснеских ребят, Детский парк им.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/PresnenskyPark5.jpg/500px-PresnenskyPark5.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Around_Moscow_%2830995876211%29.jpg/500px-Around_Moscow_%2830995876211%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9F%D1%80%D0%B5%D1%81%D0%BD%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_(%D0%BF%D0%B0%D1%80%D0%BA)",
-  "artist": "Akkit",
-  "license": "CC BY-SA 3.0"
+  "artist": "Gennady Grachev from Moscow, Russia",
+  "license": "CC BY 2.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Around_Moscow_(30995876211).jpg"
  },
  "poi61": {
   "title": "Лефортовский парк",
@@ -794,10 +797,11 @@
  "poi132": {
   "title": "Дом на набережной (музей)",
   "text": "Музей «Дом на набережной» — российское музейное заведение, посвящённое одноимённому зданию. Отдел Музея истории ГУЛАГа.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Moscow_20200119_133955.jpg/500px-Moscow_20200119_133955.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Moscow_-_2026_-_House_on_the_Embankment%2C_viewed_from_the_side_of_the_Cathedral_of_Christ_the_Saviour1.jpg/500px-Moscow_-_2026_-_House_on_the_Embankment%2C_viewed_from_the_side_of_the_Cathedral_of_Christ_the_Saviour1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%94%D0%BE%D0%BC_%D0%BD%D0%B0_%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%BE%D0%B9_(%D0%BC%D1%83%D0%B7%D0%B5%D0%B9)",
-  "artist": "Bogdanov-62",
-  "license": "CC BY-SA 4.0"
+  "artist": "Юрий Д.К.",
+  "license": "CC BY 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow_-_2026_-_House_on_the_Embankment,_viewed_from_the_side_of_the_Cathedral_of_Christ_the_Saviour1.jpg"
  },
  "poi133": {
   "title": "Музей холодной войны (Москва)",
@@ -852,10 +856,7 @@
  "poi143": {
   "title": "Музей русской гармоники А. Мирека",
   "text": "Музей русской гармоники А. Мирека — культурное учреждение, посвящённое истории развития и существования музыкальных инструментов семейства гармоник в России.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%D0%9C%D1%83%D0%B7%D0%B5%D1%8F_%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%B9_%D0%B3%D0%B0%D1%80%D0%BC%D0%BE%D0%BD%D0%B8%D0%BA%D0%B8_%D0%90._%D0%9C%D0%B8%D1%80%D0%B5%D0%BA%D0%B0.JPG/500px-%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%D0%9C%D1%83%D0%B7%D0%B5%D1%8F_%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%B9_%D0%B3%D0%B0%D1%80%D0%BC%D0%BE%D0%BD%D0%B8%D0%BA%D0%B8_%D0%90._%D0%9C%D0%B8%D1%80%D0%B5%D0%BA%D0%B0.JPG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "url": "https://ru.m.wikipedia.org/wiki/%D0%9C%D1%83%D0%B7%D0%B5%D0%B9_%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%B9_%D0%B3%D0%B0%D1%80%D0%BC%D0%BE%D0%BD%D0%B8%D0%BA%D0%B8_%D0%90._%D0%9C%D0%B8%D1%80%D0%B5%D0%BA%D0%B0",
-  "artist": "Здравствуйте!",
-  "license": "CC0"
+  "url": "https://ru.m.wikipedia.org/wiki/%D0%9C%D1%83%D0%B7%D0%B5%D0%B9_%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%B9_%D0%B3%D0%B0%D1%80%D0%BC%D0%BE%D0%BD%D0%B8%D0%BA%D0%B8_%D0%90._%D0%9C%D0%B8%D1%80%D0%B5%D0%BA%D0%B0"
  },
  "poi144": {
   "title": "Музей Михаила Булгакова",
@@ -956,10 +957,11 @@
  "poi163": {
   "title": "Государственный центральный музей кино",
   "text": "Госуда́рственный центра́льный музе́й кино́ — российское государственное учреждение, занимающееся активной просветительской и научной деятельностью в области истории и теории кино.",
-  "img": "https://upload.wikimedia.org/wikipedia/commons/1/1b/LOGO_cinema_museum_-02.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/20260317_Hard_to_Be_a_God_%282013_film%29_exhibition_02_%2819580%29.jpg/500px-20260317_Hard_to_Be_a_God_%282013_film%29_exhibition_02_%2819580%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%93%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D1%86%D0%B5%D0%BD%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%BC%D1%83%D0%B7%D0%B5%D0%B9_%D0%BA%D0%B8%D0%BD%D0%BE",
-  "artist": "Лариса Солоницына",
-  "license": "CC BY 3.0"
+  "artist": "Sergey A. Demidov",
+  "license": "CC BY 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:20260317_Hard_to_Be_a_God_(2013_film)_exhibition_02_(19580).jpg"
  },
  "poi164": {
   "title": "ART4.RU",
@@ -996,10 +998,11 @@
  "poi169": {
   "title": "Отечественная война 1812 года",
   "text": "Оте́чественная война́ 1812 го́да, во французской историографии — Ру́сская кампа́ния 1812 го́да (фр.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/French_invasion_of_Russia_collage.jpg/500px-French_invasion_of_Russia_collage.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B3%D0%BE%D1%84%2C_%D0%9D%D0%B8%D0%B6%D0%BD%D0%B8%D0%B9_%D0%BF%D0%B0%D1%80%D0%BA%2C_%D0%9B%D1%8C%D0%B2%D0%B8%D0%BD%D1%8B%D0%B9_%D0%BA%D0%B0%D1%81%D0%BA%D0%B0%D0%B4._%D0%A4%D0%BE%D0%BD%D1%82%D0%B0%D0%BD%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D0%B0%D1%82%D1%83%D1%8F_%C2%AB%D0%9D%D0%B8%D0%BC%D1%84%D0%B0%2C_%D0%BB%D1%8C%D1%8E%D1%89%D0%B0%D1%8F_%D0%B2%D0%BE%D0%B4%D1%83_%D0%B8%D0%B7_%D0%BA%D1%83%D0%B2%D1%88%D0%B8%D0%BD%D0%B0%C2%BB_2.jpg/500px-thumbnail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9E%D1%82%D0%B5%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F_%D0%B2%D0%BE%D0%B9%D0%BD%D0%B0_1812_%D0%B3%D0%BE%D0%B4%D0%B0",
-  "artist": "Blaue Max",
-  "license": "CC BY-SA 4.0"
+  "artist": "Игорь Гордеев",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B3%D0%BE%D1%84,_%D0%9D%D0%B8%D0%B6%D0%BD%D0%B8%D0%B9_%D0%BF%D0%B0%D1%80%D0%BA,_%D0%9B%D1%8C%D0%B2%D0%B8%D0%BD%D1%8B%D0%B9_%D0%BA%D0%B0%D1%81%D0%BA%D0%B0%D0%B4._%D0%A4%D0%BE%D0%BD%D1%82%D0%B0%D0%BD%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D0%B0%D1%82%D1%83%D1%8F_%C2%AB%D0%9D%D0%B8%D0%BC%D1%84%D0%B0,_%D0%BB%D1%8C%D1%8E%D1%89%D0%B0%D1%8F_%D0%B2%D0%BE%D0%B4%D1%83_%D0%B8%D0%B7_%D0%BA%D1%83%D0%B2%D1%88%D0%B8%D0%BD%D0%B0%C2%BB_2.jpg"
  },
  "poi170": {
   "title": "Музей археологии Москвы",
@@ -1028,10 +1031,11 @@
  "poi177": {
   "title": "Государственный геологический музей имени В. И. Вернадского РАН",
   "text": "Государственный геологический музей имени В. И. Вернадского РАН (ГГМ РАН) — геологический музей Российской академии наук в Москве, просветительский центр в области геологии и горного дела.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/%D0%93%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D0%B5%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%BC%D1%83%D0%B7%D0%B5%D0%B9.png/500px-%D0%93%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D0%B5%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%BC%D1%83%D0%B7%D0%B5%D0%B9.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Moscow_-_2025_-_Vernadsky_Geological_Museum.jpg/500px-Moscow_-_2025_-_Vernadsky_Geological_Museum.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%93%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D0%B5%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%BC%D1%83%D0%B7%D0%B5%D0%B9_%D0%B8%D0%BC%D0%B5%D0%BD%D0%B8_%D0%92._%D0%98._%D0%92%D0%B5%D1%80%D0%BD%D0%B0%D0%B4%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%A0%D0%90%D0%9D",
-  "artist": "Государственный геологический музей имени В. И. Вернадского",
-  "license": "Public domain"
+  "artist": "Юрий Д.К.",
+  "license": "CC BY 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow_-_2025_-_Vernadsky_Geological_Museum.jpg"
  },
  "poi178": {
   "title": "Зоологический музей Московского государственного университета",
@@ -1456,26 +1460,25 @@
  "poi243": {
   "title": "Мамонова дача",
   "text": "Усадьба «Васи́льевское» (известная также как Мамо́нова дача, Ноева дача, Усадьба Дмитриева-Мамонова) — усадьба конца XVIII — начала XIX веков в черте современной Москвы на Воробьёвых горах.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Municipal_Album_1.218_Mamonov_Dacha.jpg/500px-Municipal_Album_1.218_Mamonov_Dacha.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "url": "https://ru.m.wikipedia.org/wiki/%D0%9C%D0%B0%D0%BC%D0%BE%D0%BD%D0%BE%D0%B2%D0%B0_%D0%B4%D0%B0%D1%87%D0%B0",
-  "artist": "Anonymous photographer for P. P. Pavlov print shop",
-  "license": "Public domain"
+  "url": "https://ru.m.wikipedia.org/wiki/%D0%9C%D0%B0%D0%BC%D0%BE%D0%BD%D0%BE%D0%B2%D0%B0_%D0%B4%D0%B0%D1%87%D0%B0"
  },
  "poi247": {
   "title": "Измалково (усадьба)",
   "text": "Изма́лково — существовавшая в XVIII — начале XX веков подмосковная усадьба рода Самариных. Руины — в поселение Внуковское Новомосковского административного округа г. Москвы.",
-  "img": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Izmalkovo.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/%D0%A3%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0_%22%D0%98%D0%B7%D0%BC%D0%B0%D0%BB%D0%BA%D0%BE%D0%B2%D0%BE%22_3.JPG/500px-%D0%A3%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0_%22%D0%98%D0%B7%D0%BC%D0%B0%D0%BB%D0%BA%D0%BE%D0%B2%D0%BE%22_3.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%98%D0%B7%D0%BC%D0%B0%D0%BB%D0%BA%D0%BE%D0%B2%D0%BE_(%D1%83%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0)",
-  "artist": "Unknown authorUnknown author",
-  "license": "Public domain"
+  "artist": "Russian grig",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%A3%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0_%22%D0%98%D0%B7%D0%BC%D0%B0%D0%BB%D0%BA%D0%BE%D0%B2%D0%BE%22_3.JPG"
  },
  "poi250": {
   "title": "Михайловское (подмосковная усадьба)",
   "text": "«Михайловское» — крупная подмосковная усадьба, отстроенная генералом Михаилом Кречетниковым (1729—1793), видным деятелем екатерининского царствования, на берегу Пахры в Подольском уезде Московской губернии (с 2012 года Троицкий административный округ Москвы).",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Mikhailovskoye_Palace.jpg/500px-Mikhailovskoye_Palace.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/%D0%A3%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0_%D0%9C%D0%B8%D1%85%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%B5._4.jpg/500px-%D0%A3%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0_%D0%9C%D0%B8%D1%85%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%B5._4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9C%D0%B8%D1%85%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%B5_(%D0%BF%D0%BE%D0%B4%D0%BC%D0%BE%D1%81%D0%BA%D0%BE%D0%B2%D0%BD%D0%B0%D1%8F_%D1%83%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0)",
-  "artist": "Otto Clodt von Jurgensburg",
-  "license": "Public domain"
+  "artist": "This file comes from the official website of the Government of Moscow ",
+  "license": "CC BY 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%A3%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0_%D0%9C%D0%B8%D1%85%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%B5._4.jpg"
  },
  "poi251": {
   "title": "Усадьба Охотниковых",
@@ -1616,10 +1619,11 @@
  "poi273": {
   "title": "Особняк Шехтеля на Большой Садовой",
   "text": "Особняк Шехтеля на Большой Садовой — городская усадьба, построенная русским архитектором Федором Осиповичем Шехтелем в 1910 году. Здание известно как третий и последний дом, который он построил для себя.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Moscow%2C_Bolshaya_Sadovaya%2C_Schechtel_House%2C_1910.jpg/500px-Moscow%2C_Bolshaya_Sadovaya%2C_Schechtel_House%2C_1910.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/Moscow%2C_Bolshaya_Sadovaya_4_May_2009_03.JPG/500px-Moscow%2C_Bolshaya_Sadovaya_4_May_2009_03.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9E%D1%81%D0%BE%D0%B1%D0%BD%D1%8F%D0%BA_%D0%A8%D0%B5%D1%85%D1%82%D0%B5%D0%BB%D1%8F_%D0%BD%D0%B0_%D0%91%D0%BE%D0%BB%D1%8C%D1%88%D0%BE%D0%B9_%D0%A1%D0%B0%D0%B4%D0%BE%D0%B2%D0%BE%D0%B9",
-  "artist": "en:Fyodor Schechtel, 1859-1926",
-  "license": "Public domain"
+  "artist": "NVO",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow,_Bolshaya_Sadovaya_4_May_2009_03.JPG"
  },
  "poi274": {
   "title": "Палаты Волковых — Юсуповых",
@@ -1753,10 +1757,11 @@
  "poi301": {
   "title": "Усадьба Замятина — Третьякова",
   "text": "Усадьба Замятина — Третьякова — усадьба в Москве по адресу Гоголевский бульвар, дом 6, строение 1; Большой Знаменский переулок, дом 7, строения 1 и 2. Объект культурного наследия федерального значения.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/Moscow%2C_Gogolevsky_6%2C_A.S.Kaminsky%2C_1880s.jpg/500px-Moscow%2C_Gogolevsky_6%2C_A.S.Kaminsky%2C_1880s.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9_%D0%B4%D0%BE%D0%BC_%D1%83%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D1%8B_%D0%97%D0%B0%D0%BC%D1%8F%D1%82%D0%B8%D0%BD%D0%B0-%D0%A2%D1%80%D0%B5%D1%82%D1%8C%D1%8F%D0%BA%D0%BE%D0%B2%D0%B0_02.jpg/500px-%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9_%D0%B4%D0%BE%D0%BC_%D1%83%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D1%8B_%D0%97%D0%B0%D0%BC%D1%8F%D1%82%D0%B8%D0%BD%D0%B0-%D0%A2%D1%80%D0%B5%D1%82%D1%8C%D1%8F%D0%BA%D0%BE%D0%B2%D0%B0_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%A3%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0_%D0%97%D0%B0%D0%BC%D1%8F%D1%82%D0%B8%D0%BD%D0%B0_%E2%80%94_%D0%A2%D1%80%D0%B5%D1%82%D1%8C%D1%8F%D0%BA%D0%BE%D0%B2%D0%B0",
-  "artist": "Alexander Kaminsky, 1827-1897",
-  "license": "Public domain"
+  "artist": "Книжная пыль",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9_%D0%B4%D0%BE%D0%BC_%D1%83%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D1%8B_%D0%97%D0%B0%D0%BC%D1%8F%D1%82%D0%B8%D0%BD%D0%B0-%D0%A2%D1%80%D0%B5%D1%82%D1%8C%D1%8F%D0%BA%D0%BE%D0%B2%D0%B0_02.jpg"
  },
  "poi302": {
   "title": "Усадьба Цурикова",
@@ -1897,10 +1902,11 @@
  "poi324": {
   "title": "Космодемьянское (усадьба)",
   "text": "Космодемьянское — загородная усадьба Патрикеевых.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Patrikeev_House.jpg/500px-Patrikeev_House.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C_%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D0%B4%D0%B5%D0%BC%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D1%86%D0%B5%D1%80%D0%BA%D0%BE%D0%B2%D1%8C_%D0%B2_%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D0%B4%D0%B5%D0%BC%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%BE%D0%BC_01.jpg/500px-%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C_%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D0%B4%D0%B5%D0%BC%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D1%86%D0%B5%D1%80%D0%BA%D0%BE%D0%B2%D1%8C_%D0%B2_%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D0%B4%D0%B5%D0%BC%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%BE%D0%BC_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D0%B4%D0%B5%D0%BC%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%BE%D0%B5_(%D1%83%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0)",
-  "artist": "Unknown authorUnknown author",
-  "license": "Public domain"
+  "artist": "This is Andy",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0,_%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D0%B4%D0%B5%D0%BC%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D1%86%D0%B5%D1%80%D0%BA%D0%BE%D0%B2%D1%8C_%D0%B2_%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D0%B4%D0%B5%D0%BC%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%BE%D0%BC_01.jpg"
  },
  "poi325": {
   "title": "Грачёвка (усадьба)",
@@ -1937,10 +1943,11 @@
  "poi336": {
   "title": "Симонов монастырь",
   "text": "Си́монов Успе́нский монасты́рь — монастырь, основанный в XIV веке преподобным Фёдором. Являлся одним из самых крупных и богатых монастырей Москвы. В XVI—XVII веках входил в пояс укреплений, защищавших подступы к городу с юга.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Moscow._%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0._%D0%92%D0%B8%D0%B4_%D0%A1%D0%B8%D0%BC%D0%BE%D0%BD%D0%BE%D0%B2%D0%B0_%D0%BC%D0%BE%D0%BD%D0%B0%D1%81%D1%82%D1%8B%D1%80%D1%8F_%D1%81_%D1%81%D0%B5%D0%B2.-%D0%B7%D0%B0%D0%BF.%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D1%8B_%D1%86%D0%B2._1841_1894_%D0%A1%D1%8B%D1%82%D0%B8%D0%BD_6290x_e1.jpg/500px-Moscow._%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0._%D0%92%D0%B8%D0%B4_%D0%A1%D0%B8%D0%BC%D0%BE%D0%BD%D0%BE%D0%B2%D0%B0_%D0%BC%D0%BE%D0%BD%D0%B0%D1%81%D1%82%D1%8B%D1%80%D1%8F_%D1%81_%D1%81%D0%B5%D0%B2.-%D0%B7%D0%B0%D0%BF.%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D1%8B_%D1%86%D0%B2._1841_1894_%D0%A1%D1%8B%D1%82%D0%B8%D0%BD_6290x_e1.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Moscow_%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0._%D0%A1%D0%B8%D0%BC%D0%BE%D0%BD%D0%BE%D0%B2_%D0%BC%D0%BE%D0%BD._%D0%A2%D0%B8%D1%85%D0%B2%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D1%85%D1%80%D0%B0%D0%BC_%D0%B8_%D1%82%D1%80%D0%B0%D0%BF%D0%B5%D0%B7%D0%BD%D0%B0%D1%8F%28%D1%87%D0%B0%D1%81%D1%82%D1%8C%29_IMG_3284.3_e1.jpg/500px-Moscow_%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0._%D0%A1%D0%B8%D0%BC%D0%BE%D0%BD%D0%BE%D0%B2_%D0%BC%D0%BE%D0%BD._%D0%A2%D0%B8%D1%85%D0%B2%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D1%85%D1%80%D0%B0%D0%BC_%D0%B8_%D1%82%D1%80%D0%B0%D0%BF%D0%B5%D0%B7%D0%BD%D0%B0%D1%8F%28%D1%87%D0%B0%D1%81%D1%82%D1%8C%29_IMG_3284.3_e1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%A1%D0%B8%D0%BC%D0%BE%D0%BD%D0%BE%D0%B2_%D0%BC%D0%BE%D0%BD%D0%B0%D1%81%D1%82%D1%8B%D1%80%D1%8C",
-  "artist": "Афанасьев Г. (оригинальный рисунок), Тов-во И.Д.Сытина (издатель)",
-  "license": "Public domain"
+  "artist": "T3ru",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow_%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0._%D0%A1%D0%B8%D0%BC%D0%BE%D0%BD%D0%BE%D0%B2_%D0%BC%D0%BE%D0%BD._%D0%A2%D0%B8%D1%85%D0%B2%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D1%85%D1%80%D0%B0%D0%BC_%D0%B8_%D1%82%D1%80%D0%B0%D0%BF%D0%B5%D0%B7%D0%BD%D0%B0%D1%8F(%D1%87%D0%B0%D1%81%D1%82%D1%8C)_IMG_3284.3_e1.jpg"
  },
  "poi337": {
   "title": "Данилов монастырь",
@@ -2076,11 +2083,12 @@
  "poi382": {
   "title": "В. В. Маяковскому",
   "text": "Памятник Владимиру Маяковскому был установлен в 1958 году в Москве на площади Маяковского (сейчас это Триумфальная площадь). Авторы монумента — скульптор Александр Кибальников и архитектор Дмитрий Чечулин.",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D1%82%D0%B0%D0%BD%D1%86%D0%B8%D1%8F_%D0%9C%D0%B0%D1%8F%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%B0%D1%8F_%D0%B2_%D1%81%D0%B5%D0%BD%D1%82%D1%8F%D0%B1%D1%80%D0%B5_2022_%D0%B3%D0%BE%D0%B4%D0%B0.jpg?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%92.%D0%92._%D0%9C%D0%B0%D1%8F%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%BC%D1%83.jpg/500px-%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%92.%D0%92._%D0%9C%D0%B0%D1%8F%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%BC%D1%83.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%9C%D0%B0%D1%8F%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%BC%D1%83_(%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0)",
   "src": "Wikimedia Commons",
-  "artist": "Artur Random",
-  "license": "CC BY-SA 4.0"
+  "artist": "Belovanatalia",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%92.%D0%92._%D0%9C%D0%B0%D1%8F%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%BC%D1%83.jpg"
  },
  "poi383": {
   "title": "Рабочий и колхозница",
@@ -2110,11 +2118,8 @@
  "poi386": {
   "title": "Последний рубеж обороны",
   "text": "354-я стрелковая Калинковичская ордена Ленина Краснознамённая ордена Суворова дивизия (354-я сд) — воинское соединение Вооружённых Сил СССР, принимавшее участие в Великой Отечественной войне.",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Rayon_Matushkino%2C_Moskva%2C_Russia_-_panoramio_%2824%29.jpg?width=480",
   "url": "https://ru.m.wikipedia.org/wiki/354-%D1%8F_%D1%81%D1%82%D1%80%D0%B5%D0%BB%D0%BA%D0%BE%D0%B2%D0%B0%D1%8F_%D0%B4%D0%B8%D0%B2%D0%B8%D0%B7%D0%B8%D1%8F",
-  "src": "Wikimedia Commons",
-  "artist": "Svetlov Artem",
-  "license": "CC BY 3.0"
+  "src": "Wikimedia Commons"
  },
  "poi387": {
   "title": "Золотая Царицына палата",
@@ -2334,34 +2339,38 @@
  "poi427": {
   "title": "Кусково",
   "text": "Уса́дьба Куско́во — бывшее имение графов Шереметевых, где сохранился архитектурно-художественный ансамбль XVIII века. Расположен на востоке Москвы на территории района Вешняки.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg/500px-Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Moscow_Kuskovo_Italian_House_2025-08-30_6569.jpg/500px-Moscow_Kuskovo_Italian_House_2025-08-30_6569.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9A%D1%83%D1%81%D0%BA%D0%BE%D0%B2%D0%BE",
-  "artist": "Asedach Alexander",
-  "license": "CC BY 3.0"
+  "artist": "Mike1979 Russia",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow_Kuskovo_Italian_House_2025-08-30_6569.jpg"
  },
  "poi428": {
   "title": "Кусково",
   "text": "Уса́дьба Куско́во — бывшее имение графов Шереметевых, где сохранился архитектурно-художественный ансамбль XVIII века. Расположен на востоке Москвы на территории района Вешняки.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg/500px-Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/%D0%9E%D1%80%D0%B0%D0%BD%D0%B6%D0%B5%D1%80%D0%B5%D1%8F_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%81%D0%BA%D0%B0%D1%8F.jpg/500px-%D0%9E%D1%80%D0%B0%D0%BD%D0%B6%D0%B5%D1%80%D0%B5%D1%8F_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%81%D0%BA%D0%B0%D1%8F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9A%D1%83%D1%81%D0%BA%D0%BE%D0%B2%D0%BE",
-  "artist": "Asedach Alexander",
-  "license": "CC BY 3.0"
+  "artist": "Ulaisaeva",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%9E%D1%80%D0%B0%D0%BD%D0%B6%D0%B5%D1%80%D0%B5%D1%8F_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%81%D0%BA%D0%B0%D1%8F.jpg"
  },
  "poi429": {
   "title": "Кусково",
   "text": "Уса́дьба Куско́во — бывшее имение графов Шереметевых, где сохранился архитектурно-художественный ансамбль XVIII века. Расположен на востоке Москвы на территории района Вешняки.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg/500px-Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Moscow_Kuskovo_Aviary_2025-08-30_6751.jpg/500px-Moscow_Kuskovo_Aviary_2025-08-30_6751.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9A%D1%83%D1%81%D0%BA%D0%BE%D0%B2%D0%BE",
-  "artist": "Asedach Alexander",
-  "license": "CC BY 3.0"
+  "artist": "Mike1979 Russia",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow_Kuskovo_Aviary_2025-08-30_6751.jpg"
  },
  "poi430": {
   "title": "Кусково",
   "text": "Уса́дьба Куско́во — бывшее имение графов Шереметевых, где сохранился архитектурно-художественный ансамбль XVIII века. Расположен на востоке Москвы на территории района Вешняки.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg/500px-Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Moscow_Kuskovo_Hermitage_2025-08-30_6641.jpg/500px-Moscow_Kuskovo_Hermitage_2025-08-30_6641.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9A%D1%83%D1%81%D0%BA%D0%BE%D0%B2%D0%BE",
-  "artist": "Asedach Alexander",
-  "license": "CC BY 3.0"
+  "artist": "Mike1979 Russia",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow_Kuskovo_Hermitage_2025-08-30_6641.jpg"
  },
  "poi431": {
   "title": "Кусково",
@@ -2463,10 +2472,11 @@
  "poi451": {
   "title": "Белгородская стена",
   "text": "Белогоро́дская, или Белгоро́дская, стена́ — выбеленная кирпичная крепостная стена, окружавшая московский Белый город с конца XVI по конец XVIII века. Предположительно от цвета стены, выбеленной известью, и получила название эта часть города.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Vasnetsov_Lubyanoy_torg_na_Trube.jpg/500px-Vasnetsov_Lubyanoy_torg_na_Trube.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Moscow%2C_Khokhlovskaya_Square._Remains_of_the_fortress_wall_of_Bely_Gorod.jpg/500px-Moscow%2C_Khokhlovskaya_Square._Remains_of_the_fortress_wall_of_Bely_Gorod.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%91%D0%B5%D0%BB%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D1%8F_%D1%81%D1%82%D0%B5%D0%BD%D0%B0",
-  "artist": "Apollinary Vasnetsov",
-  "license": "Public domain"
+  "artist": "Bestalex",
+  "license": "CC0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow,_Khokhlovskaya_Square._Remains_of_the_fortress_wall_of_Bely_Gorod.jpg"
  },
  "poi454": {
   "title": "БТС-001 ОК-МЛ-1",
@@ -2613,10 +2623,11 @@
  "poi475": {
   "title": "Спасская башня",
   "text": "Спа́сская ба́шня (Фро́ловская, Фло́ровская, Фролола́врская, Иерусали́мские воро́та) — проездная башня Московского Кремля, выходящая на Красную площадь. Построена в 1491 году архитектором Пьетро Солари.",
-  "img": "https://upload.wikimedia.org/wikipedia/commons/5/54/Moscow_Kremlin_map_-_Spasskaya_Tower.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/Moscow_2026-07-17_008.jpg/500px-Moscow_2026-07-17_008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B0%D1%81%D1%81%D0%BA%D0%B0%D1%8F_%D0%B1%D0%B0%D1%88%D0%BD%D1%8F",
-  "artist": "Presidential Press and Information Office",
-  "license": "CC BY 4.0"
+  "artist": "Perituss",
+  "license": "CC0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow_2026-07-17_008.jpg"
  },
  "poi476": {
   "title": "Петровская башня",
@@ -2637,10 +2648,11 @@
  "poi478": {
   "title": "Царская башня",
   "text": "Царская башня — наиболее молодая и небольшая башня Московского Кремля, архитектор неизвестен. Её возвели в 1680 году во время реконструкции Кремля, когда остальные башни были дополнены шатрами, по сути эта башня является теремным шатром.",
-  "img": "https://upload.wikimedia.org/wikipedia/commons/0/03/Moscow_Kremlin_map_-_Tsarskaya_Tower.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/Tsarskaya_Tower_%282026%29.jpg/500px-Tsarskaya_Tower_%282026%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%A6%D0%B0%D1%80%D1%81%D0%BA%D0%B0%D1%8F_%D0%B1%D0%B0%D1%88%D0%BD%D1%8F",
-  "artist": "Presidential Press and Information Office",
-  "license": "CC BY 4.0"
+  "artist": "Юрий Д.К.",
+  "license": "CC BY 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Tsarskaya_Tower_(2026).jpg"
  },
  "poi479": {
   "title": "Арка главного входа ВДНХ",
@@ -2882,10 +2894,11 @@
  "poi527": {
   "title": "Кусково",
   "text": "Уса́дьба Куско́во — бывшее имение графов Шереметевых, где сохранился архитектурно-художественный ансамбль XVIII века. Расположен на востоке Москвы на территории района Вешняки.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg/500px-Veshnyaki_District%2C_Moscow%2C_Russia_-_panoramio_%2855%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Moscow_Kuskovo_Grotto_2025-08-30_6757.jpg/500px-Moscow_Kuskovo_Grotto_2025-08-30_6757.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9A%D1%83%D1%81%D0%BA%D0%BE%D0%B2%D0%BE",
-  "artist": "Asedach Alexander",
-  "license": "CC BY 3.0"
+  "artist": "Mike1979 Russia",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Moscow_Kuskovo_Grotto_2025-08-30_6757.jpg"
  },
  "poi530": {
   "title": "Триумфальные ворота (Москва)",
@@ -2914,10 +2927,11 @@
  "poi533": {
   "title": "Шаляпин, Фёдор Иванович",
   "text": "Фёдор Ива́нович Шаля́пин (1 [13] февраля 1873, Казань — 12 апреля 1938, Париж) — русский оперный и камерный певец (высокий бас), который в разное время был солистом Большого и Мариинского театров, а также театра Метрополитен Опера.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Feodor_Chaliapin_signed.jpg/500px-Feodor_Chaliapin_signed.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Zemstvo_counsil_building%2C_Kazan_%282024-03-16%29_01.jpg/500px-Zemstvo_counsil_building%2C_Kazan_%282024-03-16%29_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%A8%D0%B0%D0%BB%D1%8F%D0%BF%D0%B8%D0%BD,_%D0%A4%D1%91%D0%B4%D0%BE%D1%80_%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%87",
-  "artist": "Unknown (Bibliothèque nationale et universitaire de Strasbourg, Franc…",
-  "license": "Public domain"
+  "artist": "Vyacheslav Kirillin",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Zemstvo_counsil_building,_Kazan_(2024-03-16)_01.jpg"
  },
  "poi535": {
   "title": "Главный павильон ВДНХ",
@@ -3075,10 +3089,11 @@
  "poi62": {
   "title": "Петровский парк (Москва)",
   "text": "Петровский парк — пейзажный парковый комплекс в северо-западной части Москвы. Памятник паркового искусства XIX века. Площадь 22 га.",
-  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Sannye_gonki_v_Petrovskom_parke_1830-e-40-e.jpg/500px-Sannye_gonki_v_Petrovskom_parke_1830-e-40-e.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Petrovsky_Palace%2C_Moscow%2C_2024_02.jpg/500px-Petrovsky_Palace%2C_Moscow%2C_2024_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://ru.m.wikipedia.org/wiki/%D0%9F%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%B9_%D0%BF%D0%B0%D1%80%D0%BA_(%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0)",
-  "artist": "AnonymousUnknown author, 19th centurydate QS:P,+1850-00-00T00:00:00Z/7",
-  "license": "Public domain"
+  "artist": "MBH",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Petrovsky_Palace,_Moscow,_2024_02.jpg"
  },
  "poi87": {
   "title": "Мемориально-парковый комплекс героев Первой мировой войны",
@@ -3322,11 +3337,12 @@
  "poi46": {
   "title": "Братиславский парк",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Bratislavskiy_park_tablichka.jpg?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Bratislavskiy_park_03.jpg/500px-Bratislavskiy_park_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://m.wikidata.org/wiki/Q4095899",
   "src": "Викиданные",
   "artist": "MotorinGY",
-  "license": "CC BY-SA 4.0"
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Bratislavskiy_park_03.jpg"
  },
  "poi75": {
   "title": "Парк Олимпийской деревни",
@@ -3403,11 +3419,8 @@
  "poi139": {
   "title": "Московский государственный музей Вадима Сидура",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Moscow_trolleybus_VMZ-170_2599_2005-10_1129739000.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3AMoscow_trolleybus_VMZ-170_2599_2005-10_1129739000.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "Artyom Svetlov",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi141": {
   "title": "Государственный музей Л.Н. Толстого",
@@ -3448,29 +3461,24 @@
  "poi154": {
   "title": "Музей Игоря Талькова",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_%28%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F%29_%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%BF%D0%B5%D0%B2%D1%86%D1%83_%D0%98%D0%B3%D0%BE%D1%80%D1%8E_%D0%A2%D0%B0%D0%BB%D1%8C%D0%BA%D0%BE%D0%B2%D1%83_%D1%81_%22%D0%B7%D0%B8%D0%B3%D0%BE%D0%B9%22_-_panoramio.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_%28%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F%29_%D0%9F%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA_%D0%BF%D0%B5%D0%B2%D1%86%D1%83_%D0%98%D0%B3%D0%BE%D1%80%D1%8E_%D0%A2%D0%B0%D0%BB%D1%8C%D0%BA%D0%BE%D0%B2%D1%83_%D1%81_%22%D0%B7%D0%B8%D0%B3%D0%BE%D0%B9%22_-_panoramio.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "Сергей Алексеев",
-  "license": "CC BY 3.0"
+  "src": "Wikimedia Commons"
  },
  "poi159": {
   "title": "Садовое кольцо",
   "text": "Круговая магистральная улица в центре Москвы.",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Khotev%27s_Atlas_of_Moscow_-_Garden_Ring.jpg?width=480",
   "url": "https://m.wikidata.org/wiki/Q961888",
-  "src": "Викиданные",
-  "artist": "State topographers, edited by A. Khotev. Numerous single sheet pasted…",
-  "license": "Public domain"
+  "src": "Викиданные"
  },
  "poi166": {
   "title": "Музей международного нумизматического клуба",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Museum_of_International_Numismatic_Club_04.jpg?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Museum_of_International_Numismatic_Club_16.jpg/500px-Museum_of_International_Numismatic_Club_16.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://m.wikidata.org/wiki/Q30890091",
   "src": "Викиданные",
   "artist": "DVRozhkov",
-  "license": "CC BY-SA 4.0"
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Museum_of_International_Numismatic_Club_16.jpg"
  },
  "poi172": {
   "title": "Музей истории телесных наказаний",
@@ -3565,20 +3573,22 @@
  "poi209": {
   "title": "Дом-музей Марины Цветаевой",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%94%D0%BE%D0%BC-%D0%BC%D1%83%D0%B7%D0%B5%D0%B9_%D0%A6%D0%B2%D0%B5%D1%82%D0%B0%D0%B5%D0%B2%D0%BE%D0%B9.JPG?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/%D0%94%D0%BE%D0%BC-%D0%BC%D1%83%D0%B7%D0%B5%D0%B9_%D0%A6%D0%B2%D0%B5%D1%82%D0%B0%D0%B5%D0%B2%D0%BE%D0%B9._%D0%AD%D0%BA%D1%81%D0%BF%D0%BE%D0%B7%D0%B8%D1%86%D0%B8%D1%8F.jpg/500px-%D0%94%D0%BE%D0%BC-%D0%BC%D1%83%D0%B7%D0%B5%D0%B9_%D0%A6%D0%B2%D0%B5%D1%82%D0%B0%D0%B5%D0%B2%D0%BE%D0%B9._%D0%AD%D0%BA%D1%81%D0%BF%D0%BE%D0%B7%D0%B8%D1%86%D0%B8%D1%8F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://m.wikidata.org/wiki/Q4165209",
   "src": "Викиданные",
-  "artist": "Catlaster",
-  "license": "CC BY-SA 3.0"
+  "artist": "Kotofey2016",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%94%D0%BE%D0%BC-%D0%BC%D1%83%D0%B7%D0%B5%D0%B9_%D0%A6%D0%B2%D0%B5%D1%82%D0%B0%D0%B5%D0%B2%D0%BE%D0%B9._%D0%AD%D0%BA%D1%81%D0%BF%D0%BE%D0%B7%D0%B8%D1%86%D0%B8%D1%8F.jpg"
  },
  "poi211": {
   "title": "Мемориальный музей А. Н. Скрябина",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Moscow_BNikolopeskovsky9_asv2018-09.jpg?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Scriabin_Museum_8.jpg/500px-Scriabin_Museum_8.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://commons.m.wikimedia.org/wiki/File%3AMoscow_BNikolopeskovsky9_asv2018-09.jpg",
   "src": "Wikimedia Commons",
-  "artist": "A.Savin",
-  "license": "FAL"
+  "artist": "Stolbovsky",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Scriabin_Museum_8.jpg"
  },
  "poi224": {
   "title": "Музей Н. В. Гоголя",
@@ -3637,11 +3647,12 @@
  "poi248": {
   "title": "Усадьба Лукино",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Massalitin_%283238821497%29.jpg?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/%D0%9F%D0%B5%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%BA%D0%B8%D0%BD%D0%BE_%D0%9F%D0%B0%D1%82%D1%80%D0%B8%D0%B0%D1%80%D1%88%D0%B0%D1%8F_%D1%80%D0%B5%D0%B7%D0%B8%D0%B4%D0%B5%D0%BD%D1%86%D0%B8%D1%8F_01.jpg/500px-%D0%9F%D0%B5%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%BA%D0%B8%D0%BD%D0%BE_%D0%9F%D0%B0%D1%82%D1%80%D0%B8%D0%B0%D1%80%D1%88%D0%B0%D1%8F_%D1%80%D0%B5%D0%B7%D0%B8%D0%B4%D0%B5%D0%BD%D1%86%D0%B8%D1%8F_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://commons.m.wikimedia.org/wiki/File%3AMassalitin_%283238821497%29.jpg",
   "src": "Wikimedia Commons",
-  "artist": "Fr Maxim Massalitin from Rabat, Maroc",
-  "license": "CC BY-SA 2.0"
+  "artist": "A.Savin",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%B5%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%BA%D0%B8%D0%BD%D0%BE_%D0%9F%D0%B0%D1%82%D1%80%D0%B8%D0%B0%D1%80%D1%88%D0%B0%D1%8F_%D1%80%D0%B5%D0%B7%D0%B8%D0%B4%D0%B5%D0%BD%D1%86%D0%B8%D1%8F_01.jpg"
  },
  "poi249": {
   "title": "Усадьба Гиреево",
@@ -3655,11 +3666,12 @@
  "poi252": {
   "title": "Городская усадьба Ф.Е. Сычева-Калининых",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Moscow_trolleybus_ZiU-9_2513_2003-09_1063468253.jpg?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/%D0%91%D0%B0%D0%BA%D1%83%D0%BD%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D1%83%D0%BB%D0%B8%D1%86%D0%B0%2C_%D0%B4%D0%BE%D0%BC_6.JPG/500px-%D0%91%D0%B0%D0%BA%D1%83%D0%BD%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D1%83%D0%BB%D0%B8%D1%86%D0%B0%2C_%D0%B4%D0%BE%D0%BC_6.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://commons.m.wikimedia.org/wiki/File%3AMoscow_trolleybus_ZiU-9_2513_2003-09_1063468253.jpg",
   "src": "Wikimedia Commons",
-  "artist": "Artyom Svetlov",
-  "license": "CC BY-SA 4.0"
+  "artist": "Brateevsky",
+  "license": "CC BY-SA 4.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:%D0%91%D0%B0%D0%BA%D1%83%D0%BD%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D1%83%D0%BB%D0%B8%D1%86%D0%B0,_%D0%B4%D0%BE%D0%BC_6.JPG"
  },
  "poi255": {
   "title": "усадьба \"Роднево\"",
@@ -3736,11 +3748,12 @@
  "poi312": {
   "title": "Усадьба Н.А. Дурасова",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A3%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0_%D0%94%D1%83%D1%80%D0%B0%D1%81%D0%BE%D0%B2%D0%B0_%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5.JPG?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Durasov_palace_wide.jpg/500px-Durasov_palace_wide.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A3%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0_%D0%94%D1%83%D1%80%D0%B0%D1%81%D0%BE%D0%B2%D0%B0_%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5.JPG",
   "src": "Wikimedia Commons",
-  "artist": "Artempris",
-  "license": "CC BY-SA 3.0"
+  "artist": "This photo was taken by Anton Zelenov. Please credit this with : Photo",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:Durasov_palace_wide.jpg"
  },
  "poi314": {
   "title": "Усадьба Бекетовых-Прозоровских в Зюзино",
@@ -3826,29 +3839,20 @@
  "poi349": {
   "title": "Вид развилки каштановой и большой липовой аллей",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/IMG10963_%D0%A2%D1%8B%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D0%B0_%D0%B8%D0%BD%D1%84%D0%BE%D1%89%D0%B8%D1%82%D0%B0%2C_%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BD%D0%B0_%D1%83%D0%B3%D0%BB%D1%83_%D0%BC%D0%B0%D0%BB%D0%BE%D0%B9_%D1%82%D1%83%D0%B5%D0%B2%D0%BE%D0%B9_%D0%B8_%D1%80%D1%8F%D0%B1%D0%B8%D0%BD%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B9._%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%81%D0%BE_%D1%81%D1%85%D0%B5%D0%BC%D0%BE%D0%B9_%D0%B8_%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5%D0%BC_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%BE%D0%BF%D0%B0%D1%80%D0%BA%D0%B0.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3AIMG10963_%D0%A2%D1%8B%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D0%B0_%D0%B8%D0%BD%D1%84%D0%BE%D1%89%D0%B8%D1%82%D0%B0%2C_%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BD%D0%B0_%D1%83%D0%B3%D0%BB%D1%83_%D0%BC%D0%B0%D0%BB%D0%BE%D0%B9_%D1%82%D1%83%D0%B5%D0%B2%D0%BE%D0%B9_%D0%B8_%D1%80%D1%8F%D0%B1%D0%B8%D0%BD%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B9._%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%81%D0%BE_%D1%81%D1%85%D0%B5%D0%BC%D0%BE%D0%B9_%D0%B8_%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5%D0%BC_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%BE%D0%BF%D0%B0%D1%80%D0%BA%D0%B0.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "https://ru.wikipedia.org/wiki/Участник:Shirius как фотограф",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi350": {
   "title": "Пять углов",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%9A%D0%BB%D1%91%D0%BD_%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%D0%B7%D0%B8%D0%B1%D0%BE%D0%BB%D1%8C%D0%B4%D0%BE%D0%B2%C2%BB_%D0%BD%D0%B0_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BA%D0%B5_41_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D1%8F.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%9A%D0%BB%D1%91%D0%BD_%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%D0%B7%D0%B8%D0%B1%D0%BE%D0%BB%D1%8C%D0%B4%D0%BE%D0%B2%C2%BB_%D0%BD%D0%B0_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BA%D0%B5_41_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D1%8F.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "https://ru.wikipedia.org/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0…",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi351": {
   "title": "Вид пруда в центральном овраге",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A4%D0%B8%D0%B3%D1%83%D1%80%D0%B0_%D0%BD%D0%B0%D0%BF%D1%80%D0%BE%D1%82%D0%B8%D0%B2_%D0%A6%D0%B5%D0%BD%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BF%D1%80%D1%83%D0%B4%D0%B0.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A4%D0%B8%D0%B3%D1%83%D1%80%D0%B0_%D0%BD%D0%B0%D0%BF%D1%80%D0%BE%D1%82%D0%B8%D0%B2_%D0%A6%D0%B5%D0%BD%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BF%D1%80%D1%83%D0%B4%D0%B0.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "Kirjucha",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi352": {
   "title": "Вид дендропарка перед центральным входом",
@@ -3862,38 +3866,26 @@
  "poi353": {
   "title": "Вид развилки лиственничной и еловой аллей",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A4%D0%B8%D0%B3%D1%83%D1%80%D0%B0_%D0%BD%D0%B0_%D1%83%D0%B3%D0%BB%D1%83_%D0%95%D0%BB%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B8_%D0%9B%D0%B8%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%B8%D1%87%D0%BD%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B9.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A4%D0%B8%D0%B3%D1%83%D1%80%D0%B0_%D0%BD%D0%B0_%D1%83%D0%B3%D0%BB%D1%83_%D0%95%D0%BB%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B8_%D0%9B%D0%B8%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%B8%D1%87%D0%BD%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B9.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "Kirjucha",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi355": {
   "title": "Вид лиственничной аллеи и коллекционной группы сосен румелийских",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%A1%D0%BE%D1%81%D0%BD%D0%B0_%D1%80%D1%83%D0%BC%D0%B5%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B0%D1%8F_%D0%B8%D0%BB%D0%B8_%D0%B1%D0%B0%D0%BB%D0%BA%D0%B0%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%C2%BB%2C_%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F_%D0%B2%D0%B5%D1%81%D0%BD%D0%BE%D0%B9_2020_%D0%B3%D0%BE%D0%B4%D0%B0_%D1%83_7-%D0%B9_%D0%BC%D0%B0%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D0%B9_%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%BA%D0%B8_21-%D0%B3%D0%BE_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BA%D0%B0.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%A1%D0%BE%D1%81%D0%BD%D0%B0_%D1%80%D1%83%D0%BC%D0%B5%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B0%D1%8F_%D0%B8%D0%BB%D0%B8_%D0%B1%D0%B0%D0%BB%D0%BA%D0%B0%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%C2%BB%2C_%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F_%D0%B2%D0%B5%D1%81%D0%BD%D0%BE%D0%B9_2020_%D0%B3%D0%BE%D0%B4%D0%B0_%D1%83_7-%D0%B9_%D0%BC%D0%B0%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D0%B9_%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%BA%D0%B8_21-%D0%B3%D0%BE_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BA%D0%B0.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "https://ru.wikipedia.org/wiki/Участник:Shirius",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi356": {
   "title": "Вид площадки большого туевого круга с подхода",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/2016_%D0%9F%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%E2%84%962_-_%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BA%D0%BE%D0%BB%D0%BB%D0%B5%D0%BA%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D0%BE-%D0%BC%D0%B0%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D1%85_%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%BE%D0%BA_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%BE%D0%BF%D0%B0%D1%80%D0%BA%D0%B0.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A2016_%D0%9F%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%E2%84%962_-_%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BA%D0%BE%D0%BB%D0%BB%D0%B5%D0%BA%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D0%BE-%D0%BC%D0%B0%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D1%85_%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%BE%D0%BA_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%BE%D0%BF%D0%B0%D1%80%D0%BA%D0%B0.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "Основа:Департамент культурного наследия города МосквыРеставрация: htt…",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi357": {
   "title": "Вид коллекционной группы елей европейских",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%95%D0%BB%D1%8C_%D0%BE%D0%B1%D1%8B%D0%BA%D0%BD%D0%BE%D0%B2%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F_%D0%B8%D0%BB%D0%B8_%D0%B5%D0%B2%D1%80%D0%BE%D0%BF%D0%B5%D0%B9%D1%81%D0%BA%D0%B0%D1%8F%C2%BB_%D0%BD%D0%B0_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BA%D0%B5_9_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D1%8F.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%95%D0%BB%D1%8C_%D0%BE%D0%B1%D1%8B%D0%BA%D0%BD%D0%BE%D0%B2%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F_%D0%B8%D0%BB%D0%B8_%D0%B5%D0%B2%D1%80%D0%BE%D0%BF%D0%B5%D0%B9%D1%81%D0%BA%D0%B0%D1%8F%C2%BB_%D0%BD%D0%B0_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BA%D0%B5_9_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D1%8F.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "https://ru.wikipedia.org/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0…",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi358": {
   "title": "Вид на усадьбу Остафьево",
@@ -3961,20 +3953,14 @@
  "poi366": {
   "title": "Перспектива пихтовой аллеи",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%9F%D0%B8%D1%85%D1%82%D0%B0_%D1%81%D0%B8%D0%B1%D0%B8%D1%80%D1%81%D0%BA%D0%B0%D1%8F%C2%BB_%D0%B2_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%BC_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D0%B8_%D0%B2_%D0%BA%D0%BE%D0%BD%D1%86%D0%B5_%D0%BF%D0%B8%D1%85%D1%82%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B8.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%9F%D0%B8%D1%85%D1%82%D0%B0_%D1%81%D0%B8%D0%B1%D0%B8%D1%80%D1%81%D0%BA%D0%B0%D1%8F%C2%BB_%D0%B2_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%BC_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D0%B8_%D0%B2_%D0%BA%D0%BE%D0%BD%D1%86%D0%B5_%D0%BF%D0%B8%D1%85%D1%82%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B8.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "https://ru.wikipedia.org/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0…",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi367": {
   "title": "Перспектива еловой аллеи",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%9F%D0%B8%D1%85%D1%82%D0%B0_%D1%81%D0%B8%D0%B1%D0%B8%D1%80%D1%81%D0%BA%D0%B0%D1%8F%C2%BB_%D0%B2_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%BC_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D0%B8_%D0%B2_%D0%BA%D0%BE%D0%BD%D1%86%D0%B5_%D0%BF%D0%B8%D1%85%D1%82%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B8.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%9F%D0%B8%D1%85%D1%82%D0%B0_%D1%81%D0%B8%D0%B1%D0%B8%D1%80%D1%81%D0%BA%D0%B0%D1%8F%C2%BB_%D0%B2_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%BC_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D0%B8_%D0%B2_%D0%BA%D0%BE%D0%BD%D1%86%D0%B5_%D0%BF%D0%B8%D1%85%D1%82%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B8.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "https://ru.wikipedia.org/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0…",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi368": {
   "title": "Вид дендропарка перед южным входом",
@@ -4024,20 +4010,14 @@
  "poi373": {
   "title": "Перспектива каштановой аллеи",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%A0%D1%8F%D0%B1%D0%B8%D0%BD%D0%B0_%D0%BE%D0%B1%D1%8B%D0%BA%D0%BD%D0%BE%D0%B2%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F%C2%BB_%D1%83_%D1%80%D1%8F%D0%B1%D0%B8%D0%BD%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B8_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D1%8F.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%A0%D1%8F%D0%B1%D0%B8%D0%BD%D0%B0_%D0%BE%D0%B1%D1%8B%D0%BA%D0%BD%D0%BE%D0%B2%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F%C2%BB_%D1%83_%D1%80%D1%8F%D0%B1%D0%B8%D0%BD%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B8_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D1%8F.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "https://ru.wikipedia.org/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0…",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi374": {
   "title": "Перспектива березовой аллеи",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%9D%D0%BE%D0%B2%D1%8B%D0%B9_%D0%B8%D0%BD%D1%84%D0%BE%D1%89%D0%B8%D1%82_%C2%AB%D0%9F%D1%80%D0%B0%D0%B2%D0%B8%D0%BB%D0%B0_%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%BE%D0%B9_%D0%B8%D0%B3%D1%80%D0%BE%D0%B2%D0%BE%D0%B9_%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%BA%D0%BE%D0%B9%C2%BB_%D0%93%D0%9C%D0%97_%C2%AB%D0%A6%D0%B0%D1%80%D0%B8%D1%86%D1%8B%D0%BD%D0%BE%C2%BB_%D1%83_%D0%B4%D0%B5%D1%82._%D0%BF%D0%BB.%2C_%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9_%D0%B2_%D0%BD%D0%B0%D1%87%D0%B0%D0%BB%D0%B5_%D0%B1%D0%B5%D1%80%D1%91%D0%B7%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B8.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%9D%D0%BE%D0%B2%D1%8B%D0%B9_%D0%B8%D0%BD%D1%84%D0%BE%D1%89%D0%B8%D1%82_%C2%AB%D0%9F%D1%80%D0%B0%D0%B2%D0%B8%D0%BB%D0%B0_%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%BE%D0%B9_%D0%B8%D0%B3%D1%80%D0%BE%D0%B2%D0%BE%D0%B9_%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%BA%D0%BE%D0%B9%C2%BB_%D0%93%D0%9C%D0%97_%C2%AB%D0%A6%D0%B0%D1%80%D0%B8%D1%86%D1%8B%D0%BD%D0%BE%C2%BB_%D1%83_%D0%B4%D0%B5%D1%82._%D0%BF%D0%BB.%2C_%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9_%D0%B2_%D0%BD%D0%B0%D1%87%D0%B0%D0%BB%D0%B5_%D0%B1%D0%B5%D1%80%D1%91%D0%B7%D0%BE%D0%B2%D0%BE%D0%B9_%D0%B0%D0%BB%D0%BB%D0%B5%D0%B8.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "https://ru.wikipedia.org/wiki/Участник:Shirius как фотограф",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi375": {
   "title": "Вид мостика у пруда в центральном овраге",
@@ -4051,11 +4031,8 @@
  "poi376": {
   "title": "Перспектива кленовой аллеи",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%9A%D0%BB%D1%91%D0%BD_%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%BB%D0%B8%D1%81%D1%82%D0%BD%D1%8B%D0%B9._%D0%96%D0%B8%D0%BC%D0%BE%D0%BB%D0%BE%D1%81%D1%82%D1%8C_%D0%BF%D0%BE%D0%BA%D1%80%D1%8B%D0%B2%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%C2%BB_%D0%BD%D0%B0_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BA%D0%B5_11_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D1%8F.jpg?width=480",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%87%D0%BA%D0%B0_%C2%AB%D0%9A%D0%BB%D1%91%D0%BD_%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%BB%D0%B8%D1%81%D1%82%D0%BD%D1%8B%D0%B9._%D0%96%D0%B8%D0%BC%D0%BE%D0%BB%D0%BE%D1%81%D1%82%D1%8C_%D0%BF%D0%BE%D0%BA%D1%80%D1%8B%D0%B2%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%C2%BB_%D0%BD%D0%B0_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BA%D0%B5_11_%D0%91%D0%B8%D1%80%D1%8E%D0%BB%D1%91%D0%B2%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D1%8F.jpg",
-  "src": "Wikimedia Commons",
-  "artist": "https://ru.wikipedia.org/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0…",
-  "license": "CC BY-SA 4.0"
+  "src": "Wikimedia Commons"
  },
  "poi391": {
   "title": "Второй «круглый» дом",
@@ -4204,11 +4181,12 @@
  "poi442": {
   "title": "Трапезная",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%A2%D1%80%D0%B0%D0%BF%D0%B5%D0%B7%D0%BD%D0%B0%D1%8F_%D0%9D%D0%BE%D0%B2%D0%BE%D0%B4%D0%B5%D0%B2%D0%B8%D1%87%D0%B8%D0%B9_%D0%BC%D0%BE%D0%BD%D0%B0%D1%81%D1%82%D1%8B%D1%80%D1%8C_02.JPG?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/NovodevichyConvent_DormitionChurch3.JPG/500px-NovodevichyConvent_DormitionChurch3.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://commons.m.wikimedia.org/wiki/File%3A%D0%A2%D1%80%D0%B0%D0%BF%D0%B5%D0%B7%D0%BD%D0%B0%D1%8F_%D0%9D%D0%BE%D0%B2%D0%BE%D0%B4%D0%B5%D0%B2%D0%B8%D1%87%D0%B8%D0%B9_%D0%BC%D0%BE%D0%BD%D0%B0%D1%81%D1%82%D1%8B%D1%80%D1%8C_02.JPG",
   "src": "Wikimedia Commons",
-  "artist": "Kemal KOZBAEV",
-  "license": "CC BY-SA 4.0"
+  "artist": "Ludvig14",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:NovodevichyConvent_DormitionChurch3.JPG"
  },
  "poi443": {
   "title": "Филатьевское училище",
@@ -4420,11 +4398,12 @@
  "poi504": {
   "title": "Стрелецкая караульня при Никольской башне",
   "text": "",
-  "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Moscow_trolleybus_ZiU-9_5001_2003-03_1048962242.jpg?width=480",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/NovodevichyConvent_ChebotarnayaGuardroom.JPG/500px-NovodevichyConvent_ChebotarnayaGuardroom.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
   "url": "https://commons.m.wikimedia.org/wiki/File%3AMoscow_trolleybus_ZiU-9_5001_2003-03_1048962242.jpg",
   "src": "Wikimedia Commons",
-  "artist": "Artyom Svetlov",
-  "license": "CC BY-SA 4.0"
+  "artist": "Ludvig14",
+  "license": "CC BY-SA 3.0",
+  "photo_page": "https://commons.wikimedia.org/wiki/File:NovodevichyConvent_ChebotarnayaGuardroom.JPG"
  },
  "poi505": {
   "title": "Стрелецкая караульня при Чеботарной башне",
