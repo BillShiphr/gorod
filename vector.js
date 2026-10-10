@@ -38,6 +38,8 @@ const NIGHT = {
   poi: '#c3a2ff', poiText: '#ddd0ff', poiRing: '#f4efff', visitedRing: '#ffffff', poiHalo: '#0a0f17',
   pillBg: 'rgba(9,20,24,.92)', pillGlow: 'rgba(63,240,220,.55)', pillText: '#eef3f8', icoOpen: '#9ff6ea', flash: '#eafffb',
   wish: '#ffd24a', wishText: '#ffd24a',  // «хочу сходить» — золотой блик и подпись
+  // главные дороги поверх тумана (кольца и вылетные) — ориентиры, как в Яндекс Картах
+  mainRoad: '#f2c45a', mainRoadCase: '#0a0f17', mainRoadText: '#f7d888',
   lock: '#6b7689', metroFill: '#c9d0da', metroStroke: 'rgba(10,15,23,.85)',
 };
 const THEMES = {
@@ -72,6 +74,7 @@ const THEMES = {
     metroText: '#1d2733', cityLabel: '#28313d', okrugLabel: '#364050', districtLabel: '#5b6574',
     poi: '#8657f0', poiText: '#5a2fd0', poiRing: '#ffffff', visitedRing: '#ffffff', poiHalo: '#ffffff',
     pillBg: 'rgba(255,255,255,.96)', pillGlow: 'rgba(15,174,155,.35)', pillText: '#1b2430', icoOpen: '#0e9e8c', wish: '#e0a100', wishText: '#9a6a00',
+    mainRoad: '#f7c64a', mainRoadCase: '#b58a2c', mainRoadText: '#6b4a00',
     lock: '#8a93a1', metroFill: '#4b5563', metroStroke: 'rgba(255,255,255,.95)',
   },
   // бумажная карта: неизведанное заштриховано, как «терра инкогнита» на старых картах
@@ -97,6 +100,7 @@ const THEMES = {
     poi: '#7b4fd8', poiText: '#5c33b8', poiRing: '#fffaf0', visitedRing: '#fffaf0', poiHalo: '#f7f0e0',
     pillBg: 'rgba(252,247,236,.97)', pillGlow: 'rgba(223,95,51,.35)', pillText: '#2e261b', icoOpen: '#c9542b', flash: '#fff6e0',
     wish: '#d18f00', wishText: '#8a5a00',  // подпись темнее значка — на бежевом не сливается
+    mainRoad: '#f6c24b', mainRoadCase: '#a87a1e', mainRoadText: '#5c3f00',
     lock: '#4f4130', metroFill: '#4a3c2a', metroStroke: 'rgba(255,250,240,.95)',
   },
 };
@@ -462,6 +466,7 @@ function buildStyle() {
       fog: { type: 'geojson', data: empty },
       openFill: { type: 'geojson', data: empty },
       metro: { type: 'geojson', data: `data/metro.json?v=${DATA_VERSION}` },
+      roads: { type: 'geojson', data: `data/roads.json?v=${DATA_VERSION}` },
       cells: { type: 'geojson', data: fc(App.cells) },
       zones: { type: 'geojson', data: fc(App.zones) },
       admin: { type: 'geojson', data: fc(App.admin) },
@@ -546,6 +551,25 @@ function buildStyle() {
       { id: 'cell-line', type: 'line', source: 'cells', minzoom: 11.8,
         paint: { 'line-color': C.cellLine, 'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.8, 15, 1.6],
           'line-opacity': ['interpolate', ['linear'], ['zoom'], 11.9, 0, 12.4, 1] } },
+      /* главные дороги — поверх тумана, видны и на закрытой карте и при любом отдалении:
+       * кольца толще, вылетные магистрали тоньше; у колец подпись вдоль линии */
+      { id: 'main-road-case', type: 'line', source: 'roads',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': C.mainRoadCase, 'line-opacity': 0.85,
+          'line-width': ['interpolate', ['exponential', 1.5], ['zoom'],
+            8, ['match', ['get', 'kind'], 'ring', 2.6, 1.4], 11, ['match', ['get', 'kind'], 'ring', 4.6, 2.6],
+            14, ['match', ['get', 'kind'], 'ring', 8.5, 5.5], 17, ['match', ['get', 'kind'], 'ring', 16, 11]] } },
+      { id: 'main-road', type: 'line', source: 'roads',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': C.mainRoad,
+          'line-width': ['interpolate', ['exponential', 1.5], ['zoom'],
+            8, ['match', ['get', 'kind'], 'ring', 1.4, 0.6], 11, ['match', ['get', 'kind'], 'ring', 2.8, 1.3],
+            14, ['match', ['get', 'kind'], 'ring', 6, 3.6], 17, ['match', ['get', 'kind'], 'ring', 12, 8]] } },
+      { id: 'main-road-label', type: 'symbol', source: 'roads', minzoom: 9.5, filter: ['==', ['get', 'kind'], 'ring'],
+        layout: { 'symbol-placement': 'line', 'symbol-spacing': 380, 'text-field': ['get', 'name'],
+          'text-font': FONT.bold, 'text-size': ['interpolate', ['linear'], ['zoom'], 10, 10, 15, 12.5],
+          'text-letter-spacing': 0.04, 'text-keep-upright': true },
+        paint: { 'text-color': C.mainRoadText, 'text-halo-color': C.mainRoadCase, 'text-halo-width': 1.4 } },
       { id: 'water-edge-glow', type: 'line', source: 'omt', 'source-layer': 'water',
         paint: { 'line-color': C.waterEdge, 'line-opacity': C.waterEdgeGlow, 'line-width': 5, 'line-blur': 4 } },
       { id: 'water-edge', type: 'line', source: 'omt', 'source-layer': 'water',
